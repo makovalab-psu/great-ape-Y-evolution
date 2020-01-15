@@ -7,23 +7,99 @@ multiple alignments.
 
 ## contents
 
+alignments_to_best.py&mdash;
+From an alignment, collect intervals that are "best" as measured by some
+column. An interval may be split, if only parts of that interval are best.
+
 human_primate.q&mdash;
-scoring and parameters file used for lastz primate pairwise alignments.
+Scoring and parameters file used for lastz primate pairwise alignments.
 
 ## mini-pipelines
 
-TBD add the alignment steps
-TBD add the selection of best alignments per base
+TBD add the part that creates the alignment  Dec/21/2019 B, Dec/26/2019 A
+
+TBD add the part that creates ${S1}_Y.lengths
+
+TBD add the part that creates ${S1}_Y.nonN
+
+TBD add the part that creates ${S1}_Y.N_intervals
+
+TBD add the part that convert fasta to 2bit
+
+TBD add the part that sorts the lastz output
+
+Align species S1 and S2&mdash;
+
+```bash  
+jobId=${S1}_${S2}
+lastz \
+      ${S1}.smsk.2bit[multiple,unmask] \
+      ${S2}.smsk.2bit[unmask] \
+      --scores=human_primate.q \
+      --seed=match12 \
+      --allocate:traceback=200M \
+      --format=general:name1,zstart1,end1,name2,strand2,zstart2+,end2+,score,cov%,con%,id%,text1,text2 \
+      --markend \
+  | gzip \
+  > ${jobId}.dat.gz
+
+gzip -dc ${jobId}.dat.gz \
+  | tr -d \"%\" \
+  | awk '/^#/  { if (NR==1) print $0 }
+         !/^#/ { print $0 | "sort -k 1,1d -k 11,11nr" }' \
+  | gzip \
+  > ${jobId}.sorted.gz
+```
+
+
+Compute the amount of each species S1 aligned to S2&mdash;
+
+```bash  
+jobId=${S1}_${S2}
+gzip -dc ${jobId}.sorted.gz \
+  | awk '{ print $1,$2,$3 }' \
+  | genodsp --novalue --uncovered:show \
+      --chromosomes=${S1}_Y.lengths \
+  | gzip \
+  > ${jobId}.cov.dat.gz
+
+nonN=`cat ${S1}_Y.nonN`
+gzip -dc ${jobId}.cov.dat.gz \
+  | awk '{ if ($4 != 0) bp += $3-$2 }
+     END { printf("%s\t%d\t%d\t%0.2f%%\n",jobId,bp,nonN,100.0*bp/nonN) }' \
+     jobId=${jobId} nonN=${nonN} \
+  > ${jobId}.cov.bp.dat
+```
+
+Find the highest identity alignment between species S1 and S2 at each position
+in S1&mdash;
+
+At the same time, discard short alignments (fewer than 30 alignment columns).
+
+```bash  
+minAlignment=30    # discard alignments with fewer columns than this
+text1Col=12
+
+jobId=${S1}_${S2}
+gzip -dc ${jobId}.sorted.gz \
+  | awk '/^#/  { print $0 }
+         !/^#/ { if (length($text1Col)>=M) print $0 }' \
+               text1Col=${text1Col} \
+               M=${minAlignment} \
+  | alignments_to_best --format=automatic \
+      --interval=sequence1 --key=id \
+  | gzip \
+  > ${jobId}.id.best.gz
+```
 
 Make a histogram of the distribution of identity between species S1 and
 S2&mdash;
 
 ```bash  
-jobId=${S1}_${S2}
-
 # find intervals that have no alignment, excluding N intervals
 
-gzip -dc alignments/${jobId}.id.best.gz \
+jobId=${S1}_${S2}
+gzip -dc ${jobId}.id.best.gz \
   | awk '{ print $1,$2,$3 }' \
   | genodsp --novalue --uncovered:hide --nooutputvalue \
       --chromosomes=${S1}_Y.lengths \
@@ -35,7 +111,7 @@ gzip -dc alignments/${jobId}.id.best.gz \
 
 # compute histogram
 
-gzip -dc alignments/${jobId}.id.best.gz \
+gzip -dc ${jobId}.id.best.gz \
          temp.${jobId}.unaligned.gz \
   | grep -v "^#" \
   | awk '{ if (NF==3) print $1,$2,$3,"0.0";
@@ -44,15 +120,18 @@ gzip -dc alignments/${jobId}.id.best.gz \
      END { for (id in bp) printf("%s %d\n",id,bp[id]) }' \
   | sort -nr \
   | awk 'BEGIN { print "id","bases" } { print $1,$2 }' \
-  > alignments/${jobId}.id.hist_bins
+  > ${jobId}.id.hist_bins
+
+# cleanup
+
+rm temp.${jobId}.unaligned.gz
 ```
 
 Compute average identity between species S1 and S2&mdash;
 
 ```bash  
 jobId=${S1}_${S2}
-
-cat alignments/${jobId}.id.hist_bins \
+cat ${jobId}.id.hist_bins \
   | grep -v "^id" \
   | awk '{
          id = $1;  bases = $2;
