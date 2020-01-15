@@ -13,3 +13,6 @@ repository.
 Note that all python scripts in this section of the repository are written to
 run in python2.
 
+Where shell scripts are shown (usually under the heading "mini-pipelines", they
+are written to run in a bash shell.
+

@@ -5,13 +5,12 @@ All pairwise alignment relating to this section of the repository was done
 using either lastz, or by extracting pairwise alignments from progressiveCactus
 multiple alignments.
 
-# Contents
+## contents
 
 human_primate.q&mdash;
 scoring and parameters file used for lastz primate pairwise alignments.
 
-# Mini-pipelines
-
+## mini-pipelines
 
 TBD add the alignment steps
 TBD add the selection of best alignments per base
@@ -52,6 +51,7 @@ Compute average identity between species S1 and S2&mdash;
 
 ```bash  
 jobId=${S1}_${S2}
+
 cat alignments/${jobId}.id.hist_bins \
   | grep -v "^id" \
   | awk '{
