@@ -1,7 +1,7 @@
 # alignment
 Support for alignment-related tasks.
 
-# Dependencies
+## Dependencies
 
 Some of the scripts herein make use of tools provided outside the scope of this
 repository.
