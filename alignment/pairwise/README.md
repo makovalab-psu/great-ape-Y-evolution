@@ -16,21 +16,46 @@ Scoring and parameters file used for lastz primate pairwise alignments.
 
 ## mini-pipelines
 
-TBD add the part that creates the alignment  Dec/21/2019 B, Dec/26/2019 A
+Record the length of scaffolds/contigs in species S1's assembly&mdash;
 
-TBD add the part that creates ${S1}_Y.lengths
+```bash  
+cat ${S1}.smsk.fa | fasta_lengths > ${S1}.lengths
+```
 
-TBD add the part that creates ${S1}_Y.nonN
+Record the runs of Ns in species S1's assembly&mdash;
 
-TBD add the part that creates ${S1}_Y.N_intervals
+```bash  
+cat ${S1}.smsk.fa | fasta_N_intervals > ${S1}.N_intervals
+```
 
-TBD add the part that convert fasta to 2bit
+Record the nucleotide content (counts) of scaffolds/contigs in species S1's
+assembly&mdash;
 
-TBD add the part that sorts the lastz output
+```bash  
+cat ${S1}.smsk.fa | fasta_content > ${S1}.content
+```
+
+Record the number of non-N bases in species S1's assembly&mdash;
+
+```bash  
+cat ${S1}.content \
+  | pick_named_columns --sep=whitespace nonN \
+  | awk '{ nonNTotal += $0 }
+     END { printf("%d\n",nonNTotal) }' \
+  > ${S1}.nonN
+```
+
+Convert species S1's assembly to 2bit format&mdash;
+
+```bash  
+faToTwoBit ${S1}.smsk.fa ${S1}.smsk.2bit
+```
 
 Align species S1 and S2&mdash;
 
 ```bash  
+# perform alignment
+
 jobId=${S1}_${S2}
 lastz \
       ${S1}.smsk.2bit[multiple,unmask] \
@@ -43,6 +68,8 @@ lastz \
   | gzip \
   > ${jobId}.dat.gz
 
+# sort alignments by decreasing identity
+
 gzip -dc ${jobId}.dat.gz \
   | tr -d \"%\" \
   | awk '/^#/  { if (NR==1) print $0 }
@@ -50,7 +77,6 @@ gzip -dc ${jobId}.dat.gz \
   | gzip \
   > ${jobId}.sorted.gz
 ```
-
 
 Compute the amount of each species S1 aligned to S2&mdash;
 
