@@ -6,11 +6,15 @@ using progressiveCactus.
 
 ## contents
 
-maf_blocks_to_subset_base_counts&mdash;
+maf_blocks_to_subset_base_counts.py&mdash;
 Read alignments in maf format and, conceptually, partition blocks by the set of
 species present. Collect and report species-specific stats within each subset.
 
-multi_fasta_to_pairwise_identity&mdash;
+maf_to_pairwise_identity.py&mdash;
+Read alignments in maf format and output pairwise identity stats, and other
+alignment stats.
+
+multi_fasta_to_pairwise_identity.py&mdash;
 Read an alignment in multi-fasta format and output pairwise identity stats.
 
 5Y.seqFile&mdash;
@@ -79,3 +83,19 @@ cat chrY.ancestor.pruned.5species.fas \
   | multi_fasta_to_pairwise_identity \
 ```
 
+Compute the amount of each species aligned to each other species&mdash;
+
+The output of maf_to_pairwise_identity is a table with one row for each
+species pair. The "aligned" column is the amount of one species aligned to
+the other.
+
+```bash  
+gzip -dc 5Y.Anc0_centric.maf.gz \
+  | maf_to_pairwise_identity \
+      hg_Y     --fasta:hg_Y=hg38.msY.smsk.fa \
+      panTro_Y --fasta:panTro_Y=panTro6.msY.smsk.fa \
+      panPan_Y --fasta:panPan_Y=panPan.msY.makovalab.ver1.smsk.fa \
+      gorGor_Y --fasta:gorGor_Y=gorGor.msY.makovalab.ver3.smsk.fa \
+      ponAbe_Y --fasta:ponAbe_Y=ponAbe.msY.makovalab.ver3.smsk.fa \
+      --discard:weeds
+```
