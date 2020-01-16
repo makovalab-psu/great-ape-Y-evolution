@@ -1,5 +1,4 @@
 # pairwise alignment
-Support for pairwise alignment tasks.
 
 All pairwise alignment relating to this section of the repository was done
 using either lastz, or by extracting pairwise alignments from progressiveCactus
