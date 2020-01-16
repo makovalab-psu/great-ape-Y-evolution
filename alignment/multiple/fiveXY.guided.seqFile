@@ -1,11 +1,11 @@
 ((panTro_Y, panTro),(panPan_Y, panPan),(hg_Y, hg),(gorGor_Y, gorGor),(ponAbe_Y, ponAbe));
-hg_Y temp/hg38.msY.smsk.fa
-hg temp/hg38.chrX.smsk.fa
-panTro_Y temp/panTro6.msY.smsk.fa
-panTro temp/panTro6.chrX.smsk.fa
-gorGor_Y temp/gorGor.msY.makovalab.ver3.smsk.fa
-gorGor temp/gorGor4.chrX.smsk.fa
-ponAbe_Y temp/ponAbe.msY.makovalab.ver3.smsk.fa
-ponAbe temp/ponAbe3.chrX.smsk.fa
-panPan_Y temp/panPan.msY.makovalab.ver1.smsk.fa
-panPan temp/panPan2.chrX.smsk.fa
+hg_Y hg38.msY.smsk.fa
+hg hg38.chrX.smsk.fa
+panTro_Y panTro6.msY.smsk.fa
+panTro panTro6.chrX.smsk.fa
+gorGor_Y gorGor.msY.makovalab.ver3.smsk.fa
+gorGor gorGor4.chrX.smsk.fa
+ponAbe_Y ponAbe.msY.makovalab.ver3.smsk.fa
+ponAbe ponAbe3.chrX.smsk.fa
+panPan_Y panPan.msY.makovalab.ver1.smsk.fa
+panPan panPan2.chrX.smsk.fa

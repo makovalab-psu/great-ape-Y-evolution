@@ -6,15 +6,15 @@ using progressiveCactus.
 
 ## contents
 
+five${C}.unguided.seqFile (for C in 1,2,...,22,X,Y)&mdash;
+Control file for progressiveCactus for the 5-species alignment of chromosome C.
+No phylogenetic tree is specified, so progressiveCactus will assume a star
+tree (a single root with all leaves connected to it).
+
 fiveXY.guided.seqFile&mdash;
 Control file for progressiveCactus for the 5-species alignment of chromosomes X
 and Y. A phylogenetic tree is specified, a root with five branches, each
 splitting into branches for X and Y.
-
-fiveY.unguided.seqFile&mdash;
-Control file for progressiveCactus for the 5-species alignment of chromosome Y.
-No phylogenetic tree is specified, so progressiveCactus will assume a star-tree
-(a single root with all leaves connected to it).
 
 maf_blocks_to_subset_base_counts.py&mdash;
 Read alignments in maf format and, conceptually, partition blocks by the set of
@@ -43,7 +43,7 @@ progressiveCactus \
   fiveY.hal
 ```
 
-Run progressiveCactus to create the 5-species alignment of chromosomes A and
+Run progressiveCactus to create the 5-species alignment of chromosomes X and
 Y&mdash;
 
 ```bash  
@@ -51,7 +51,27 @@ progressiveCactus \
   --maxThreads=24 \
   fiveXY.guided.seqFile \
   work_dir \
-  fiveY.hal
+  fiveXY.hal
+```
+
+Run progressiveCactus to create the 5-species alignment of chromosome X&mdash;
+
+```bash  
+progressiveCactus \
+  --maxThreads=24 \
+  fiveX.unguided.seqFile \
+  work_dir \
+  fiveX.hal
+```
+
+Run progressiveCactus to create the 5-species alignment of chromosome C&mdash;
+
+```bash  
+progressiveCactus \
+  --maxThreads=24 \
+  five${C}.unguided.seqFile \
+  work_dir \
+  five${C}.hal
 ```
 
 Convert the 5-species alignment to MAF format, with the putative ancestral
