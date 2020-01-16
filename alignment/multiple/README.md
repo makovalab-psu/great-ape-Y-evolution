@@ -133,7 +133,7 @@ elsewhere in this repository.
 
 ```bash  
 cat chrY.ancestor.pruned.5species.fas \
-  | multi_fasta_to_pairwise_identity \
+  | multi_fasta_to_pairwise_identity
 ```
 
 Compute the amount of each species aligned to each other species&mdash;
