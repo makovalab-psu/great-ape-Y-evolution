@@ -31,6 +31,10 @@ alignment stats.
 multi_fasta_to_pairwise_identity.py&mdash;
 Read an alignment in multi-fasta format and output pairwise identity stats.
 
+subset_base_counts_plot.r&mdash;
+R script to plot counts of aligned bases, by species subsets. It assumes an
+input table as created by maf_blocks_to_subset_base_counts.py.
+
 ## mini-pipelines
 
 Run progressiveCactus to create the 5-species alignment of chromosome Y&mdash;
