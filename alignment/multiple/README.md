@@ -6,9 +6,23 @@ using progressiveCactus.
 
 ## contents
 
+fiveXY.guided.seqFile&mdash;
+Control file for progressiveCactus for the 5-species alignment of chromosomes X
+and Y. A phylogenetic tree is specified, a root with five branches, each
+splitting into branches for X and Y.
+
+fiveY.unguided.seqFile&mdash;
+Control file for progressiveCactus for the 5-species alignment of chromosome Y.
+No phylogenetic tree is specified, so progressiveCactus will assume a star-tree
+(a single root with all leaves connected to it).
+
 maf_blocks_to_subset_base_counts.py&mdash;
 Read alignments in maf format and, conceptually, partition blocks by the set of
 species present. Collect and report species-specific stats within each subset.
+
+maf_filter_by_species_set.py&mdash;
+Read alignments in maf format and output those blocks that have a specified
+set of species, and no other species.
 
 maf_to_pairwise_identity.py&mdash;
 Read alignments in maf format and output pairwise identity stats, and other
@@ -17,20 +31,25 @@ alignment stats.
 multi_fasta_to_pairwise_identity.py&mdash;
 Read an alignment in multi-fasta format and output pairwise identity stats.
 
-fiveY.seqFile&mdash;
-Control file for progressiveCactus for the 5-species Y alignment. This
-describes the location of the input sequence files. No phylogenetic tree is
-specified, so progressiveCactus will assume a star-tree (a single root with all
-leaves connected to it).
-
 ## mini-pipelines
 
-Run progressiveCactus to create the 5-species Y alignment&mdash;
+Run progressiveCactus to create the 5-species alignment of chromosome Y&mdash;
 
 ```bash  
 progressiveCactus \
   --maxThreads=24 \
-  fiveY.seqFile \
+  fiveY.unguided.seqFile \
+  work_dir \
+  fiveY.hal
+```
+
+Run progressiveCactus to create the 5-species alignment of chromosomes A and
+Y&mdash;
+
+```bash  
+progressiveCactus \
+  --maxThreads=24 \
+  fiveXY.guided.seqFile \
   work_dir \
   fiveY.hal
 ```
@@ -69,6 +88,16 @@ gzip -dc fiveY.Anc0_centric.maf.gz \
   | maf_blocks_to_subset_base_counts \
       --species=hg_Y,panTro_Y,panPan_Y,gorGor_Y,ponAbe_Y \
   > fiveY.Anc0_centric.subset_base_counts
+```
+
+Extract alignment blocks that contain all five species&mdash;
+
+```bash  
+gzip -dc fiveY.Anc0_centric.maf.gz \
+  | maf_filter_by_species_set \
+      --species=hg_Y,panTro_Y,panPan_Y,gorGor_Y,ponAbe_Y \
+  | gzip \
+  > fiveY.Anc0_centric.all_five .maf.gz
 ```
 
 Compute average identity between each pair of species, in alignment blocks that

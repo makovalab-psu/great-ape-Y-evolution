@@ -9,7 +9,7 @@ multiple alignments.
 
 alignments_to_best.py&mdash;
 From an alignment, collect intervals that are "best" as measured by some
-column. An interval may be split, if only parts of that interval are best.
+column.
 
 human_primate.q&mdash;
 Scoring and parameters file used for lastz primate pairwise alignments.
