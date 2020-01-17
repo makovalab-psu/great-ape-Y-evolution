@@ -16,14 +16,17 @@ def usage(s=None):
 usage: cat maf | maf_blocks_to_subset_base_counts <reference> [options]
   --species=<list>       (cumulative) comma-separated list of species of
                          interest; required only for some operations
+  --discard:weeds        discard any components that go beyond the end of the
+                         sequence ('off in the weeds')
+                         (by default we treat these as errors and halt)
   --skip=<number>        skip the first so many maf blocks
   --head=<number>        limit the number of maf blocks read
   --progress=<number>    periodically report how many maf blocks we've
                          processed
 
-Read alignments in maf format and, conceptually, partition blocks by the
-set of species present. Collect and report species-specific stats (defined
-below) within each subset.
+Read alignments in maf format and, conceptually, partition blocks by the set
+of species present. Collect and report species-specific stats (defined below)
+within each subset.
 
 Three counts are colected for each subset:
   - "One-to-one" counts bases in segments that are in blocks that have no
@@ -71,6 +74,7 @@ def main():
 	# parse the command line
 
 	speciesOfInterest = None
+	discardWeeds      = False
 	skipCount         = None
 	headLimit         = None
 	reportProgress    = None
@@ -87,6 +91,8 @@ def main():
 				species = species.strip()
 				if (species not in speciesOfInterest):
 					speciesOfInterest += [species]
+		elif (arg in ["--discard:weeds","--discard=weeds"]):
+			discardWeeds = True
 		elif (arg.startswith("--skip=")):
 			skipCount = int_with_unit(argVal)
 		elif (arg.startswith("--head=")):
@@ -111,7 +117,7 @@ def main():
 
 	skipsRemaining = skipCount
 	mafBlockNumber = mafBlocksSkipped = 0
-	for a in maf_alignments(stdin):
+	for a in maf_alignments(stdin,discardWeeds=discardWeeds):
 		if (skipsRemaining != None):
 			mafBlocksSkipped += 1
 			if (mafBlocksSkipped <= skipsRemaining): continue

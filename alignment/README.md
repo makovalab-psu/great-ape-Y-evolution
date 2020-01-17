@@ -17,4 +17,3 @@ run in python2.
 
 Where shell scripts are shown (usually under the heading "mini-pipelines", they
 are written to run in a bash shell.
-
