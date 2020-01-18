@@ -20,5 +20,8 @@ Report the runs of Ns in fasta sequences.
 histogram.py&mdash;
 Make a histogram of input values.
 
+merge_file_columns_by_common_name&mdash;
+Merge columns from multiple files into a single file.
+
 pick_named_columns.py&mdash;
 Pick columns, by name, from a whitespace-delimited file.

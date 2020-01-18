@@ -106,11 +106,63 @@ hal2maf fiveY.hal \
 
 Collect by-subset stats from the 5-species alignment&mdash;
 
+Note that the ancestor-centric MAF can lack species-specific portions of each
+species, so the counts for singleton sets in the following mini-pipeline are
+replaced by another mini-pipeline (described elsewhere in this README).
+
 ```bash  
 gzip -dc fiveY.Anc0_centric.maf.gz \
   | maf_blocks_to_subset_base_counts \
       --species=hg_Y,panTro_Y,panPan_Y,gorGor_Y,ponAbe_Y \
   > fiveY.Anc0_centric.subset_base_counts
+```
+
+Collect stats for species-specific 'alignments' for species S1, from the
+5-species alignment&mdash;
+
+Note that the ancestor-centric MAF can lack species-specific portions of each
+species, so the results of the following mini-pipeline replace the counts for
+singleton sets in fiveY.Anc0_centric.subset_base_counts. 
+
+```bash  
+gzip -dc fiveY.${S1}_Y_centric.maf.gz \
+  | maf_filter_by_species_set --species=${S1}_Y \
+  | grep ${S1}_Y \
+  | awk '{
+         if ($5 == "+") print $2,$3,$3+$4;
+         else           print $2,$6-($3+$4),$6-$3;
+         }' \
+  | sed "s/^${S1}_Y\.//" \
+  | genodsp --novalue --uncovered:hide --nooutputvalue \
+      --chromosomes=${S1}_Y.lengths \
+      = mask ${S1}_Y.N_intervals \
+  | awk '{ t+=$3-$2; }
+     END { printf("%s %d\n",species,t); }' species=${S1} \
+  > fiveY.${S1}_Y_centric.${S1}_Y_specific
+
+gzip -dc fiveY.${S1}_Y_centric.maf.gz \
+  | maf_filter_by_species_set --species=${S1}_Y \
+      --discard:duplicates \
+  | grep ${S1}_Y \
+  | awk '{
+         if ($5 == "+") print $2,$3,$3+$4;
+         else           print $2,$6-($3+$4),$6-$3;
+         }' \
+  | sed "s/^${S1}_Y\.//" \
+  | genodsp --novalue --uncovered:hide --nooutputvalue \
+      --chromosomes=${S1}_Y.lengths \
+      = mask ${S1}_Y.N_intervals \
+  | awk '{ t+=$3-$2; }
+     END { printf("%s %d\n",species,t); }' species=${S1} \
+  > fiveY.${S1}_Y_centric.${S1}_Y_unique
+
+cat fiveY.*_Y_specific > temp.specific
+cat fiveY.*_Y_unique   > temp.unique
+merge_file_columns_by_common_name --removekey \
+    temp.specific \
+    temp.unique \
+  | awk 'BEGIN { print "#species","specific","unique" } { print $0 }' \
+  | colrithmetic --header "duplicate:specific-unique"
 ```
 
 Extract alignment blocks that contain all five species&mdash;
