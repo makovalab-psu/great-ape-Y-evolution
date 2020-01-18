@@ -13,7 +13,11 @@ def usage(s=None):
 	message = """
 
 usage: cat maf | maf_filter_by_species_set <reference> [options]
-  --species=<list>       (cumulative) comma-separated list of species
+  --species=<list>       (cumulative) comma-separated list of species of
+                         interest
+  --discard:duplicates   discard any *blocks* that contain more than one
+                         component (a duplicate) for any of the species of
+                         interest
   --discard:weeds        discard any components that go beyond the end of the
                          sequence ('off in the weeds')
                          (by default we treat these as errors and halt)
@@ -39,6 +43,7 @@ def main():
 	# parse the command line
 
 	speciesOfInterest = None
+	discardDuplicates = False
 	discardWeeds      = False
 	skipCount         = None
 	headLimit         = None
@@ -54,6 +59,8 @@ def main():
 			for species in argVal.split(","):
 				species = species.strip()
 				speciesOfInterest.add(species)
+		elif (arg in ["--discard:duplicates","--discard=duplicates"]):
+			discardDuplicates = True
 		elif (arg in ["--discard:weeds","--discard=weeds"]):
 			discardWeeds = True
 		elif (arg.startswith("--skip=")):
@@ -101,6 +108,18 @@ def main():
 		if (refs != speciesOfInterest):
 			mafBlocksDiscarded += 1
 			continue
+
+		if (discardDuplicates):
+			refs = set()
+			hasDuplicate = False
+			for c in a.block:
+				if (c.ref in refs):
+					hasDuplicate = True
+					break
+				refs.add(c.ref)
+			if (hasDuplicate):
+				mafBlocksDiscarded += 1
+				continue
 
 		mafBlocksKept += 1
 		if (nothingHasPrinted): nothingHasPrinted = False
