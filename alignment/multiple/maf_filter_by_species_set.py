@@ -4,9 +4,9 @@ Read alignments in maf format and output those blocks that have a specified
 set of species, and no other species.
 """
 
-from sys              import argv,stdin,stdout,stderr,exit
-from math             import ceil
-from maf_to_lzgeneral import maf_alignments
+from sys        import argv,stdin,stdout,stderr,exit
+from math       import ceil
+from maf_reader import maf_alignments
 
 
 def usage(s=None):

@@ -5,9 +5,9 @@ set of species present. Collect and report species-specific stats (defined
 below) within each subset.
 """
 
-from sys              import argv,stdin,stdout,stderr,exit
-from math             import ceil
-from maf_to_lzgeneral import maf_alignments
+from sys        import argv,stdin,stdout,stderr,exit
+from math       import ceil
+from maf_reader import maf_alignments
 
 
 def usage(s=None):

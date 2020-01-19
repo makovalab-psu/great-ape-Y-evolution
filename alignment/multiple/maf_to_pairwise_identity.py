@@ -9,7 +9,7 @@ from string      import maketrans
 from collections import OrderedDict 
 from gzip        import open as gzip_open
 import copy
-from maf_to_lzgeneral import maf_alignments
+from maf_reader  import maf_alignments
 
 try:                from fasta_file import FastaFile
 except ImportError: FastaFile = None
