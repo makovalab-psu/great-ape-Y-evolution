@@ -5,6 +5,9 @@ using progressiveCactus.
 
 ## contents
 
+fasta_file.py&mdash;
+Support for reading FASTA files.
+
 five${C}.unguided.seqFile (for C in 1,2,...,22,X,Y)&mdash;
 Control file for progressiveCactus for the 5-species alignment of chromosome C.
 No phylogenetic tree is specified, so progressiveCactus will assume a star
@@ -22,6 +25,9 @@ species present. Collect and report species-specific stats within each subset.
 maf_filter_by_species_set.py&mdash;
 Read alignments in maf format and output those blocks that have a specified
 set of species, and no other species.
+
+maf_reader.py&mdash;
+Support for reading MAF files.
 
 maf_to_pairwise_identity.py&mdash;
 Read alignments in maf format and output pairwise identity stats, and other
