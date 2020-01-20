@@ -142,6 +142,7 @@ gzip -dc fiveY.${S1}_Y_centric.maf.gz \
   | genodsp --novalue --uncovered:hide --nooutputvalue \
       --chromosomes=${S1}_Y.lengths \
       = mask ${S1}_Y.N_intervals \
+  | tee fiveY.${S1}_Y_centric.${S1}_Y_specific.bed \
   | awk '{ t+=$3-$2; }
      END { printf("%s %d\n",species,t); }' species=${S1} \
   > fiveY.${S1}_Y_centric.${S1}_Y_specific
