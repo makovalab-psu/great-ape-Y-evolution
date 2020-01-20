@@ -123,12 +123,15 @@ gzip -dc fiveY.Anc0_centric.maf.gz \
   > fiveY.Anc0_centric.subset_base_counts
 ```
 
-Collect stats for species-specific 'alignments' for species S1, from the
-5-species alignment&mdash;
+Identify and collect stats for species-specific segments for species S1, from
+the 5-species alignment&mdash;
 
 Note that the ancestor-centric MAF can lack species-specific portions of each
 species, so the results of the following mini-pipeline replace the counts for
-singleton sets in fiveY.Anc0_centric.subset_base_counts. 
+singleton sets in fiveY.Anc0_centric.subset_base_counts.
+
+Species-specific segments are created as a byproduct of this pipeline, in BED
+format.
 
 ```bash  
 gzip -dc fiveY.${S1}_Y_centric.maf.gz \
