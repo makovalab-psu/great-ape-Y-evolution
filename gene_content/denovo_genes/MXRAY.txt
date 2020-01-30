@@ -1,0 +1,29 @@
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gene_content/analysis/gene_BLAT
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/Bonobo/transcriptome_assembly/All/Join/standard_output/blastp.outfmt6 rnaseq_blastp_bonobo.outfmt6
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/SumatranOrangutan/transcriptome_assembly/1991-0051/All/Join/standard_output/blastp.outfmt6 rnaseq_blastp_sumatranOrangutan.outfmt6
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/Gorilla/transcriptome_assembly/All/Join/standard_output/blastp.outfmt6 rnaseq_blastp_gorilla.outfmt6
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/index/panPan.msY.makovalab.ver1.smsk.2bit .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/index/gorGor.msY.makovalab.ver3.smsk.2bit .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/BWA_align/index/ponAbe.msY.makovalab.ver3.smsk.2bit .
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/gene_prediction/augustus/blastp_completeGene.outfmt6 orangutan_augustus_completegene_blast.outfmt6
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/gene_prediction/augustus/blastp_completeGene.outfmt6 bonobo_augustus_completegene_blast.outfmt6
+
+#MXRAY5
+No hit in RNASeq data
+No hit in BLAT that covers at least 50% of the gene
+No hit in gene prediction with complete gene.
+
+grep "MXRAY" rnaseq_blastp_*
+blat panPan.msY.makovalab.ver1.smsk.2bit gene/MXRAY5.fa MXRAY5_bonobo_output.psl 	# longest hit 16157bp out of 40829 
+blat gorGor.msY.makovalab.ver3.smsk.2bit gene/MXRAY5.fa MXRAY5_gorilla_output.psl	# longest hit 12787bp out of 40829
+blat ponAbe.msY.makovalab.ver3.smsk.2bit gene/MXRAY5.fa MXRAY5_orangutan_output.psl # longest hit 5633bp out of 40829
+
+cut -f1 MXRAY5_orangutan_output.psl | sort -n | uniq |sort -nr | head
+
+grep "MXRA" bonobo_augustus_completegene_blast.outfmt6      
+g24.t1  MXRA5_HUMAN     84.042  1299    1059    0.0     N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+
+#Only aligns to exon 5,6 and 7 on X chromosome. Miss the first 4 smaller exons.

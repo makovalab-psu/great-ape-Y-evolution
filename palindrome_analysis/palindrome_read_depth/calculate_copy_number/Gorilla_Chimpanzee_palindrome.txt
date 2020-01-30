@@ -1,0 +1,432 @@
+#Steps for Orangutan and Chimpanzee
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/palindrome/chimpanzee
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#Obtain scripts from github
+#converst them to dos if there is an issue.
+python /galaxy/home/rxv923/scripts/dos2unix.py AlignRefYtoAssembly.sh AlignRefYtoAssembly.sh
+
+
+mkdir data
+cd data
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Chimp_Y/analysis/Assemblies/panTro6.msY.fa .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Gorilla_Y/analysis/Assemblies/gorGor.msY.makovalab.ver3.fa .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Gorilla_Y/analysis/Assemblies/gorGor.msY.makovalab.ver3.smsk.fa .
+
+
+awk 'BEGIN{FS=" "}{if(!/>/){print toupper($0)}else{print $1}}' gorGor.msY.makovalab.ver3.fa > gorGor.msY.makovalab.ver3_UC.fa
+awk 'BEGIN{FS=" "}{if(!/>/){print toupper($0)}else{print $1}}' panTro6.msY.fa > panTro6.msY_UC.fa
+
+#Obtain length of contigs in orangutan assembly
+samtools faidx gorGor.msY.makovalab.ver3_UC.fa
+cat gorGor.msY.makovalab.ver3_UC.fa.fai | cut -f1,2 > gorGor.msY.makovalab.ver3.contigs.lengths
+
+mv ../human_primate.q .
+
+#Done preparing data folder
+cd ..
+
+
+#Needs a directory named alignments, into which it will put
+mkdir alignments
+mkdir temp
+
+#Running LASTZ to obtain alignment
+#update the below parameters as found in data folder
+vim AlignChimpRefYtoAssembly.sh.sh
+folder='alignments'
+refY='panTro6.msY_UC.fa'
+assembly='gorGor.msY.makovalab.ver3_UC.fa'
+
+
+#run lastz
+cut -f1 data/gorGor.msY.makovalab.ver3.contigs.lengths| xargs -n1 sh AlignChimpRefYtoAssembly.sh.sh > lastZ_run.out
+
+#We want N-counts in each window
+python
+
+from Bio import SeqIO
+
+def chunks(seq, window):
+	seqlen = len(seq)
+	for i in range(0,seqlen,window):
+		if (i+window>seqlen):
+			j = seqlen 
+		else:
+			j = i+window
+		yield i,j,seq[i:j]
+
+
+fasta='data/gorGor.msY.makovalab.ver3.smsk.fa'
+window_size=1000
+output="temp/gorGor.msY.makovalab.ver3.contigs.lengths."+str(window_size)+".n_counts"
+refFH=open(fasta,"rU")
+out=open(output,"w")
+
+for chr_record in SeqIO.parse(refFH, "fasta"):
+	chr = chr_record.seq
+	for win in chunks(chr, window_size):
+		N = win[2].count("N")
+		out.write(str(chr_record.id)+"\t"+str(win[0])+"\t"+str(win[1])+"\t"+str(N)+"\n")
+
+
+
+################
+
+#Generate window intervals, with the excess given to the last window ...
+#sh Gen_window_intervals.sh <FileName.contigs.lengths> <outputfolder>
+sh Gen_window_intervals.sh gorGor.msY.makovalab.ver3.contigs.lengths temp
+
+#Identify the windows
+####Bob's (imperfect) strategy for removing alignments will be ...
+####
+####	(1) keep the alignment with the highest number of matches
+####	(2) exclude any alignments that intersect with that interval (in gorilla)
+####	(3) keep the remaining alignment with the next highest number of matches
+####	(4) go back to step 2
+
+#update the below parameters as found in data folder
+
+vim identify_windows.sh
+outfolder='temp'
+contigs='gorGor.msY.makovalab.ver3.contigs.lengths'
+refY='chimpanzee'
+assembly='gorilla'
+alignments='alignments'
+
+
+nohup sh identify_windows.sh > identify_windows_run.out &
+
+#Conver dat file to bed file
+
+cd temp
+
+#Check how thw chromosome was mapped to was define : Y or chrY
+#Update the below python script accordingly
+less gorilla_to_chimpanzee.1000.preferential.dat
+
+
+python
+
+align="gorilla_to_chimpanzee.1000.preferential.dat"
+parsed="gorilla_to_chimpanzee.1000.preferential.bed"
+
+out = open(parsed, "w")
+fio = open(align, "r")
+lines = fio.read().split('\n')
+for i in range(len(lines)):
+	if lines[i][0]=="=":
+		temp=lines[i].split(" ")
+		id=str(temp[1])+"_"+str(temp[2])+"_"+str(temp[3])
+		#print id
+		if i+2 <= len(lines):
+			temp_align=lines[i+2].split()
+			if len(temp_align)> 0:
+				if temp_align[0]=="chrY":   ##Set Y or chrY here
+					#print temp_align
+					out.write( str(temp_align[0])+"\t"+str(temp_align[1])+"\t"+str(temp_align[2])+"\t"+id+"\n")
+
+
+##NOTE You will get an error if the last line is empty without alignment information. 
+#test below to check the line being parsed
+len(lines)-i  #should not be more than one
+
+####Coordinates of palindromes
+cd ..
+mkdir coordinates
+
+vim Chimp_panTro6_palindromeCord.bed
+chrY	1759451	2053069
+chrY	2298081	2984818
+chrY	3587737	3925944
+chrY	4669973	5444881
+chrY	8651546	9099775
+chrY	9099776	9383863
+chrY	9383864	9832093
+chrY	9832094	10116181
+chrY	10116182	10564411
+chrY	10564412	10851248
+chrY	11060051	11674261
+chrY	12651797	12963129
+chrY	13340000	14084660
+chrY	14798116	15024316
+chrY	15493746	16056815
+chrY	16477310	16791733
+chrY	21591500	21671300
+chrY	23517939	23546819
+chrY	23807052	24577396
+
+
+cat << EOF > Chimp_panTro6_palindrome1.bed
+chrY	1759451	2053069
+EOF
+
+##Note: Did not paste here but create file for each palindrome.
+
+vim Chimp_panTro6_XDGCord.bed
+
+chrY	26210218	26211127
+chrY	25814614	25822712
+chrY	20429349	20442635
+chrY	17534922	17551649
+chrY	22946482	23238101
+chrY	25143378	25246224
+chrY	18097144	18135348
+chrY	25425481	25499431
+chrY	20238918	20383654
+chrY	20869562	21028971
+chrY	26012708	26038802
+
+##################################
+
+mkdir contigs
+
+#Obtain the contigs which overlap the palindromes using bedtools intersect
+bedtools intersect -b coordinates/Chimp_panTro6_palindromeCord.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome.bed
+
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome1.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome1.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome2.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome2.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome3.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome3.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome4.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome4.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome5.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome5.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome6.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome6.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome7.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome7.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome8.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome8.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome9.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome9.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome10.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome10.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome11.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome11.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome12.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome12.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome13.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome13.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome14.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome14.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome15.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome15.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome16.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome16.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome17.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome17.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome18.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome18.bed
+bedtools intersect -b coordinates/Chimp_panTro6_palindrome19.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_Palindrome19.bed
+
+#Obtain the contigs which overlap the XDG using bedtools intersect
+bedtools intersect -b coordinates/Chimp_panTro6_XDGCord.bed -a temp/gorilla_to_chimpanzee.1000.preferential.bed > contigs/Contig_to_XDG.bed
+
+#Parse the contigs names from bed file
+cat contigs/Contig_to_Palindrome.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome.txt
+cat contigs/Contig_to_Palindrome1.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome1.txt
+cat contigs/Contig_to_Palindrome2.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome2.txt
+cat contigs/Contig_to_Palindrome3.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome3.txt
+cat contigs/Contig_to_Palindrome4.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome4.txt
+cat contigs/Contig_to_Palindrome5.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome5.txt
+cat contigs/Contig_to_Palindrome6.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome6.txt
+cat contigs/Contig_to_Palindrome7.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome7.txt
+cat contigs/Contig_to_Palindrome8.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome8.txt
+cat contigs/Contig_to_Palindrome9.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome9.txt
+cat contigs/Contig_to_Palindrome10.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome10.txt
+cat contigs/Contig_to_Palindrome11.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome11.txt
+cat contigs/Contig_to_Palindrome12.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome12.txt
+cat contigs/Contig_to_Palindrome13.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome13.txt
+cat contigs/Contig_to_Palindrome14.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome14.txt
+cat contigs/Contig_to_Palindrome15.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome15.txt
+cat contigs/Contig_to_Palindrome16.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome16.txt
+cat contigs/Contig_to_Palindrome17.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome17.txt
+cat contigs/Contig_to_Palindrome18.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome18.txt
+cat contigs/Contig_to_Palindrome19.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome19.txt
+
+
+cat contigs/Contig_to_XDG.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedXDG.txt
+
+#######################################
+
+#Parse windows with 800bp alignment
+
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.PalindromeAll_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome1.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome1_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome2.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome2_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome3.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome3_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome4.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome4_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome5.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome5_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome6.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome6_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome7.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome7_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome8.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome8_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome9.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome9_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome10.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome10_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome11.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome11_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome12.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome12_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome13.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome13_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome14.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome14_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome15.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome15_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome16.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome16_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome17.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome17_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome18.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome18_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome19.txt temp/gorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome19_80perAlign.dat
+
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedXDG.txt temp/gorilla_to_chimpanzeegorilla_to_chimpanzee.1000.windows_for_identity.dat temp/gorilla_to_chimpanzee.1000.windows_for_identity.XDG_80perAlign.dat
+
+
+################################################################################################
+
+#Sort windows to optimize coverage analysis
+
+mkdir bam
+cd bam
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/gorillaWGS_msY_ver3.GCcorrected.bam .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/gorillaWGS_msY_ver3.GCcorrected.bam.bai .
+
+samtools idxstats gorillaWGS_msY_ver3.GCcorrected.bam | cut -f 1-2 > chromosomes.txt
+
+cd ..
+
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.PalindromeAll_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.PalindromeAll_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome1_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome1_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome2_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome2_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome3_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome3_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome4_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome4_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome5_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome5_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome6_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome6_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome7_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome7_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome8_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome8_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome9_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome9_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome10_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome10_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome11_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome11_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome12_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome12_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome13_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome13_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome14_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome14_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome15_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome15_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome16_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome16_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome17_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome17_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome18_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome18_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome19_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome19_80perAlign_sorted.dat
+
+bedtools sort -faidx bam/chromosomes.txt -i temp/gorilla_to_chimpanzee.1000.windows_for_identity.XDG_80perAlign.dat > temp/gorilla_to_chimpanzee.1000.windows_for_identity.XDG_80perAlign_sorted.dat
+
+
+
+##########################################
+
+
+
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.PalindromeAll_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindromeAll_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome1_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome1_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome2_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome2_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome3_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome3_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome4_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome4_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome5_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome5_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome6_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome6_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome7_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome7_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome8_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome8_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome9_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome9_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome10_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome10_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome11_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome11_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome12_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome12_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome13_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome13_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome14_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome14_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome15_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome15_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome16_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome16_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome17_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome17_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome18_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome18_80per.bed
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.Palindrome19_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_palindrome19_80per.bed
+
+bedtools coverage -b bam/gorillaWGS_msY_ver3.GCcorrected.bam -a temp/gorilla_to_chimpanzee.1000.windows_for_identity.XDG_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_XDG_80per.bed
+
+mkdir gcCor_results
+mv Coverage_gorilla_msY_WGS_* gcCor_results
+
+#####################################################################
+
+cd gcCor_results
+R
+
+palin=read.table("Coverage_gorilla_msY_WGS_palindromeAll_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin1=read.table("Coverage_gorilla_msY_WGS_palindrome1_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin2=read.table("Coverage_gorilla_msY_WGS_palindrome2_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin3=read.table("Coverage_gorilla_msY_WGS_palindrome3_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin4=read.table("Coverage_gorilla_msY_WGS_palindrome4_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin5=read.table("Coverage_gorilla_msY_WGS_palindrome5_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin6=read.table("Coverage_gorilla_msY_WGS_palindrome6_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin7=read.table("Coverage_gorilla_msY_WGS_palindrome7_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin8=read.table("Coverage_gorilla_msY_WGS_palindrome8_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin9=read.table("Coverage_gorilla_msY_WGS_palindrome9_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin10=read.table("Coverage_gorilla_msY_WGS_palindrome10_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin11=read.table("Coverage_gorilla_msY_WGS_palindrome11_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin12=read.table("Coverage_gorilla_msY_WGS_palindrome12_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin13=read.table("Coverage_gorilla_msY_WGS_palindrome13_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin14=read.table("Coverage_gorilla_msY_WGS_palindrome14_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin15=read.table("Coverage_gorilla_msY_WGS_palindrome15_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin16=read.table("Coverage_gorilla_msY_WGS_palindrome16_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin17=read.table("Coverage_gorilla_msY_WGS_palindrome17_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin18=read.table("Coverage_gorilla_msY_WGS_palindrome18_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin19=read.table("Coverage_gorilla_msY_WGS_palindrome19_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+XDG=read.table("Coverage_gorilla_msY_WGS_XDG_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+
+
+get_coverage<-function(data_align){
+temp=data_align[which(data_align$V4<200 & data_align$V13 > 0.8),]
+return ((temp$V10/temp$V12)*250)
+}
+
+get_CN<-function(coverage,XDG){
+control=median(XDG)
+temp=coverage/control
+return (temp)
+}
+
+pall=get_coverage(palin)
+p1=get_coverage(palin1)
+p2=get_coverage(palin2)
+p3=get_coverage(palin3)
+p4=get_coverage(palin4)
+p5=get_coverage(palin5)
+p6=get_coverage(palin6)
+p7=get_coverage(palin7)
+p8=get_coverage(palin8)
+p9=get_coverage(palin9)
+p10=get_coverage(palin10)
+p11=get_coverage(palin11)
+p12=get_coverage(palin12)
+p13=get_coverage(palin13)
+p14=get_coverage(palin14)
+p15=get_coverage(palin15)
+p16=get_coverage(palin16)
+p17=get_coverage(palin17)
+p18=get_coverage(palin18)
+p19=get_coverage(palin19)
+
+x=get_coverage(XDG)
+
+#Manually for Gorilla Chimp
+p15=0
+
+
+CNpall=get_CN(pall,x)
+CNp1=get_CN(p1,x)
+CNp2=get_CN(p2,x)
+CNp3=get_CN(p3,x)
+CNp4=get_CN(p4,x)
+CNp5=get_CN(p5,x)
+CNp6=get_CN(p6,x)
+CNp7=get_CN(p7,x)
+CNp8=get_CN(p8,x)
+CNp9=get_CN(p9,x)
+CNp10=get_CN(p10,x)
+CNp11=get_CN(p11,x)
+CNp12=get_CN(p12,x)
+CNp13=get_CN(p13,x)
+CNp14=get_CN(p14,x)
+CNp15=get_CN(p15,x)
+CNp16=get_CN(p16,x)
+CNp17=get_CN(p17,x)
+CNp18=get_CN(p18,x)
+CNp19=get_CN(p19,x)
+
+CNx=get_CN(x,x)
+
+
+C1<-c(CNp1,CNp6,CNp8,CNp10,CNp14,CNp16)
+C2<-c(CNp2,CNp11,CNp15)
+C3<-c(CNp3,CNp12)
+C4<-c(CNp4,CNp13)
+C5<-c(CNp5,CNp7,CNp9)
+color_Palindromes<-c("white","#ea94b8","#00b6dd","#d64033","#fbd120","#048696","#dce1ee","#dce1ee","#dce1ee","#fffbcc")
+
+pdf('Fig_ChimpP_Gorilla.pdf', width=6.5, height=4)
+boxplot(CNpall,C1,C2,C3,C4,C5,CNp17,CNp18,CNp19,CNx,names=c("PAll","C1","C2","C3","C4","C5","C17","C18","C19","XDG"), ylab="Copy number", main="Chimpanzee palindromes on gorilla Y", outline=FALSE, cex.axis=0.50,col=color_Palindromes)
+abline(h=2, col='red')
+abline(h=1,col='black')
+dev.off()

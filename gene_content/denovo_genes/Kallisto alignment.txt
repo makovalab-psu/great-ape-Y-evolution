@@ -1,0 +1,16 @@
+Run Kallisto
+
+/nfs/brubeck.bx.psu.edu/scratch6/rahul/GTEx/TESTIS/RNASeq/src/kallisto_linux-v0.43.0/kallisto index --index=denovo_kallisto_index possible_denovo.fa
+
+/nfs/brubeck.bx.psu.edu/scratch6/rahul/GTEx/TESTIS/RNASeq/src/kallisto_linux-v0.43.0/kallisto quant --index=denovo_kallisto_index --output-dir=kalisto_Bonobo160817_M02286_k25 --threads=10 --bias --bootstrap-samples=100 --seed=9 --plaintext /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/data/Bonobo/data/160817_M02286/Ppa-RNAseq-513_S1_L001_R1_001.fastq /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/data/Bonobo/data/160817_M02286/Ppa-RNAseq-513_S1_L001_R2_001.fastq
+awk '{if(int($4) > 10) print $0}' kalisto_Bonobo160817_M02286_k25/abundance.tsv
+
+
+
+
+
+/nfs/brubeck.bx.psu.edu/scratch6/rahul/GTEx/TESTIS/RNASeq/src/kallisto_linux-v0.43.0/kallisto index --index=denovo_kallisto_index possible_denovo.fa
+/nfs/brubeck.bx.psu.edu/scratch6/rahul/GTEx/TESTIS/RNASeq/src/kallisto_linux-v0.43.0/kallisto quant --index=denovo_kallisto_index --output-dir=kalisto_3405R1 --threads=10 --bias --bootstrap-samples=100 --seed=9 --plaintext /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/data/BorneanOrangutan/3405/Rep1/3405a_S1_L001_R1.fastq /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/data/BorneanOrangutan/3405/Rep1/3405a_S1_L001_R2.fastq 
+
+
+awk '{if(int($4) > 10) print $0}' kalisto_3405R1/abundance.tsv

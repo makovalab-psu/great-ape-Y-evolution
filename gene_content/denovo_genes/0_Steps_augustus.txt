@@ -1,0 +1,420 @@
+#Steps to run Augustus
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/gene_prediction/augustus
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Bonobo_Y/analysis/Assemblies/panPan.msY.makovalab.ver1.smsk.fa .
+
+
+#Running augustus
+augustus --species=human panPan.msY.makovalab.ver1.smsk.fa --softmasking=on --codingseq=on --outfile=panPan.msY.makovalab.ver1.smsk.gff --errfile=panPan.msY.makovalab.ver1.smsk.augustus.err
+
+#Default
+#augustus --species=human panPan.msY.makovalab.ver1.smsk.fa > panPan.msY.makovalab.ver1.gff
+getAnnoFasta.pl panPan.msY.makovalab.ver1.smsk.gff
+
+#/galaxy/home/rxv923/src/ncbi-blast-2.6.0+/bin/blastp
+blastp -query panPan.msY.makovalab.ver1.smsk.aa  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp.outfmt6
+
+
+STEP: Run read_gff_augustus.py file to parse complete gene sequences only
+
+blastp -query panPan.msY.makovalab.ver1.smsk.aa_complete  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp_completeGene.outfmt6
+
+#parse hits which have above 80% identity
+awk '{ if($3>80) print $0 }' blastp_completeGene.outfmt6 > blastp_completeGene_above80identifty.outfmt6
+
+#cut -f2 blastp_completeGene.outfmt6 | sort | uniq
+
+#awk '{ if($3>80) print $0 }' blastp_completeGene.outfmt6 | cut -f1 | sort | uniq | wc -l
+
+Use online databases like UCSC genome browser, NCBI to search for gene annotations and identify the chromosome they are present on. 
+
+STEP: Run parse_unannotated_genes.py to get list of un-annotated genes. 
+
+
+STEP: Filter high confidence genes
+
+#obtained list of contigs which map to human and chimpanzee Y chromosomes and consider them as high confidence contigs. Obtain list from assembly filtering step where its mapped to female and human and chimp Y sequences for filtering.
+#Parse genes which map to the high confidence contigs
+
+python parse_genes_specificYchromosome.py
+
+STEP : Run Kallisto_alignment.txt to map testis specific reads and filter genes with atleast 10 reads.
+
+awk '{if(int($4) > 10) print $0}' kalisto_3405R1/abundance.ts
+
+
+#Parse gene sequences
+
+mkdir gene_FASTA
+cd gene_FASTA
+
+grep "SRY" ../blastp_completeGene.outfmt6
+g2.t1   SRY_PANPA       100.000 204     204     1.28e-154       N/A     N/A     N/A     N/A     SRY_PANPA Sex-determining region Y protein
+grep "g2.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+
+#copy g2.t1 into a FASTA names SRY_panPan.fa
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig170.g2.t1 > SRY_panPan.fa
+
+repeat this for other genes INCOMPLETE
+
+grep "AMELY" ../blastp_completeGene.outfmt6
+
+grep "CYorf" ../blastp_completeGene.outfmt6
+
+grep "TXLNG" ../blastp_completeGene.outfmt6
+g44.t1  TXLNG_HUMAN     57.566  312     304     1.65e-95        N/A     N/A     N/A     N/A     TXLNG_HUMAN Gamma-taxilin
+g44.t1  TXLNG_HUMAN     72.581  312     62      1.78e-22        N/A     N/A     N/A     N/A     TXLNG_HUMAN Gamma-taxilin
+grep "g44.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig437.g44.t1 > TXLNGY_panPan.fa
+
+grep "DBY" ../blastp_completeGene.outfmt6
+
+
+grep "EIF1A" ../blastp_completeGene.outfmt6
+
+grep "KDM5D" ../blastp_completeGene.outfmt6
+g45.t1  KDM5D_HUMAN     98.392  1257    622     0.0     N/A     N/A     N/A     N/A     KDM5D_HUMAN Lysine-specific demethylase 5D
+g45.t1  KDM5D_HUMAN     94.595  1257    296     6.66e-169       N/A     N/A     N/A     N/A     KDM5D_HUMAN Lysine-specific demethylase 5D
+g45.t1  KDM5D_HUMAN     99.087  1257    219     1.95e-141       N/A     N/A     N/A     N/A     KDM5D_HUMAN Lysine-specific demethylase 5D
+g45.t1  KDM5D_HUMAN     96.689  1257    151     5.80e-89        N/A     N/A     N/A     N/A     KDM5D_HUMAN Lysine-specific demethylase 5D
+
+grep "g45.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig4227.g45.t1 > KDM5D_panPan.fa
+
+
+grep "NLGN" ../blastp_completeGene.outfmt6
+g37.t1  NLGNY_HUMAN     96.855  257     159     7.97e-107       N/A     N/A     N/A     N/A     NLGNY_HUMAN Neuroligin-4, Y-linked
+
+grep "g37.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig1494.g37.t1 > NLGN4Y_panPan.fa
+
+grep "PRK" ../blastp_completeGene.outfmt6
+
+
+grep "RS4Y1" ../blastp_completeGene.outfmt6
+
+grep "RS4Y2" ../blastp_completeGene.outfmt6
+g46.t1  RS4Y2_PANTR     100.000 364     230     7.52e-170       N/A     N/A     N/A     N/A     RS4Y2_PANTR 40S ribosomal protein S4, Y isoform 2
+
+grep "g46.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig854.g46.t1 > RPS4Y2_panPan.fa
+
+grep "SRY" ../blastp_completeGene.outfmt6
+g2.t1   SRY_PANPA       100.000 204     204     1.28e-154       N/A     N/A     N/A     N/A     SRY_PANPA Sex-determining region Y protein
+
+grep "g2.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig170.g2.t1 > SRY_panPan.fa
+
+grep "TBL1Y" ../blastp_completeGene.outfmt6
+g5.t1   TBL1Y_HUMAN     62.536  336     347     4.64e-132       N/A     N/A     N/A     N/A     TBL1Y_HUMAN F-box-like/WD repeat-containing protein TBL1Y
+g5.t1   TBL1Y_HUMAN     24.242  336     198     1.55e-08        N/A     N/A     N/A     N/A     TBL1Y_HUMAN F-box-like/WD repeat-containing protein TBL1Y
+
+grep "g5.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig4101.g5.t1 > TBL1Y_panPan.fa
+
+grep "TB4Y" ../blastp_completeGene.outfmt6
+
+grep "USP9Y" ../blastp_completeGene.outfmt6
+
+grep "UTY" ../blastp_completeGene.outfmt6
+g34.t1  UTY_PANTR       98.919  189     185     9.20e-129       N/A     N/A     N/A     N/A     UTY_PANTR Histone demethylase UTY
+
+grep "g34.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig1041.g34.t1 > UTY_panPan.fa
+
+grep "ZFY" ../blastp_completeGene.outfmt6
+g3.t1   ZFY_PANTR       98.363  1096    794     0.0     N/A     N/A     N/A     N/A     ZFY_PANTR Zinc finger Y-chromosomal protein
+
+grep "g3.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig1041.g34.t1 > ZFY_RPS4Y1_panPan.fa
+
+grep "MXRA" ../blastp_completeGene.outfmt6
+g24.t1  MXRA5_HUMAN     84.042  1299    1059    0.0     N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     87.603  1299    242     5.61e-122       N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     27.249  1299    389     9.63e-37        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     28.689  1299    366     7.45e-31        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     28.511  1299    235     2.76e-18        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     29.293  1299    198     5.03e-17        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     30.636  1299    173     3.58e-14        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     35.577  1299    104     6.27e-06        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+g24.t1  MXRA5_HUMAN     24.277  1299    173     8.28e-06        N/A     N/A     N/A     N/A     MXRA5_HUMAN Matrix-remodeling-associated protein 5
+
+grep "g24.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig4380.g24.t1 > MXRA5_panPan.fa
+
+
+
+grep "VCY2" ../blastp_completeGene.outfmt6
+grep "CDY" ../blastp_completeGene.outfmt6
+grep "DAZ" ../blastp_completeGene.outfmt6
+grep "HSFY" ../blastp_completeGene.outfmt6
+grep "PRY" ../blastp_completeGene.outfmt6
+grep "RBY" ../blastp_completeGene.outfmt6
+grep "TSPY" ../blastp_completeGene.outfmt6
+grep "VCY" ../blastp_completeGene.outfmt6
+grep "XKRY" ../blastp_completeGene.outfmt6
+
+g109.t1 CDY1_HUMAN      97.043  541     541     0.0     N/A     N/A     N/A     N/A     CDY1_HUMAN Testis-specific chromodomain protein Y 1
+g12.t1  RBY1F_HUMAN     53.947  287     228     3.24e-65        N/A     N/A     N/A     N/A     RBY1F_HUMAN RNA-binding motif protein, Y chromosome, family 1 member F/J
+g103.t1 TSPY2_HUMAN     95.122  128     123     7.04e-74        N/A     N/A     N/A     N/A     TSPY2_HUMAN Testis-specific Y-encoded protein 2
+
+grep "g109.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+grep "g12.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+grep "g103.t1" ../panPan.msY.makovalab.ver1.smsk.codingseq_complete
+
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig1473.g109.t1 > CDY_panPan.fa
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig816.g12.t1 > RBMY_panPan.fa
+samtools faidx ../panPan.msY.makovalab.ver1.smsk.codingseq_complete Contig1404.g103.t1 > TSPY_panPan.fa
+
+#####################
+#####################
+#####################
+##Seach for gene sequences in transcriptome assembly
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/Bonobo/transcriptome_assembly/All/Join/standard_output/blastp.outfmt6 ./tests_transcriptome_blastp.outfmt6
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/Bonobo/transcriptome_assembly/All/Join/standard_output/Male_Transcripts_Filtered_final.fa.transdecoder_dir/longest_orfs.cds tests_transcriptome_longest_orf.cds
+samtools faidx tests_transcriptome_longest_orf.cds
+
+grep "AMELY" tests_transcriptome_blastp.outfmt6
+grep "CYorf" tests_transcriptome_blastp.outfmt6
+grep "TXLNG" tests_transcriptome_blastp.outfmt6
+grep "DBY" tests_transcriptome_blastp.outfmt6
+grep "EIF1A" tests_transcriptome_blastp.outfmt6
+grep "KDM5D" tests_transcriptome_blastp.outfmt6
+grep "NLGN" tests_transcriptome_blastp.outfmt6
+grep "PRK" tests_transcriptome_blastp.outfmt6
+grep "RS4Y1" tests_transcriptome_blastp.outfmt6
+grep "RS4Y2" tests_transcriptome_blastp.outfmt6
+grep "SRY" tests_transcriptome_blastp.outfmt6
+grep "TBL1Y" tests_transcriptome_blastp.outfmt6
+grep "TB4Y" tests_transcriptome_blastp.outfmt6
+grep "USP9Y" tests_transcriptome_blastp.outfmt6
+grep "UTY" tests_transcriptome_blastp.outfmt6
+grep "ZFY" tests_transcriptome_blastp.outfmt6
+grep "MXRA" tests_transcriptome_blastp.outfmt6
+
+###Best hits
+Gene.11087::scaffold3765|size1360::g.11087::m.11087     TXLNG_HUMAN     67.910  143     134     5.90e-45        N/A     N/A     N/A N/A      TXLNG_HUMAN Gamma-taxilin
+Gene.396::105::g.396::m.396     KDM5D_PANTR     99.553  896     895     0.0     N/A     N/A     N/A     N/A     KDM5D_PANTR Lysine-specific demethylase 5D
+Gene.14161::scaffold8919|size914::g.14161::m.14161      NLGNY_HUMAN     99.013  304     304     0.0     N/A     N/A     N/A     N/A NLGNY_HUMAN Neuroligin-4, Y-linked
+Gene.2899::2716::g.2899::m.2899 RS4Y1_PANTR     85.057  275     261     3.80e-157       N/A     N/A     N/A     N/A     RS4Y1_PANTR 40S ribosomal protein S4, Y isoform 1
+Gene.14141::scaffold8886|size915::g.14141::m.14141      RS4Y2_PANTR     100.000 233     233     1.63e-171       N/A     N/A     N/A N/A      RS4Y2_PANTR 40S ribosomal protein S4, Y isoform 2
+Gene.15809::scaffold12732|size778::g.15809::m.15809     SRY_PANPA       99.510  218     204     1.00e-152       N/A     N/A     N/A N/A      SRY_PANPA Sex-determining region Y protein
+Gene.14174::scaffold8949|size912::g.14174::m.14174      USP9Y_HUMAN     97.500  258     240     2.65e-155       N/A     N/A     N/A N/A      USP9Y_HUMAN Probable ubiquitin carboxyl-terminal hydrolase FAF-Y
+Gene.8068::scaffold784|size2462::g.8068::m.8068 UTY_HUMAN       81.441  820     819     0.0     N/A     N/A     N/A     N/A     UTY_HUMAN Histone demethylase UTY
+Gene.2005::1356::g.2005::m.2005 ZFY_PANTR       95.312  204     192     4.01e-114       N/A     N/A     N/A     N/A     ZFY_PANTR Zinc finger Y-chromosomal protein
+
+
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.11087::scaffold3765|size1360::g.11087::m.11087" >TXLNG_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.396::105::g.396::m.396" >KDM5D_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.14161::scaffold8919|size914::g.14161::m.14161" >NLGNY_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.2899::2716::g.2899::m.2899" >RS4Y1_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.14141::scaffold8886|size915::g.14141::m.14141" >RS4Y2_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.15809::scaffold12732|size778::g.15809::m.15809" >SRY_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.14174::scaffold8949|size912::g.14174::m.14174" >USP9Y_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.8068::scaffold784|size2462::g.8068::m.8068" >UTY_panPan_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.2005::1356::g.2005::m.2005" >ZFY_panPan_mRNA.fa
+
+############################################################################################################################################################################
+#############################################################################################################################################################################
+
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/gene_prediction/augustus
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Sumatran_orangutan_Y/analysis/Assemblies/ponAbe.msY.makovalab.ver3.smsk.fa .
+
+
+augustus --species=human ponAbe.msY.makovalab.ver3.smsk.fa --softmasking=on --codingseq=on --outfile=ponAbe.msY.makovalab.ver3.smsk.gff --errfile=ponAbe.msY.makovalab.ver3.smsk.augustus.err
+
+#Default
+#augustus --species=human ponAbe.msY.makovalab.ver3.smsk.fa > ponAbe.msY.makovalab.ver3.gff
+
+getAnnoFasta.pl ponAbe.msY.makovalab.ver3.smsk.gff
+
+#/galaxy/home/rxv923/src/ncbi-blast-2.6.0+/bin/blastp
+blastp -query ponAbe.msY.makovalab.ver3.smsk.aa  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp.outfmt6
+
+STEP: Run read_gff_augustus.py file to parse complete gene sequences only
+
+blastp -query ponAbe.msY.makovalab.ver3.smsk.aa_complete  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp_completeGene.outfmt6
+
+#parse hits which have above 80% identity
+awk '{ if($3>80) print $0 }' blastp_completeGene.outfmt6 > blastp_completeGene_above80identifty.outfmt6
+#cut -f2 blastp_completeGene.outfmt6 | sort | uniq
+#awk '{ if($3>80) print $0 }' blastp_completeGene.outfmt6 | cut -f1 | sort | uniq | wc -l
+
+Use online databases like UCSC genome browser, NCBI to search for gene annotations and identify the chromosome they are present on. 
+
+STEP: Run parse_unannotated_genes.py to get list of un-annotated genes. 
+
+STEP : Run Kallisto_alignment.txt to map testis specific reads and filter genes with atleast 10 reads.
+
+awk '{if(int($4) > 10) print $0}' kalisto_3405R1/abundance.ts
+
+#Parse gene sequences
+
+mkdir gene_FASTA
+cd gene_FASTA
+
+grep "AMELY" ../blastp_completeGene.outfmt6
+grep "CYorf" ../blastp_completeGene.outfmt6
+grep "TXLNG" ../blastp_completeGene.outfmt6
+grep "DBY" ../blastp_completeGene.outfmt6
+grep "EIF1A" ../blastp_completeGene.outfmt6
+grep "KDM5D" ../blastp_completeGene.outfmt6
+grep "NLGN" ../blastp_completeGene.outfmt6
+grep "PRK" ../blastp_completeGene.outfmt6
+grep "RS4Y1" ../blastp_completeGene.outfmt6
+grep "RS4Y2" ../blastp_completeGene.outfmt6
+grep "SRY" ../blastp_completeGene.outfmt6
+grep "TBL1Y" ../blastp_completeGene.outfmt6
+grep "TB4Y" ../blastp_completeGene.outfmt6
+grep "USP9Y" ../blastp_completeGene.outfmt6
+grep "UTY" ../blastp_completeGene.outfmt6
+grep "ZFY" ../blastp_completeGene.outfmt6
+grep "VCY2" ../blastp_completeGene.outfmt6
+grep "CDY" ../blastp_completeGene.outfmt6
+grep "DAZ" ../blastp_completeGene.outfmt6
+grep "HSFY" ../blastp_completeGene.outfmt6
+grep "PRY" ../blastp_completeGene.outfmt6
+grep "RBY" ../blastp_completeGene.outfmt6
+grep "TSPY" ../blastp_completeGene.outfmt6
+grep "VCY" ../blastp_completeGene.outfmt6
+grep "XKRY" ../blastp_completeGene.outfmt6
+grep "MXRA" ../blastp_completeGene.outfmt6
+
+g41.t1  TXLNG_HUMAN     50.000  220     174     5.54e-39        N/A     N/A     N/A     N/A     TXLNG_HUMAN Gamma-taxilin
+g40.t1  KDM5D_HUMAN     98.849  1312    608     0.0     N/A     N/A     N/A     N/A     KDM5D_HUMAN Lysine-specific demethylase 5D
+g32.t1  NLGNX_HUMAN     98.239  664     284     0.0     N/A     N/A     N/A     N/A     NLGNX_HUMAN Neuroligin-4, X-linked
+g38.t1  RS4Y2_PANTR     98.855  420     262     0.0     N/A     N/A     N/A     N/A     RS4Y2_PANTR 40S ribosomal protein S4, Y isoform 2
+g3.t1   SRY_PONPY       100.000 233     233     5.78e-177       N/A     N/A     N/A     N/A     SRY_PONPY Sex-determining region Y protein
+g6.t1   TBL1Y_HUMAN     80.000  595     525     0.0     N/A     N/A     N/A     N/A     TBL1Y_HUMAN F-box-like/WD repeat-containing protein TBL1Y
+g24.t1  USP9Y_HUMAN     80.049  2689    1233    0.0     N/A     N/A     N/A     N/A     USP9Y_HUMAN Probable ubiquitin carboxyl-terminal hydrolase FAF-Y
+g25.t1  UTY_HUMAN       96.538  980     751     0.0     N/A     N/A     N/A     N/A     UTY_HUMAN Histone demethylase UTY
+g5.t1   ZFY_HUMAN       98.462  1009    780     0.0     N/A     N/A     N/A     N/A     ZFY_HUMAN Zinc finger Y-chromosomal protein
+g57.t1  CDY2_HUMAN      84.984  312     313     0.0     N/A     N/A     N/A     N/A     CDY2_HUMAN Testis-specific chromodomain protein Y 2
+g37.t1  HSFY1_HUMAN     92.574  404     404     0.0     N/A     N/A     N/A     N/A     HSFY1_HUMAN Heat shock transcription factor, Y-linked
+g8.t1   RBY1F_HUMAN     76.923  750     39      7.57e-09        N/A     N/A     N/A     N/A     RBY1F_HUMAN RNA-binding motif protein, Y chromosome, family 1 member F/J
+g45.t1  TSPY2_HUMAN     72.131  128     122     1.29e-45        N/A     N/A     N/A     N/A     TSPY2_HUMAN Testis-specific Y-encoded protein 2
+
+grep "g41.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g40.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g32.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g38.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g3.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g6.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g24.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g25.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g5.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g57.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g37.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g8.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+grep "g45.t1" ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete
+
+
+
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_2.g41.t1 > TXLNG_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_2.g40.t1 > KDM5D_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_3.g32.t1 > NLGN4Y_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_2.g38.t1 > RPS4Y2_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_12.g3.t1 > SRY_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_8.g6.t1 > TBL1Y_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_5.g24.t1 > USP9Y_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_5.g25.t1 > UTY_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_12.g5.t1 > ZFY_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_38.g57.t1 > CDY2_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_10.g37.t1 > HSFY1_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_6.g8.t1 > RBY1F_ponAbe.fa
+samtools faidx ../ponAbe.msY.makovalab.ver3.smsk.codingseq_complete QB.A_52.g45.t1 > TSPY2_ponAbe.fa
+
+#####################
+#####################
+#####################
+##Seach for gene sequences in transcriptome assembly
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/SumatranOrangutan/transcriptome_assembly/1991-0051/All/Join/standard_output/blastp.outfmt6 ./tests_transcriptome_blastp.outfmt6
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/analysis/SumatranOrangutan/transcriptome_assembly/1991-0051/All/Join/standard_output/Male_Transcripts_Filtered_final.fa.transdecoder_dir/longest_orfs.cds tests_transcriptome_longest_orf.cds
+samtools faidx tests_transcriptome_longest_orf.cds
+
+grep "AMELY" tests_transcriptome_blastp.outfmt6
+grep "CYorf" tests_transcriptome_blastp.outfmt6
+grep "TXLNG" tests_transcriptome_blastp.outfmt6
+grep "DBY" tests_transcriptome_blastp.outfmt6
+grep "EIF1A" tests_transcriptome_blastp.outfmt6
+grep "KDM5D" tests_transcriptome_blastp.outfmt6
+grep "NLGN" tests_transcriptome_blastp.outfmt6
+grep "PRK" tests_transcriptome_blastp.outfmt6
+grep "RS4Y1" tests_transcriptome_blastp.outfmt6
+grep "RS4Y2" tests_transcriptome_blastp.outfmt6
+grep "SRY" tests_transcriptome_blastp.outfmt6
+grep "TBL1Y" tests_transcriptome_blastp.outfmt6
+grep "TB4Y" tests_transcriptome_blastp.outfmt6
+grep "USP9Y" tests_transcriptome_blastp.outfmt6
+grep "UTY" tests_transcriptome_blastp.outfmt6
+grep "ZFY" tests_transcriptome_blastp.outfmt6
+grep "MXRA" tests_transcriptome_blastp.outfmt6
+
+Gene.31661::scaffold11821|size1131::g.31661::m.31661    KDM5D_HUMAN     94.737  200     171     1.16e-93        N/A     N/A     N/A N/A      KDM5D_HUMAN Lysine-specific demethylase 5D
+Gene.50974::scaffold63219|size490::g.50974::m.50974     NLGN2_HUMAN     96.748  131     123     4.12e-77        N/A     N/A     N/A N/A      NLGN2_HUMAN Neuroligin-2
+Gene.6632::3676::g.6632::m.6632 RS4Y1_PONPY     93.536  272     263     2.99e-180       N/A     N/A     N/A     N/A     RS4Y1_PONPY 40S ribosomal protein S4, Y isoform 1
+Gene.5916::3048::g.5916::m.5916 RS4Y2_PANTR     98.696  239     230     3.27e-168       N/A     N/A     N/A     N/A     RS4Y2_PANTR 40S ribosomal protein S4, Y isoform 2
+Gene.38407::scaffold24242|size836::g.38407::m.38407     SRY_PONPY       100.000 234     233     6.02e-177       N/A     N/A     N/A N/A      SRY_PONPY Sex-determining region Y protein
+Gene.50147::scaffold60036|size505::g.50147::m.50147     USP9Y_HUMAN     89.222  167     167     5.18e-102       N/A     N/A     N/A N/A      USP9Y_HUMAN Probable ubiquitin carboxyl-terminal hydrolase FAF-Y
+Gene.53603::scaffold74426|size443::g.53603::m.53603     UTY_HUMAN       99.320  147     147     3.16e-100       N/A     N/A     N/A N/A      UTY_HUMAN Histone demethylase UTY
+Gene.56488::scaffold87600|size400::g.56488::m.56488     ZFY_GORGO       97.727  132     132     4.73e-81        N/A     N/A     N/A N/A      ZFY_GORGO Zinc finger Y-chromosomal protein
+
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.31661::scaffold11821|size1131::g.31661::m.31661" >KDM5D_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.50974::scaffold63219|size490::g.50974::m.50974" >NLGN2_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.6632::3676::g.6632::m.6632" >RS4Y1_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.5916::3048::g.5916::m.5916" >RS4Y2_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.38407::scaffold24242|size836::g.38407::m.38407" >SRY_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.50147::scaffold60036|size505::g.50147::m.50147" >USP9Y_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.53603::scaffold74426|size443::g.53603::m.53603" >UTY_ponAbe_mRNA.fa
+samtools faidx tests_transcriptome_longest_orf.cds "Gene.56488::scaffold87600|size400::g.56488::m.56488" >ZFY_ponAbe_mRNA.fa
+
+
+
+############################################################################################################################################################################
+
+
+
+##Test for presence in other Y chromosome assemblies
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gene_content/analysis/gene_BLAT
+
+blat gorGor.msY.makovalab.ver3.smsk.2bit gene/PSMA6_bonoboY.fa PSMA6_BonoboY_gor.psl
+blat gorGor.msY.makovalab.ver3.smsk.2bit gene/SUZ12_bonoboY.fa SUZ12_BonoboY_gor.psl
+blat ponAbe.msY.makovalab.ver3.smsk.2bit gene/SUZ12_bonoboY.fa SUZ12_BonoboY_orang.psl
+blat ponAbe.msY.makovalab.ver3.smsk.2bit gene/PSMA6_bonoboY.fa PSMA6_BonoboY_orang.psl
+
+
+
+
+####################
+
+Obtained the list of contigs that map to only human and chimpanzee Y from Monika. Use the list for further filtering the genes.
+
+
+
+####################
+Map testis expression to Y chromosome
+
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/data
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Apes/data/Bonobo/data/HenrikLab/SRR306837_1.fastq ./bonobo_RNAseq_SRR306837_1.fastq
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#align
+srun bwa mem -t 20 index/panPan.msY.makovalab.ver1.smsk.fa data/bonobo_RNAseq_SRR306837_1.fastq > bonoboRNAseq_msY_ver1.sam
+
+#convert to BAM
+srun samtools view -bhS bonoboRNAseq_msY_ver1.sam > bonoboRNAseq_msY_ver1.bam
+
+#sort and index
+samtools sort bonoboRNAseq_msY_ver1.bam > bonoboRNAseq_msY_ver1.sorted.bam
+samtools index bonoboRNAseq_msY_ver1.sorted.bam
+
+
+##View in IGV
+
+SUZ12 - created a report and is in google docs.
+
+##Trying nr
+blastp -query panPan.msY.makovalab.ver1.smsk.aa_complete  -db nr  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp_nr_completeGene.outfmt6

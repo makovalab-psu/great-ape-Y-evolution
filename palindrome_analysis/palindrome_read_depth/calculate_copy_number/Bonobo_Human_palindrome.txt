@@ -1,0 +1,478 @@
+#Steps for Bonobo and human
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/palindrome/human/
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#Obtain scripts from github
+#converst them to dos if there is an issue.
+python /galaxy/home/rxv923/scripts/dos2unix.py AlignRefYtoAssembly.sh AlignRefYtoAssembly.sh
+
+
+mkdir data
+cd data
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Human_Y/analysis/Assemblies/hg38.msY.fa .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Bonobo_Y/analysis/Assemblies/panPan.msY.makovalab.ver1.fa .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Bonobo_Y/analysis/Assemblies/panPan.msY.makovalab.ver1.smsk.fa .
+
+
+awk 'BEGIN{FS=" "}{if(!/>/){print toupper($0)}else{print $1}}' panPan.msY.makovalab.ver1.fa > panPan.msY.makovalab.ver1_UC.fa
+
+awk 'BEGIN{FS=" "}{if(!/>/){print toupper($0)}else{print $1}}' hg38.msY.fa > hg38.msY_UC.fa
+
+
+cat human_primate.q
+gap_open_penalty   =   500 # O
+gap_extend_penalty =    30 # E
+hsp_threshold      =  3000 # K
+gapped_threshold   =  4500 # L
+x_drop             =   900 # X
+y_drop             = 15000 # Y
+
+     A    C    G    T
+A   90 -330 -236 -356
+C -330  100 -318 -236
+G -236 -318  100 -330
+T -356 -236 -330   90
+
+
+#Obtain length of contigs in bonobo assembly
+samtools faidx panPan.msY.makovalab.ver1.fa
+cat panPan.msY.makovalab.ver1.fa.fai | cut -f1,2 > panPan.msY.makovalab.ver1.contigs.lengths
+
+
+#Done preparing data folder
+cd ..
+
+
+#Needs a directory named alignments, into which it will put
+mkdir alignments
+mkdir temp
+
+
+#Running LASTZ to obtain alignment
+#update the below parameters as found in data folder
+vim AlignRefYtoAssembly.sh
+folder='alignments'
+refY='hg38.msY_UC.fa'
+assembly='panPan.msY.makovalab.ver1_UC.fa'
+
+
+#run lastz
+cut -f1 data/panPan.msY.makovalab.ver1.contigs.lengths| xargs -n1 sh AlignRefYtoAssembly.sh > lastZ_run.out
+
+
+#We want N-counts in each window
+python
+
+from Bio import SeqIO
+
+def chunks(seq, window):
+	seqlen = len(seq)
+	for i in range(0,seqlen,window):
+		if (i+window>seqlen):
+			j = seqlen 
+		else:
+			j = i+window
+		yield i,j,seq[i:j]
+
+
+fasta='data/panPan.msY.makovalab.ver1.smsk.fa'
+window_size=1000
+output="temp/panPan.msY.makovalab.ver1.contigs.lengths."+str(window_size)+".n_counts"
+refFH=open(fasta,"rU")
+out=open(output,"w")
+
+for chr_record in SeqIO.parse(refFH, "fasta"):
+	chr = chr_record.seq
+	for win in chunks(chr, window_size):
+		N = win[2].count("N")
+		out.write(str(chr_record.id)+"\t"+str(win[0])+"\t"+str(win[1])+"\t"+str(N)+"\n")
+
+
+
+		
+################
+
+#Generate window intervals, with the excess given to the last window ...
+#sh Gen_window_intervals.sh <FileName.contigs.lengths> <outputfolder>
+sh Gen_window_intervals.sh panPan.msY.makovalab.ver1.contigs.lengths temp
+
+
+
+#Identify the windows
+####Bob's (imperfect) strategy for removing alignments will be ...
+####
+####	(1) keep the alignment with the highest number of matches
+####	(2) exclude any alignments that intersect with that interval (in gorilla)
+####	(3) keep the remaining alignment with the next highest number of matches
+####	(4) go back to step 2
+
+#update the below parameters as found in data folder
+
+vim identify_windows.sh
+#outfolder='temp'
+#contigs='panPan.msY.makovalab.ver1.contigs.lengths'
+#refY='human'
+#assembly='bonobo'
+
+sh identify_windows.sh > identify_windows_run.out
+
+
+#Conver dat file to bed file
+
+cd temp
+
+#Check how thw chromosome was mapped to was define : Y or chrY
+#Update the below python script accordingly
+less bonobo_to_human.1000.preferential.dat
+
+
+python
+
+
+align="bonobo_to_human.1000.preferential.dat"
+parsed="bonobo_to_human.1000.preferential.bed"
+
+out = open(parsed, "w")
+fio = open(align, "r")
+lines = fio.read().split('\n')
+for i in range(len(lines)):
+	if lines[i][0]=="=":
+		temp=lines[i].split(" ")
+		id=str(temp[1])+"_"+str(temp[2])+"_"+str(temp[3])
+		#print id
+		if i+2 <= len(lines):
+			temp_align=lines[i+2].split()
+			if len(temp_align)> 0:
+				if temp_align[0]=="chrY":   ##Set Y or chrY here
+					#print temp_align
+					out.write( str(temp_align[0])+"\t"+str(temp_align[1])+"\t"+str(temp_align[2])+"\t"+id+"\n")
+
+
+##NOTE You will get an error if the last line is empty without alignment information. 
+#test below to check the line being parsed
+len(lines)-i  #should not be more than one		
+
+
+####Coordinates of palindromes
+cd ..
+mkdir coordinates
+
+vim Human_hg38_palindromeCord.bed
+
+chrY	23359067	26311550
+chrY	23061889	23358813
+chrY	21924954	22661453
+chrY	18450291	18870104
+chrY	17455877	18450126
+chrY	16159590	16425757
+chrY	15874906	15904894
+chrY	13984498	14058230
+
+vim Human_hg38_palindrome1.bed
+
+chrY	23359067	26311550
+
+vim Human_hg38_palindrome2.bed
+
+chrY	23061889	23358813
+
+vim Human_hg38_palindrome3.bed
+
+chrY	21924954	22661453
+
+vim Human_hg38_palindrome4.bed
+
+chrY	18450291	18870104
+
+vim Human_hg38_palindrome5.bed
+
+chrY	17455877	18450126
+
+vim Human_hg38_palindrome6.bed
+
+chrY	16159590	16425757
+
+vim Human_hg38_palindrome7.bed
+
+chrY	15874906	15904894
+
+vim Human_hg38_palindrome8.bed
+
+chrY	13984498	14058230
+
+
+vim Human_hg38_XDGCord.bed
+
+chrY	2786855	2787699
+chrY	6865918	6874027
+chrY	12904831	12920478
+chrY	20575725	20593154
+chrY	14523746	14843726
+chrY	7273972	7381547
+chrY	19705417	19744939
+chrY	6910686	7091683
+chrY	13703567	13706024
+chrY	12701231	12860839
+chrY	13248379	13480673
+chrY	2935477	2982506
+
+
+#Trouble shoot bedtools run
+#If you are copying them make sure you convert them to unix \n format.
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_XDGCord.bed Human_hg38_XDGCord.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome1.bed Human_hg38_palindrome1.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome4.bed Human_hg38_palindrome4.bed 
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome7.bed Human_hg38_palindrome7.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindromeCord.bed Human_hg38_palindromeCord.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome2.bed Human_hg38_palindrome2.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome5.bed Human_hg38_palindrome5.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome8.bed Human_hg38_palindrome8.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome3.bed Human_hg38_palindrome3.bed
+python /galaxy/home/rxv923/scripts/dos2unix.py Human_hg38_palindrome6.bed Human_hg38_palindrome6.bed
+
+or
+sed -i 's/Y/chrY/g' Human_hg38_palindromeCord.bed
+sed -i 's/Y/chrY/g' Human_hg38_XDGCord.bed
+
+
+##################################
+
+mkdir contigs
+
+#Obtain the contigs which overlap the palindromes using bedtools intersect
+bedtools intersect -b coordinates/Human_hg38_palindromeCord.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome.bed
+
+bedtools intersect -b coordinates/Human_hg38_palindrome1.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome1.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome2.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome2.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome3.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome3.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome4.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome4.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome5.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome5.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome6.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome6.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome7.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome7.bed
+bedtools intersect -b coordinates/Human_hg38_palindrome8.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_Palindrome8.bed
+
+
+
+#Obtain the contigs which overlap the XDG using bedtools intersect
+bedtools intersect -b coordinates/Human_hg38_XDGCord.bed -a temp/bonobo_to_human.1000.preferential.bed > contigs/Contig_to_XDG.bed
+
+#Parse the contigs names from bed file
+cat contigs/Contig_to_Palindrome.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome.txt
+cat contigs/Contig_to_Palindrome1.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome1.txt
+cat contigs/Contig_to_Palindrome2.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome2.txt
+cat contigs/Contig_to_Palindrome3.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome3.txt
+cat contigs/Contig_to_Palindrome4.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome4.txt
+cat contigs/Contig_to_Palindrome5.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome5.txt
+cat contigs/Contig_to_Palindrome6.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome6.txt
+cat contigs/Contig_to_Palindrome7.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome7.txt
+cat contigs/Contig_to_Palindrome8.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedPalindrome8.txt
+cat contigs/Contig_to_XDG.bed | cut -f4 | sort | uniq > contigs/Contig_names_mappedXDG.txt
+
+
+##
+vim parse_Contigs_alignment80per.py
+
+#!/usr/bin/env python
+"""\
+Identifies windows mapping to palindromes with >80% alignment from windows_for_identity.dat file.
+usage: parse_Contigs_alignment80per.py <ContigNamesPalindrome> <windows_for_identity> <output>
+
+Example input files:
+<ContigNamesPalindrome>
+Contig1000_0_1365
+Contig1023_29000_30000
+Contig1038_0_1447
+Contig1047_0_1000
+Contig106_0_1000
+Contig106_1000_2359
+
+<windows_for_identity>
+#contig start   end     Ns      alignments      m       mm      gapGor  gapHum
+Contig4681      1       1123            0       0       0       0       0
+Contig5332      1       1277            0       0       0       0       0
+Contig2574      1       1000    0       0       0       0       0       0
+
+
+For each contig the code obtains the lenght of the contig which is end - start (+1) and divides the number of m by lenght of contig.
+Identify contigs with >80% alignment.
+Check if number of N's is less than 200 assuming the size of the window is always 1000.
+"""
+import sys
+
+if len(sys.argv[1:]) != 3:
+  sys.exit(__doc__)
+
+Contigs=sys.argv[1]
+#creating a dictionary of contig names
+contigs_dic=dict()
+with open(Contigs, "rU") as r:
+	for line in r:
+		n=line.rstrip('\n')
+		if n in contigs_dic:
+			contigs_dic[n]+= 1
+		else:
+			contigs_dic[n]=0
+
+r.close()
+
+alignment=sys.argv[2]
+filtered=sys.argv[3]
+
+with open(alignment, "rU") as s,open(filtered, "w") as w:
+	s.next()
+	for line in s:
+		col=line.split("\t")
+		id=str(col[0])+"_"+str(int(col[1])-1)+"_"+str(col[2])
+		if id in contigs_dic:
+			M=float(col[5])
+			size=int(col[2])-int(col[1])+1
+			Per=M/size*100
+			if Per >= 80:
+				if col[3] == '':
+					continue
+				elif int(col[3]) <= 200:
+					w.write(line)
+
+w.close()
+s.close()
+
+
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.PalindromeAll_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome1.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome1_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome2.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome2_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome3.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome3_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome4.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome4_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome5.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome5_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome6.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome6_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome7.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome7_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedPalindrome8.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.Palindrome8_80perAlign.dat
+python parse_Contigs_alignment80per.py contigs/Contig_names_mappedXDG.txt temp/bonobo_to_human.1000.windows_for_identity.dat temp/bonobo_to_human.1000.windows_for_identity.XDG_80perAlign.dat
+
+
+################################################
+
+#Sort windows to optimize coverage analysis
+
+mkdir bam
+cd bam
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/bonoboWGS_msY_ver1.GCcorrected.bam .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/bonoboWGS_msY_ver1.GCcorrected.bam.bai .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/bonoboWGS_msY_ver1.sorted.bam .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/bonoboWGS_msY_ver1.sorted.bam.bai .
+samtools idxstats bonoboWGS_msY_ver1.GCcorrected.bam | cut -f 1-2 > chromosomes.txt
+
+cd ..
+
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.PalindromeAll_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.PalindromeAll_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome1_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome1_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome2_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome2_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome3_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome3_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome4_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome4_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome5_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome5_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome6_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome6_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome7_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome7_80perAlign_sorted.dat
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.Palindrome8_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.Palindrome8_80perAlign_sorted.dat
+
+bedtools sort -faidx bam/chromosomes.txt -i temp/bonobo_to_human.1000.windows_for_identity.XDG_80perAlign.dat > temp/bonobo_to_human.1000.windows_for_identity.XDG_80perAlign_sorted.dat
+
+
+
+#####################################################################
+
+
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.PalindromeAll_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindromeAll_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome1_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome1_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome2_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome2_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome3_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome3_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome4_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome4_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome5_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome5_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome6_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome6_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome7_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome7_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome8_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome8_80per.bed
+
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a temp/bonobo_to_human.1000.windows_for_identity.XDG_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_XDG_80per.bed
+
+mkdir gcCor_results
+mv Coverage_orangutan_msY_WGS_* gcCor_results
+
+
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.PalindromeAll_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindromeAll_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome1_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome1_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome2_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome2_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome3_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome3_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome4_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome4_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome5_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome5_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome6_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome6_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome7_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome7_80per.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.Palindrome8_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_palindrome8_80per.bed
+
+bedtools coverage -b bam/bonoboWGS_msY_ver1.sorted.bam -a temp/bonobo_to_human.1000.windows_for_identity.XDG_80perAlign_sorted.dat -g bam/chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_XDG_80per.bed
+
+mkdir nongcCor_results
+mv Coverage_bonobo_msY_WGS_* nongcCor_results
+
+#####################################################################
+cd gcCor_results/
+
+R
+
+palin=read.table("Coverage_bonobo_msY_WGS_palindromeAll_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin1=read.table("Coverage_bonobo_msY_WGS_palindrome1_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin2=read.table("Coverage_bonobo_msY_WGS_palindrome2_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin3=read.table("Coverage_bonobo_msY_WGS_palindrome3_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin4=read.table("Coverage_bonobo_msY_WGS_palindrome4_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin5=read.table("Coverage_bonobo_msY_WGS_palindrome5_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin6=read.table("Coverage_bonobo_msY_WGS_palindrome6_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin7=read.table("Coverage_bonobo_msY_WGS_palindrome7_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+palin8=read.table("Coverage_bonobo_msY_WGS_palindrome8_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+
+XDG=read.table("Coverage_bonobo_msY_WGS_XDG_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+
+get_coverage<-function(data_align){
+temp=data_align[which(data_align$V4<200 & data_align$V13 > 0.8),]
+return ((temp$V10/temp$V12)*250)
+}
+
+get_CN<-function(coverage,XDG){
+control=median(XDG)
+temp=coverage/control
+return (temp)
+}
+
+pall=get_coverage(palin)
+p1=get_coverage(palin1)
+p2=get_coverage(palin2)
+p3=get_coverage(palin3)
+p4=get_coverage(palin4)
+p5=get_coverage(palin5)
+p6=get_coverage(palin6)
+p7=get_coverage(palin7)
+p8=get_coverage(palin8)
+x=get_coverage(XDG)
+
+#Manually set for Bonobo 
+p4=0
+
+CNpall=get_CN(pall,x)
+CNp1=get_CN(p1,x)
+CNp2=get_CN(p2,x)
+CNp3=get_CN(p3,x)
+CNp4=get_CN(p4,x)
+CNp5=get_CN(p5,x)
+CNp6=get_CN(p6,x)
+CNp7=get_CN(p7,x)
+CNp8=get_CN(p8,x)
+CNx=get_CN(x,x)
+
+pdf('Fig_HumanP_Bonobo.pdf', width=5, height=4)
+boxplot(CNpall,CNp1,CNp2,CNp3,CNp4,CNp5,CNp6,CNp7,CNp8,CNx,names=c("PAll","P1","P2","P3","P4","P5","P6","P7","P8","XDG"), ylab="Copy number", main="Human palindromes on bonobo Y",outline=FALSE, cex.axis=0.50)
+abline(h=2, col='red')
+abline(h=1,col='black')
+dev.off()
+
+
+abline(h=30)
+abline(h=60)
+
+
+sum(palin	
