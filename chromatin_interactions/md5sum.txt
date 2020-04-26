@@ -1,0 +1,2 @@
+MD5 (chrY.CHIMP.validPairs.binPair.multi.mHiC) = 786ee90cddf743ad0be499146c5d59e4
+MD5 (chrY.HUMAN.validPairs.binPair.multi.mHiC) = f0afe558ec59d4499925bd2354b17215
