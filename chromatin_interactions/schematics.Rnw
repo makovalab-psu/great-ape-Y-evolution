@@ -5,6 +5,7 @@
 
 <<#plot arrows>>=
 par(mfrow=c(5,1))
+setwd("/Users/polly/Desktop/projects/figures/comparativeY/HUMAN_Hi-C")
 myColor<-"darkblue"
 
 #P1
@@ -58,41 +59,41 @@ par(mfrow=c(5,1))
 plotRectangle<-function(coordinates,myColor) {
   x1<-coordinates[1]
   x2<-coordinates[2]
-  y<-2
+  y<-1.2
   rect(x1,1,x2,y, col= myColor,border=TRUE)
   
   y1<-coordinates[1]
   y2<-coordinates[2]
-  x<-2
+  x<-1.2
   rect(1,y1,x,y2, col= myColor,border=TRUE)
 }
 
 #load the annotations of Xdegenerate and ampliconic regions
-#coordinates<-read.table("/Users/polly/Desktop/projects/figures/comparativeY/HUMAN_Hi-C/coordinates_human_characterization_Xdeg_ampl.txt")
-#load manually created coordinated for hg38, manually extracted coordinates  of palindromes
-coordinates<-read.table("/Users/polly/Desktop/projects/figures/comparativeY/coordinates/coordinates_human_palindromes.txt")
-
-tlength<-26670000 #tlength_without_heterochromatin for human
+coordinates<-read.table("coordinates_human_palindromes.txt")
 
 #PLOT HUMAN
-plot(NA,xlim=c(0,tlength),ylim=c(0,2.1),main="human Y chromosome",xaxs="i",yaxs="i",bty="n")
+tiff(file=paste0("humanY_schematics.tiff"),units="cm", width=30, height=18, res=300,compression="rle",pointsize = 17)
+tlength<-26670000 #tlength_without_heterochromatin for human
+plot(NA,xlim=c(0,tlength),ylim=c(0,2),main="human Y chromosome",xaxs="i",yaxs="i",bty="n")
 
 #Levels: heterochromatin PAL XDG 
 sequenceClassesColors<-c("#d1d9ec","#b5d6c0","#fdfeba","pink")
 coordinates$V6<-sequenceClassesColors[as.numeric(as.factor(coordinates[,c(5)]))]
 apply(coordinates[,c(2,3,6)],1,function(x) {plotRectangle(x[1:2],x[3])})
+dev.off()
 
 #PLOT CHIMPANZEE
 #load the annotations of Xdegenerate and ampliconic regions
-#coordinates<-read.table("/Users/polly/Desktop/projects/figures/comparativeY/HUMAN_Hi-C/coordinates_chimp_characterization_Xdeg_ampl.txt")
-#tlength<-26310000 #tlength for the chimpanzee
-
-#plot(NA,xlim=c(0,tlength),ylim=c(0,2),main="chimp Y chromosome",xaxs="i",yaxs="i",bty="n")
+coordinates<-read.table("coordinates_chimp_palindromes.txt")
+tiff(file=paste0("chimpY_schematics.tiff"),units="cm", width=30, height=18, res=300,compression="rle",pointsize = 17)
+tlength<-26350515 #tlength for the chimpanzee per Bob's end point of PAR1 in panTro6; 26350515 used to be 26310000
+plot(NA,xlim=c(0,tlength),ylim=c(0,2),main="chimp Y chromosome",xaxs="i",yaxs="i",bty="n")
 
 #Levels: heterochromatin PAL rAMP XDG XTR
-#sequenceClassesColors<-c("#d1d9ec","#fdfeba")
-#coordinates$V6<-sequenceClassesColors[as.numeric(as.factor(coordinates[,c(5)]))]
-#apply(coordinates[,c(2,3,6)],1,function(x) {plotRectangle(x[1:2],x[3])})
+sequenceClassesColors<-c("#d1d9ec","gray","#b5d6c0","#fdfeba")
+coordinates$V6<-sequenceClassesColors[as.numeric(as.factor(coordinates[,c(5)]))]
+apply(coordinates[,c(2,3,6)],1,function(x) {plotRectangle(x[1:2],x[3])})
+dev.off()
 @
 
 \end{document}
