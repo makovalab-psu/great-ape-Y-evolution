@@ -54,8 +54,6 @@ setwd("/Users/polly/Desktop/projects/Hi-C")
 #Load Hi-C data from the  mHiC pipeline for the human Y chromosome subsetted to 100 million reads and induced pluripotent cell tissue
 myLabel<-"100 million"
 filename<-"/Users/polly/Desktop/projects/Hi-C/100mil_subsets/chrY.HUMAN.validPairs.binPair.multi.mHiC"
-#tiff(file=paste0(basename(filename),".HiC",".tiff"),units="cm", width=17.9, height=17.9, res=300,compression="rle")
-#dev.off()
 
 #Load the data and limit it to the Y chromosome
 pairs<-as.data.frame(read.table(filename,header=TRUE))
@@ -73,23 +71,27 @@ table(is.na(Ypairs$prob))
 tlength_without_heterochromatin<-max(Ypairs[Ypairs$pos1<35000000,]$pos1)
 prob_colors<-sapply(Ypairs$prob,function(x) {adjustcolor( "black", alpha.f = x)}) #strength of color determined by the probability
 
-par(pty="s") #plot square
+setwd("/Users/polly/Desktop/projects/figures/comparativeY/HUMAN_Hi-C")
+tiff(file=paste0("Hi-C_human.tiff"),units="cm", width=24, height=24, res=300,compression="rle",pointsize = 17)
 
-#plot upper left part of the plot
-plot(Ypairs$pos1/coef,Ypairs$pos2/coef,xlim=c(0,tlength_without_heterochromatin/coef),ylim=c(0,tlength_without_heterochromatin/coef),xlab="coordinates",ylab="coordinates",col=prob_colors,pch=19,cex=0.2,main=paste("HUMAN from the full mHiC pipeline, 20kb",nrow(Ypairs),"interactions"), sub=myLabel,xaxs="i",yaxs="i",asp=1)
+par(pty="s") #plot square
+plot(NA,NA,xlim=c(0,tlength_without_heterochromatin/coef),ylim=c(0,tlength_without_heterochromatin/coef),xlab="coordinates",ylab="Coordinates [Mb]",col=prob_colors,pch=19,cex=0.2,main=paste("HUMAN from the full mHiC pipeline, 20kb",nrow(Ypairs),"interactions"), sub=myLabel,xaxs="i",yaxs="i",asp=1)
 
 abline(coef = c(0,1),col="darkblue")
 
-#plot bottom down part of the plot
-points(Ypairs$pos2/coef,Ypairs$pos1/coef,xlab="coordinates",ylab="coordinates",col=prob_colors,pch=19,cex=0.2,main=paste("HUMAN from the full mHiC pipeline, 20kb",nrow(Ypairs),"interactions"), sub=myLabel)
-
 #highlight PARs and centromere in the plot 
-plotRectangle(CENYhg38/coef,adjustcolor("red", alpha.f = 0.5))
+plotRectangle(CENYhg38/coef,adjustcolor("red", alpha.f = 0.2))
 plotRectangle(PAR1hg38/coef,adjustcolor("#b5d6c0", alpha.f = 0.2))
 plotRectangle(PAR2hg38/coef,adjustcolor("#b5d6c0", alpha.f = 0.2))
 
 #highlight palindromes in the plot 
-apply(palindromeshg38,1,function(x) {plotRectangle(x,adjustcolor("brown", alpha.f = 0.1))})
+apply(palindromeshg38,1,function(x) {plotRectangle(x,adjustcolor("#bdcce5", alpha.f = 0.2))})
+
+#plot upper left part of the plot
+points(Ypairs$pos1/coef,Ypairs$pos2/coef,col=prob_colors,pch=19,cex=0.2,main=paste("HUMAN from the full mHiC pipeline, 20kb",nrow(Ypairs),"interactions"), sub=myLabel)
+
+dev.off()
+
 
 @
 
