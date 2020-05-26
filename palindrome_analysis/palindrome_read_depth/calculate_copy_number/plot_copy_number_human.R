@@ -247,50 +247,75 @@ ora_cov<-out
 
 ##################################
 
+#Chimpanzee
+chimp_coverage<-read.table("/nfs/brubeck.bx.psu.edu/scratch6/rahul/Palindrome/analysis/palindrome_CN/human/palindrome/Coverage_palindrome.bed", sep="\t", stringsAsFactors=F, header=F)
+chimp_coverage$V8= chimp_coverage$V4/chimp_coverage$V6
+chimp_coverage$V9= chimp_coverage$V8/0.12156926
+chimp_coverage[,c(1,9)]
+
+#Based on literature C17, C18, C19 are homologs of P8, P7, and P6. We set the values for this to 2.
+out<-rbind(
+cbind(chimp_coverage[9,9],"XDG","ch"),
+cbind(chimp_coverage[1,9],"P1","ch"),
+cbind(chimp_coverage[2,9],"P2","ch"),
+cbind(chimp_coverage[3,9],"P3","ch"),
+cbind(chimp_coverage[4,9],"P4","ch"),
+cbind(chimp_coverage[5,9],"P5","ch"),
+cbind(2,"P6","ch"),
+cbind(2,"P7","ch"),
+cbind(2,"P8","ch")
+)
+chi_cov<-out
+
+
+
+
 #Colors.name <-  c(bo="#A7C855", ch="#74A8D3" , hu="6A6A6A", go="#BD3231", or="#E19F5A")
-Colors.name <-  c(bo="#ABD9E9", ch="#2C7BB6" , hu="D7191C", go="#FFFFBF", or="#FDAE61")
+Colors.name <-  c(bo="#ABD9E9", ch="#2C7BB6" , hu="#D7191C", go="#FFFFBF", or="#FDAE61")
 darkColors.name <-  c(bo="#799630", ch="#3778ad" , hu="#4a4a4a", go="#842222", or="#ba6f21")
 
 
-CN_human_palindrome<-rbind(gor_cov,bon_cov,ora_cov)
+CN_human_palindrome<-rbind(gor_cov,bon_cov,ora_cov) #,chi_cov
 colnames(CN_human_palindrome)<-c("CopyNumber","Palindrome","Species")
 CN_human_palindrome<-as.data.frame(CN_human_palindrome,stringsAsFactors = FALSE)
 CN_human_palindrome$CopyNumber<-as.numeric(CN_human_palindrome$CopyNumber)
 CN_human_palindrome$Species<-substr(CN_human_palindrome$Species,0,2)
+#CN_human_palindrome$Species<- factor(CN_human_palindrome$Species, levels = c("or","go","bo","ch"))
 require(ggplot2)
 
-
+CN_human_palindrome<-CN_human_palindrome[which(CN_human_palindrome$CopyNumber!=0),]
 CN_log_human_palindrome<-CN_human_palindrome
 CN_log_human_palindrome$CopyNumber<-log(as.numeric(CN_log_human_palindrome$CopyNumber))
 
 
 human1_obj<-ggplot(CN_human_palindrome, aes(x=Species, y=CopyNumber))+
-	geom_boxplot(aes(fill=Species),size=0,outlier.shape = NA, width=0.5)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
+	geom_boxplot(aes(fill=Species),size=0.1,outlier.shape = NA, width=0.8)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
 	#geom_point(size=0.5,aes(color=Species),shape = 18)+scale_colour_manual(values=darkColors.name)+
 	geom_hline(yintercept = 1, linetype = 2,size=0.1)+
 	geom_hline(yintercept = 2, linetype = 2,color='red',size=0.1)+
-	ylim(c(0,25))+
-	theme_classic() + 
-	#theme_bw() + 
-	#theme(axis.title.x = element_blank(),axis.text.x = element_text(),plot.title = element_blank())+
-	#labs(title = "CN")+
-	#labs(y = "Copy number", color = "Species\n")+
-	facet_wrap( ~ Palindrome, nrow = 1)
-	
-pdf("Fig_Human_copynumber.pdf")
-human1_obj
-dev.off()
-
-humanLog_obj<-ggplot(CN_log_human_palindrome, aes(x=Species, y=CopyNumber))+
-	geom_boxplot(aes(fill=Species),size=0.1,outlier.shape = NA, width=0.8)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
-	geom_hline(yintercept = 0, linetype = 2,size=0.1)+
-	geom_hline(yintercept = 0.6931472, linetype = 2,color='red',size=0.1)+
-	scale_y_continuous(limits=c(-0.75,3.218876),breaks=c(-0.6931472,0,0.6931472,1.609438,2.302585,2.70805,2.995732),labels=c("-0.6931472"="0.5","0" = "1","0.6931472" = "2", "1.609438"="5","2.302585"="10", "2.70805" = "15", "2.995732" = "20"))+
+	scale_y_continuous(limits=c(0,25),breaks=c(0,1,2,5,10,15,20,25),labels=c("0"="0","1" = "1","2" = "2", "5"="5","10"="10", "15" = "15", "20" = "20", "25" = "25"))+
 	theme_classic(base_size = 10) + 
 	theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())+
 	facet_wrap( ~ Palindrome, nrow = 1)
-
-pdf("Fig_Human_copynumberLOG.pdf")
-humanLog_obj
+	
+pdf("Fig_Human_copynumber.pdf", width=2.95, height=2.36)
+human1_obj+theme(legend.position="none")
 dev.off()
+
+pdf("Fig_Human_copynumber_legend.pdf", width=2.75, height=2.36)
+human1_obj
+dev.off()
+
+# humanLog_obj<-ggplot(CN_log_human_palindrome, aes(x=Species, y=CopyNumber))+
+	# geom_boxplot(aes(fill=Species),size=0.1,outlier.shape = NA, width=0.8)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
+	# geom_hline(yintercept = 0, linetype = 2,size=0.1)+
+	# geom_hline(yintercept = 0.6931472, linetype = 2,color='red',size=0.1)+
+	# scale_y_continuous(limits=c(-0.75,3.218876),breaks=c(-0.6931472,0,0.6931472,1.609438,2.302585,2.70805,2.995732),labels=c("-0.6931472"="0.5","0" = "1","0.6931472" = "2", "1.609438"="5","2.302585"="10", "2.70805" = "15", "2.995732" = "20"))+
+	# theme_classic(base_size = 10) + 
+	# theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())+
+	# facet_wrap( ~ Palindrome, nrow = 1)
+
+# pdf("Fig_Human_copynumberLOG.pdf")
+# humanLog_obj
+# dev.off()
 
