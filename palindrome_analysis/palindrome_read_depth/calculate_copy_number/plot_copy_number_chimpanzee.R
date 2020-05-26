@@ -366,33 +366,75 @@ ora_cov<-out
 
 ##################################
 
+#Human
+human_coverage<-read.table("/nfs/brubeck.bx.psu.edu/scratch6/rahul/Palindrome/analysis/palindrome_CN/chimpanzee/palindrome/Coverage_palindrome.bed", sep="\t", stringsAsFactors=F, header=F)
+human_coverage$V8= human_coverage$V4/human_coverage$V6
+human_coverage$V9= human_coverage$V8/0.17557458
+human_coverage[,c(1,9)]
+
+#Based on literature C17, C18, C19 are homologs of P8, P7, and P6. We set the values for this to 2.
+out<-rbind(
+cbind(human_coverage[9,9],"XDG","hu"),
+cbind(human_coverage[1,9],"C1","hu"),
+cbind(human_coverage[2,9],"C2","hu"),
+cbind(human_coverage[3,9],"C3","hu"),
+cbind(human_coverage[4,9],"C4","hu"),
+cbind(human_coverage[5,9],"C5","hu"),
+cbind(2,"C17","hu"),
+cbind(2,"C18","hu"),
+cbind(2,"C19","hu")
+)
+hum_cov<-out
+
+
+
+
+
 #Colors.name <-  c(bo="#A7C855", ch="#74A8D3" , hu="6A6A6A", go="#BD3231", or="#E19F5A")
-Colors.name <-  c(bo="#ABD9E9", ch="#2C7BB6" , hu="D7191C", go="#FFFFBF", or="#FDAE61")
+Colors.name <-  c(bo="#ABD9E9", ch="#2C7BB6" , hu="#D7191C", go="#FFFFBF", or="#FDAE61")
 darkColors.name <-  c(bo="#799630", ch="#3778ad" , hu="#4a4a4a", go="#842222", or="#ba6f21")
 
 
-CN_chimp_palindrome<-rbind(gor_cov,bon_cov,ora_cov)
+CN_chimp_palindrome<-rbind(gor_cov,bon_cov,ora_cov) #,hum_cov
 colnames(CN_chimp_palindrome)<-c("CopyNumber","Palindrome","Species")
 CN_chimp_palindrome<-as.data.frame(CN_chimp_palindrome,stringsAsFactors = FALSE)
 CN_chimp_palindrome$CopyNumber<-as.numeric(CN_chimp_palindrome$CopyNumber)
 CN_chimp_palindrome$CopyNumber<-as.numeric(CN_chimp_palindrome$CopyNumber)
 CN_chimp_palindrome$Species<-substr(CN_chimp_palindrome$Species,0,2)
 CN_chimp_palindrome$Palindrome<- factor(CN_chimp_palindrome$Palindrome, levels = c("C1","C2","C3","C4","C5","C17","C18","C19","XDG"))
+#CN_chimp_palindrome$Species<- factor(CN_chimp_palindrome$Species, levels = c("or","go","bo","hu"))
 require(ggplot2)
 
+CN_chimp_palindrome<-CN_chimp_palindrome[which(CN_chimp_palindrome$CopyNumber!=0),]
 CN_log_chimp_palindrome<-CN_chimp_palindrome
 CN_log_chimp_palindrome$CopyNumber<-log(as.numeric(CN_log_chimp_palindrome$CopyNumber))
 
-chimpLog_obj<-ggplot(CN_log_chimp_palindrome, aes(x=Species, y=CopyNumber))+
-	geom_boxplot(aes(fill=Species),size=0.1,outlier.shape = NA, width=0.8)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
-	geom_hline(yintercept = 0, linetype = 2,size=0.1)+
-	geom_hline(yintercept = 0.6931472, linetype = 2,color='red',size=0.1)+
-	scale_y_continuous(limits=c(-0.75,3.218876),breaks=c(-0.6931472,0,0.6931472,1.609438,2.302585,2.70805,2.995732),labels=c("-0.6931472"="0.5","0" = "1","0.6931472" = "2", "1.609438"="5","2.302585"="10", "2.70805" = "15", "2.995732" = "20"))+
+chimp_obj<-ggplot(CN_chimp_palindrome, aes(x=Species, y=CopyNumber))+
+	geom_boxplot(aes(fill=Species),size=0.1, outlier.shape = NA, width=0.8)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
+	geom_hline(yintercept = 1, linetype = 2,size=0.1)+
+	geom_hline(yintercept = 2, linetype = 2,color='red',size=0.1)+
+	scale_y_continuous(limits=c(0,25),breaks=c(0,1,2,5,10,15,20,25),labels=c("0"="0","1" = "1","2" = "2", "5"="5","10"="10", "15" = "15", "20" = "20", "25" = "25"))+
 	theme_classic(base_size = 10) + 
 	theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())+
 	facet_wrap( ~ Palindrome, nrow = 1)
 
-pdf("Fig_Chimp_copynumberLOG.pdf")
-chimpLog_obj
+pdf("Fig_Chimp_copynumber.pdf", width=2.95, height=2.36)
+chimp_obj+theme(legend.position="none")
 dev.off()
-	
+
+pdf("Fig_Chimp_copynumber_legend.pdf", width=2.75, height=2.36)
+chimp_obj
+dev.off()
+
+# chimpLog_obj<-ggplot(CN_log_chimp_palindrome, aes(x=Species, y=CopyNumber))+
+	# geom_boxplot(aes(fill=Species),size=0.1,outlier.shape = NA, width=0.8)+scale_colour_manual(values=Colors.name)+ scale_fill_manual(values=Colors.name)+
+	# geom_hline(yintercept = 0, linetype = 2,size=0.1)+
+	# geom_hline(yintercept = 0.6931472, linetype = 2,color='red',size=0.1)+
+	# scale_y_continuous(limits=c(-0.75,3.218876),breaks=c(-0.6931472,0,0.6931472,1.609438,2.302585,2.70805,2.995732),labels=c("-0.6931472"="0.5","0" = "1","0.6931472" = "2", "1.609438"="5","2.302585"="10", "2.70805" = "15", "2.995732" = "20"))+
+	# theme_classic(base_size = 10) + 
+	# theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())+
+	# facet_wrap( ~ Palindrome, nrow = 1)
+
+# pdf("Fig_Chimp_copynumberLOG.pdf")
+# chimpLog_obj
+# dev.off()
