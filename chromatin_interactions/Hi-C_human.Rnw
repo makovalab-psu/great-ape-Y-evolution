@@ -1,0 +1,210 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<LOAD THE COORDINATES>>=
+library(grDevices)
+coef=1000000
+tlength<-59373566
+
+#coordinates of palindromes in hg38
+P1hg38<-c(23359067,26311550)
+P2hg38<-c(23061889,23358813)
+P3hg38<-c(21924954,22661453)
+P4hg38<-c(18450291,18870104)
+P5hg38<-c(17455877,18450126)
+P6hg38<-c(16159590,16425757)
+P7hg38<-c(15874906,15904894)
+P8hg38<-c(13984498,14058230)
+
+#coordinates of pseudoautosomal regions (PAR1 and PAR2) and the centromere on the human Y chromosome
+PAR1hg38<-c(10001,2781479)
+PAR2hg38<-c(56887903,57217415)
+CENYhg38<-c(10316945,10544039)
+
+#dataframe with coordinates of all palindromes
+palindromeshg38<-as.data.frame(cbind(P1hg38,P2hg38,P3hg38,P4hg38,P5hg38,P6hg38,P7hg38,P8hg38))
+palindromeshg38<-apply(palindromeshg38,1,function(x) {x/coef})
+
+#color specific range of coordinates in the plot
+plotRectangle<-function(coordinates,myColor) {
+  x1<-coordinates[1]
+  x2<-coordinates[2]
+  y<-tlength
+  rect(x1,0,x2,y, col= myColor,border=NA)
+  
+  y1<-coordinates[1]
+  y2<-coordinates[2]
+  x<-tlength
+  rect(0,y1,x,y2, col= myColor,border=NA)
+}
+
+
+@
+
+
+<<PLOT THE HI-C INTERACTIONS FOR THE WHOLE CHROMOSOME>>=
+library(dplyr)
+options(scipen=10)
+par(mfrow=c(1,1),pty="s",cex=1.2)
+
+setwd("/Users/polly/Desktop/projects/Hi-C")
+
+#Load Hi-C data from the  mHiC pipeline for the human Y chromosome subsetted to 100 million reads and induced pluripotent cell tissue
+myLabel<-"100 million"
+filename<-"/Users/polly/Desktop/projects/Hi-C/100mil_subsets/chrY.HUMAN.validPairs.binPair.multi.mHiC"
+
+#Load the data and limit it to the Y chromosome
+pairs<-as.data.frame(read.table(filename,header=TRUE))
+colnames(pairs)<-c("readID","chr1","pos1","chr2","pos2","prob")
+print(dim(pairs))
+Ypairs<-pairs[pairs$chr1=="chrY" & pairs$chr2=="chrY",]
+#Ypairs<-Ypairs[Ypairs$prob>0.01,]
+  
+print(dim(Ypairs))
+table(is.na(Ypairs$prob))
+#Ypairs<-Ypairs[complete.cases(Ypairs), ] #remove rows with missing probabilities
+print(dim(Ypairs))
+table(is.na(Ypairs$prob))
+
+tlength_without_heterochromatin<-max(Ypairs[Ypairs$pos1<35000000,]$pos1)
+prob_colors<-sapply(Ypairs$prob,function(x) {adjustcolor( "black", alpha.f = x)}) #strength of color determined by the probability
+
+setwd("/Users/polly/Desktop/projects/figures/comparativeY/HUMAN_Hi-C")
+tiff(file=paste0("Hi-C_human.tiff"),units="cm", width=24, height=24, res=300,compression="rle",pointsize = 17)
+
+par(pty="s") #plot square
+plot(NA,NA,xlim=c(0,tlength_without_heterochromatin/coef),ylim=c(0,tlength_without_heterochromatin/coef),xlab="coordinates",ylab="Coordinates [Mb]",col=prob_colors,pch=19,cex=0.2,main=paste("HUMAN from the full mHiC pipeline, 20kb",nrow(Ypairs),"interactions"), sub=myLabel,xaxs="i",yaxs="i",asp=1)
+
+abline(coef = c(0,1),col="darkblue")
+
+#highlight PARs and centromere in the plot 
+plotRectangle(CENYhg38/coef,adjustcolor("red", alpha.f = 0.2))
+plotRectangle(PAR1hg38/coef,adjustcolor("#b5d6c0", alpha.f = 0.2))
+plotRectangle(PAR2hg38/coef,adjustcolor("#b5d6c0", alpha.f = 0.2))
+
+#highlight palindromes in the plot 
+apply(palindromeshg38,1,function(x) {plotRectangle(x,adjustcolor("#bdcce5", alpha.f = 0.2))})
+
+#plot upper left part of the plot
+points(Ypairs$pos1/coef,Ypairs$pos2/coef,col=prob_colors,pch=19,cex=0.2,main=paste("HUMAN from the full mHiC pipeline, 20kb",nrow(Ypairs),"interactions"), sub=myLabel)
+
+dev.off()
+
+
+@
+
+<<COUNT THE PALINDROMIC INTERACTIONS AND COMPARE THEM WITH THE EXPECTATIONS>>=
+
+withinPalindrome<-function(row) { #check if specific coordinates are locates inside any of the hg38 palindromes
+  interaction<-as.data.frame(row)
+  coordinates_to_check<-palindromeshg38
+  
+  if (interaction$chr1!='chrY' & interaction$chr2!='chrY') {
+    coordinates_match<-as.data.frame(cbind(FALSE,FALSE)) 
+  } else {
+    
+    palindrome_match<-apply(coordinates_to_check,1,function(x) { ((interaction$pos1/coef) >= x[1]) & ((interaction$pos1/coef) <= x[2])})
+    first_coordinate_match<-(interaction$chr1=='chrY' && any(palindrome_match))
+    
+    palindrome_match<-apply(coordinates_to_check,1,function(x) { ((interaction$pos2/coef) >= x[1]) & ((interaction$pos2/coef) <= x[2])})
+    second_coordinate_match<-(interaction$chr2=='chrY' && any(palindrome_match))
+    
+    #each Hi-C contact is between two locations; is the first one within the palindromes? is the seconf one within the palindromes?
+    coordinates_match<-as.data.frame(cbind(first_coordinate_match,second_coordinate_match)) 
+  }
+  return(coordinates_match)
+}
+
+#for each row of Hi-C data file, specify whether or not they're inside palindromes
+located_within<-as.data.frame(t(as.data.frame(rbind(sapply(1:nrow(Ypairs),function(x) {withinPalindrome(Ypairs[x,])})))))
+
+stopifnot(nrow(Ypairs)==nrow(located_within)) #check that each row  was given an information about palindromic locations
+annotations<-cbind(Ypairs,located_within)
+
+n_ampliconic_interactions <- list()
+
+
+for (i in 1:10) {
+  #permute the annotations without a replacement
+  permuted_annotations<-annotations
+  permuted_annotations$first_coordinate_match<-sample(permuted_annotations$first_coordinate_match, replace=FALSE)
+  permuted_annotations$second_coordinate_match<-sample(permuted_annotations$second_coordinate_match, replace=FALSE)
+  permuted_ampliconic_annotations<-permuted_annotations[permuted_annotations$first_coordinate_match==TRUE & permuted_annotations$second_coordinate_match==TRUE,]
+  n_ampliconic_interactions[[i]]<-nrow(permuted_ampliconic_annotations)
+}
+
+#split interactions into groups based on whether or not they fall inside palindromes
+ampliconic_annotations<-annotations[annotations$first_coordinate_match==TRUE & annotations$second_coordinate_match==TRUE,]
+other_annotations<-annotations[annotations$first_coordinate_match==FALSE & annotations$second_coordinate_match==FALSE,]
+mixed1_annotations<-annotations[annotations$first_coordinate_match==TRUE & annotations$second_coordinate_match==FALSE,]
+mixed2_annotations<-annotations[annotations$first_coordinate_match==FALSE & annotations$second_coordinate_match==TRUE,]
+mixed_annotations<-rbind(mixed1_annotations,mixed2_annotations)
+
+hist(unlist(n_ampliconic_interactions),breaks=100,main="Number of interactions (random expectations)",xlab="palindromic annotations")
+abline(h=nrow(ampliconic_annotations),col="red")
+
+#show probabilities for these groups
+boxplot(ampliconic_annotations$prob,outline=TRUE,col="cyan",main=paste("Probability of palindromic",nrow(ampliconic_annotations)),ylim=c(0,1))
+boxplot(other_annotations$prob,outline=TRUE,col="gold",main=paste("Probability of other",nrow(other_annotations)),ylim=c(0,1))
+boxplot(mixed_annotations$prob,outline=TRUE,col="gray",main=paste("Probability of mixed ",nrow(mixed_annotations)),ylim=c(0,1))
+
+sum(ampliconic_annotations$prob)
+sum(other_annotations$prob)
+sum(mixed_annotations$prob)
+
+print(paste("SUM of ampliconic_annotations",sum(ampliconic_annotations$prob),"SUM of mixed_annotations",sum(mixed_annotations$prob),"SUM of other_annotations",sum(other_annotations$prob)))
+
+length_of_palindromes<-sum(apply(palindromeshg38,1,function(x) {x[2]-x[1]}))
+print(nrow(ampliconic_annotations)/length_of_palindromes) #number of interactions per Mb in ampliconic regions
+print(nrow(other_annotations)/(30-length_of_palindromes)) #number of interactions per Mb outside of ampliconic regions
+
+
+#plot barplot showing these groups; "palindrome-palindrome","palindrome-other","other-palindrome","other-other"
+my_scheme<-c("dodgerblue2","coral","coral1","darkolivegreen3")
+merged<-rbind(c(nrow(ampliconic_annotations)),c(nrow(mixed1_annotations)),c(nrow(mixed2_annotations)),c(nrow(other_annotations)))
+barplot(merged,col=my_scheme, names.arg=c(myLabel),main=chisq.test(observed)$p.value)
+plot.new()
+legend("topright", inset=.02, title="Hi-C interactions", rev(c("palindrome-palindrome","palindrome-other","other-palindrome","other-other")), fill=rev(my_scheme), horiz=FALSE, cex=1.25, bty = "n")
+
+
+@
+
+
+<<PLOT INDIVIDUAL PALINDROMES>>=
+par(mfrow=c(1,1),pty="s")
+
+plotPalindrome<-function(pal,pn){
+  pal_pairs<-Ypairs[Ypairs$pos1>=pal[1] & Ypairs$pos2<=pal[2],]
+  
+  if (nrow(pal_pairs)>0) {
+    coord1<-(pal_pairs$pos1-min(pal_pairs$pos1))/1000
+    coord2<-(pal_pairs$pos2-min(pal_pairs$pos1))/1000
+    
+    prob_colors<-sapply(pal_pairs$prob,function(x) {ifelse( x > 0.8, adjustcolor( "red", alpha.f=x),adjustcolor( "black", alpha.f=x))}) #strength of color determined by the probability
+    
+    #x <= 0.6 & x > 0.4
+    par(pty="s")
+    plot(coord1,coord2,pch=19,col=prob_colors,xlab="[kb]",ylab="[kb]",xaxs="i",yaxs="i",xlim=range(min(coord1,coord2),max(coord1,coord2)),ylim=range(min(coord1,coord2),max(coord1,coord2)),asp=1,main=paste("Palindrome",as.character(pn))) #strong diagonal interaction   
+    abline(coef = c(0,1),col="darkblue")
+    midpoint<-(pal[2]-pal[1])/2/1000
+    
+    #abline(v=midpoint,col="red")
+    #abline(h=midpoint,col="red") 
+  }
+}
+
+for(pn in 1:8) { 
+  palindromeToPlot<-palindromeshg38[c(pn),] #extract the coordinates of a single palindrome
+  tiff(file=paste0("HiC",pn,".tiff"),units="cm", width=17.9, height=17.9, res=300,compression="rle",pointsize = 17)
+  plotPalindrome(palindromeToPlot*1000000,pn)
+  dev.off()
+}
+
+plot(seq(0,1,0.1),seq(0,1,0.1),col="white",xlab="Probability")
+lapply(seq(0,1,0.01),function(x) {points(x,0.1,pch=19,col=ifelse( x >0.8, adjustcolor( "red", alpha.f=x),adjustcolor( "black", alpha.f=x)))})
+
+@
+
+\end{document}
