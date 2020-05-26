@@ -261,3 +261,25 @@ TGTGTCTGGGAtgcttaaattcctcaccctcataaagacatgccctggccactccatctcaaagatcctcataacccaca
 TGTGTCTGGGATGCTTAAATTCCTCACCCTCATAAAGACATGCCCTGGCCACTCCATCTCAAAGATCCTCATAACCCACATTAGATGTTATCGTTGCTTCATTTCCCTCAAAGCTATGCTCACCATCAGCAATTCTGTCCTTCATGCATTTGATCACTGCTTTATCTTCTGTCCCCATAACTAAAGTAACAGCAGGACA
 >Bonobo_X
 TGTGTCTGGGAtgcttaaattcctcaccctcataaagacatgccctggccactccatctcaaagatcctcataacccacattagatgttatcgttgcttcatttccctcaaagctatgctcaccatcagcaattctgtccttcatgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+
+
+#Obtain locations of gene conversion
+
+
+python
+
+glfile='Gene_coverage_globalList_gt50bpFINAL.txt'
+bedoutGI=open("Gene_conversion_Location_exact_globalList.bed","w")
+
+GI_gene={}
+with open(glfile,"rU") as fh:
+	for line in fh:
+		if line[0] != '#' :
+			col=line.split()
+			temp=col[1]
+			name=temp.split(";")[0].split("|")[1].split(".")[0]
+			gene=temp.split(";")[1].split("|")
+			cord=gene[0].split(":")[1].split("-")
+			species=temp.split(";")[0].split("|")[0][0:6]
+			bedoutGI.write(name+"\t"+gene[0]+"\t"+species+"\t"+col[2]+"\t"+col[4]+"\t"+col[5]+"\n")
+ 
