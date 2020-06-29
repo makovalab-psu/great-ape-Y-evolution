@@ -2,10 +2,11 @@
 #SBATCH --job-name=prunning
 #SBATCH --output=prunning-%j.out
 #SBATCH --error=prunning-%j.err
-#SBATCH --mem=250G
-#SBATCH --ntasks=32
+#SBATCH --mem=50G
+#SBATCH --ntasks=1
 
-source activate /galaxy/home/biomonika/conda/GApy2.7
+source /opt/anaconda/etc/profile.d/conda.sh
+conda activate /galaxy/home/biomonika/conda/GApy2.7 > /dev/null 2>&1
 
 set -e
 set -x
