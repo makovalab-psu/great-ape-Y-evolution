@@ -1,0 +1,192 @@
+#Get Reference Y for Human and Chimpanzee Y
+
+#chimp
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Palindrome/analysis/palindrome_CN/chimpanzee/palindrome
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#Get Reference Y 
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Chimp_Y/analysis/Assemblies/panTro6.msY.fa .
+
+#get refY palindrome location for left arm
+
+chrY	1759451	1906260	
+chrY	2298081	2641450
+chrY	3587737	3756841
+chrY	4669973	5057427
+chrY	8651546	8875661
+chrY	21591500	21631400
+chrY	23517939	23532379
+chrY	23807052	24192224
+
+#get refY XDG location between start of EIF1AY and end of UTY genes on chimp Y
+chrY	17534922	21028971
+
+
+
+#extract regions
+
+vim palindrome_leftarm_XDR_chimp.txt
+chrY:1759451-1906260
+chrY:2298081-2641450
+chrY:3587737-3756841
+chrY:4669973-5057427
+chrY:8651546-8875661
+chrY:21591500-21631400
+chrY:23517939-23532379
+chrY:23807052-24192224
+chrY:17534922-21028971
+
+mkdir index
+samtools faidx panTro6.msY.fa
+samtools faidx panTro6.msY.fa -r palindrome_leftarm_XDR_chimp.txt > index/customRef_panTro6_palindromUniq_Xdegen_regionEIF1AYtoUTY.fa
+
+#Simulated reads
+mkdir fastq
+ln -s /nfs/brubeck.bx.psu.edu/scratch4/monika/project_Y_chromosome/simulated_reads_humanYchimpY fastq/
+
+
+#Map human simulated reads to chimp custom Y with only palindrome arm sequences.
+
+vim slurm_bwa.sh
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+#index
+srun bwa index index/customRef_panTro6_palindromUniq_Xdegen_regionEIF1AYtoUTY.fa
+#align
+srun bwa mem -t 20 index/customRef_panTro6_palindromUniq_Xdegen_regionEIF1AYtoUTY.fa fastq/simulated_reads_humanYchimpY/hg38.msY.simReads_R1.fastq fastq/simulated_reads_humanYchimpY/hg38.msY.simReads_R2.fastq > hg38.msYsimReads_custom_chimpY.sam
+
+#convert to BAM
+srun samtools view -bhS hg38.msYsimReads_custom_chimpY.sam > hg38.msYsimReads_custom_chimpY.bam
+
+#sort and index
+samtools sort hg38.msYsimReads_custom_chimpY.bam > hg38.msYsimReads_custom_chimpY.sorted.bam
+samtools index hg38.msYsimReads_custom_chimpY.sorted.bam
+
+
+####
+
+vim palindromeARM_X-degenerate.bed
+chrY:1759451-1906260	1	146809
+chrY:2298081-2641450	1	343369
+chrY:3587737-3756841	1	169104
+chrY:4669973-5057427	1	387454
+chrY:8651546-8875661	1	224115
+chrY:21591500-21631400	1	39900
+chrY:23517939-23532379	1	14440
+chrY:23807052-24192224	1	385172
+chrY:17534922-21028971	1	3494049
+
+
+bedtools coverage -b hg38.msYsimReads_custom_chimpY.sorted.bam -a palindromeARM_X-degenerate.bed > Coverage_chimp_hgY_wgsim_palindrome.bed > Coverage_palindrome.bed
+
+R
+
+palin=read.table("Coverage_palindrome.bed", sep="\t", stringsAsFactors=F, header=F)
+palin$V8= palin$V4/palin$V6
+palin$V9= palin$V8/0.17557458
+palin[,c(1,9)]
+
+                      V1        V9
+1   chrY:1759451-1906260 1.9415534	C1
+2   chrY:2298081-2641450 0.2857015	C2
+3   chrY:3587737-3756841 1.4701153	C3
+4   chrY:4669973-5057427 2.0614199	C4
+5   chrY:8651546-8875661 2.1280488	C5
+6 chrY:21591500-21631400 1.2210842	C17
+7 chrY:23517939-23532379 1.3017128	C18
+8 chrY:23807052-24192224 1.0425539	C19
+9 chrY:17534922-21028971 1.0000000	XDG
+
+
+#human
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Palindrome/analysis/palindrome_CN/human/palindrome
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#Get Reference Y 
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Human_Y/analysis/Assemblies/hg38.msY.fa .
+
+#get refY palindrome location for left arm
+
+chrY	23359067	24822577
+chrY	23061889	23208197
+chrY	21924954	22208730
+chrY	18450291	18640356
+chrY	17455877	17951255
+chrY	16159590	16269541
+chrY	15874906	15883575
+chrY	13984498	14019652
+
+#get refY XDG location between 2MB upstream of USP9Y and end of TMSB4Y genes on chimp Y
+chrY	10662368	13706024
+
+#extract regions
+
+vim palindrome_leftarm_XDR_human.txt
+chrY:23359067-24822577
+chrY:23061889-23208197
+chrY:21924954-22208730
+chrY:18450291-18640356
+chrY:17455877-17951255
+chrY:16159590-16269541
+chrY:15874906-15883575
+chrY:13984498-14019652
+chrY:10662368-13706024
+
+mkdir index
+samtools faidx hg38.msY.fa
+samtools faidx hg38.msY.fa -r palindrome_leftarm_XDR_human.txt > index/customRef_hg38_palindromUniq_Xdegen_region2mbUPUSP9YtoTMSB4Y.fa
+
+#Simulated reads
+mkdir fastq
+ln -s /nfs/brubeck.bx.psu.edu/scratch4/monika/project_Y_chromosome/simulated_reads_humanYchimpY fastq/
+
+
+#Map chimp simulated reads to human custom Y with only palindrome arm sequences and XDG as control.
+
+vim slurm_bwa.sh
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+#index
+srun bwa index index/customRef_hg38_palindromUniq_Xdegen_region2mbUPUSP9YtoTMSB4Y.fa
+#align
+srun bwa mem -t 20 index/customRef_hg38_palindromUniq_Xdegen_region2mbUPUSP9YtoTMSB4Y.fa fastq/simulated_reads_humanYchimpY/panTro6.msY.simReads_R1.fastq fastq/simulated_reads_humanYchimpY/panTro6.msY.simReads_R2.fastq > panTro6.msYsimReads_custom_humanY.sam
+
+#convert to BAM
+srun samtools view -bhS panTro6.msYsimReads_custom_humanY.sam > panTro6.msYsimReads_custom_humanY.bam
+
+#sort and index
+samtools sort panTro6.msYsimReads_custom_humanY.bam > panTro6.msYsimReads_custom_humanY.sorted.bam
+samtools index panTro6.msYsimReads_custom_humanY.sorted.bam
+
+####
+
+vim palindromeARM_X-degenerate.bed
+chrY:23359067-24822577	1	1463511
+chrY:23061889-23208197	1	146309
+chrY:21924954-22208730	1	283777
+chrY:18450291-18640356	1	190066
+chrY:17455877-17951255	1	495379
+chrY:16159590-16269541	1	109952
+chrY:15874906-15883575	1	8670
+chrY:13984498-14019652	1	35155
+chrY:10662368-13706024	1	3043657
+
+bedtools coverage -b panTro6.msYsimReads_custom_humanY.sorted.bam -a palindromeARM_X-degenerate.bed > Coverage_human_ptY_wgsim_palindrome.bed > Coverage_palindrome.bed
+
+R
+
+palin=read.table("Coverage_palindrome.bed", sep="\t", stringsAsFactors=F, header=F)
+palin$V8= palin$V4/palin$V6
+palin$V9= palin$V8/0.12156926
+palin[,c(1,9)]
+
+                      V1        V9
+1 chrY:23359067-24822577 1.6532183	P1
+2 chrY:23061889-23208197 1.1198346	P2
+3 chrY:21924954-22208730 3.4593450	P3
+4 chrY:18450291-18640356 0.2625718	P4
+5 chrY:17455877-17951255 3.5058852	P5
+6 chrY:16159590-16269541 1.2701002	P6
+7 chrY:15874906-15883575 1.2373279	P7
+8 chrY:13984498-14019652 1.7877008	P8
+9 chrY:10662368-13706024 1.0000000	XDG

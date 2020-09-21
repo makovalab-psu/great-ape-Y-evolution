@@ -1,0 +1,48 @@
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#index reference Y 
+mkdir index
+cd index
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Bonobo_Y/analysis/Assemblies/panPan.msY.makovalab.ver1.smsk.fa .
+bwa index panPan.msY.makovalab.ver1.smsk.fa
+faToTwoBit panPan.msY.makovalab.ver1.smsk.fa panPan.msY.makovalab.ver1.smsk.2bit
+
+#FASTQ files
+
+#The whole genome reads were mapped to Orangutan Female + Y chromosome and the Y chromosome only reads were obtained from Monika.
+#For the consistency of the contig names in the reference, I am realigning it to only the Y chromosome.
+#NOTE the path to monika's folders are temporary and might change in the future. 
+cd ..
+mkdir data
+cd data
+
+samtools sort -n /nfs/brubeck.bx.psu.edu/scratch5/monika/project_Y_chromosome/classification/important_tmp/Bono_R_on_panPan.bam > Bonobo_Parsed_Ychr_pairedReads_sotredbyPOS.bam
+bamToFastq -i Bonobo_Parsed_Ychr_pairedReads_sotredbyPOS.bam -fq bonobo_R1.fastq -fq2 bonobo_R2.fastq
+#NOTE lots of warnings because of missing mate pair reads
+
+
+vim slurm_BWA.sh
+
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+#align
+srun bwa mem -t 20 index/panPan.msY.makovalab.ver1.smsk.fa data/bonobo_R1.fastq data/bonobo_R2.fastq > bonoboWGS_msY_ver1.sam
+
+#convert to BAM
+srun samtools view -bhS bonoboWGS_msY_ver1.sam > bonoboWGS_msY_ver1.bam
+
+#sort and index
+samtools sort bonoboWGS_msY_ver1.bam > bonoboWGS_msY_ver1.sorted.bam
+samtools index bonoboWGS_msY_ver1.sorted.bam
+
+
+#####GC correction of BAM files
+#total length:   23435001 bp  (22636897 bp excl N/X-runs) from repeatmasker output
+
+java -jar /galaxy/home/rxv923/src/picard-master/dist/picard.jar CollectInsertSizeMetrics I= bonoboWGS_msY_ver1.sorted.bam O=insert_size_metrics.txt H=insert_size_histogram.pdf
+
+
+computeGCBias -b bonoboWGS_msY_ver1.sorted.bam --effectiveGenomeSize 22636897  -g index/panPan.msY.makovalab.ver1.smsk.2bit -l 440 --GCbiasFrequenciesFile freq.txt -p 20
+correctGCBias -b bonoboWGS_msY_ver1.sorted.bam --effectiveGenomeSize 22636897 -g index/panPan.msY.makovalab.ver1.smsk.2bit --GCbiasFrequenciesFile freq.txt -o bonoboWGS_msY_ver1.GCcorrected.bam
+

@@ -1,0 +1,99 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<#plot arrows>>=
+par(mfrow=c(5,1))
+setwd("/Users/polly/Desktop/projects/figures/comparativeY/HUMAN_Hi-C")
+myColor<-"darkblue"
+
+#P1
+arm<-1450
+spacer<-2.1
+plot(NA,xlim=c(0,2*arm+spacer),ylim=c(0,2),main="P1")
+arrows(arm,1,1,1,lwd=14,length=0.1,angle=0,col=myColor) #arm
+arrows(arm+spacer,1,2*arm+spacer,1,lwd=14,length=0.1,angle=0,col=myColor) #arm
+text(arm+spacer/2,1,col="white",labels="|",cex=5) #spacer
+
+#P2
+arm<-122
+spacer<-2.1
+plot(NA,xlim=c(0,2*arm+spacer),ylim=c(0,2),main="P2")
+arrows(arm,1,1,1,lwd=14,length=0.1,angle=0,col=myColor)
+arrows(arm+spacer,1,2*arm+spacer,1,lwd=14,length=0.1,angle=0,col=myColor)
+
+#P3
+arm<-283
+spacer<-170
+plot(NA,xlim=c(0,2*arm+spacer),ylim=c(0,2),main="P3")
+arrows(arm,1,1,1,lwd=14,length=0.1,angle=0,col=myColor)
+arrows(arm+spacer,1,2*arm+spacer,1,lwd=14,length=0.1,angle=0,col=myColor)
+
+#P4
+arm<-190
+spacer<-40
+plot(NA,xlim=c(0,2*arm+spacer),ylim=c(0,2),main="P4")
+arrows(arm,1,1,1,lwd=14,length=0.1,angle=0,col=myColor)
+arrows(arm+spacer,1,2*arm+spacer,1,lwd=14,length=0.1,angle=0,col=myColor)
+
+#P5
+arm<-496
+spacer<-3.5
+plot(NA,xlim=c(0,2*arm+spacer),ylim=c(0,2),main="P5")
+arrows(arm,1,1,1,lwd=14,length=0.1,angle=0,col=myColor)
+arrows(arm+spacer,1,2*arm+spacer,1,lwd=14,length=0.1,angle=0,col=myColor)
+text(arm+spacer/2,1,col="white",labels="|",cex=5) #spacer
+
+#P6
+arm<-110
+spacer<-46
+plot(NA,xlim=c(0,2*arm+spacer),ylim=c(0,2),main="P6")
+arrows(arm,1,1,1,lwd=14,length=0.1,angle=0,col=myColor)
+arrows(arm+spacer,1,2*arm+spacer,1,lwd=14,length=0.1,angle=0,col=myColor)
+@
+
+<<#plot schematics>>=
+par(mfrow=c(5,1))
+
+plotRectangle<-function(coordinates,myColor) {
+  x1<-coordinates[1]
+  x2<-coordinates[2]
+  y<-1.2
+  rect(x1,1,x2,y, col= myColor,border=TRUE)
+  
+  y1<-coordinates[1]
+  y2<-coordinates[2]
+  x<-1.2
+  rect(1,y1,x,y2, col= myColor,border=TRUE)
+}
+
+#load the annotations of Xdegenerate and ampliconic regions
+coordinates<-read.table("coordinates_human_palindromes.txt")
+
+#PLOT HUMAN
+tiff(file=paste0("humanY_schematics.tiff"),units="cm", width=30, height=18, res=300,compression="rle",pointsize = 17)
+tlength<-26670000 #tlength_without_heterochromatin for human
+plot(NA,xlim=c(0,tlength),ylim=c(0,2),main="human Y chromosome",xaxs="i",yaxs="i",bty="n")
+
+#Levels: heterochromatin PAL XDG 
+sequenceClassesColors<-c("#d1d9ec","#b5d6c0","#fdfeba","pink")
+coordinates$V6<-sequenceClassesColors[as.numeric(as.factor(coordinates[,c(5)]))]
+apply(coordinates[,c(2,3,6)],1,function(x) {plotRectangle(x[1:2],x[3])})
+dev.off()
+
+#PLOT CHIMPANZEE
+#load the annotations of Xdegenerate and ampliconic regions
+coordinates<-read.table("coordinates_chimp_palindromes.txt")
+tiff(file=paste0("chimpY_schematics.tiff"),units="cm", width=30, height=18, res=300,compression="rle",pointsize = 17)
+tlength<-26350515 #tlength for the chimpanzee per Bob's end point of PAR1 in panTro6; 26350515 used to be 26310000
+plot(NA,xlim=c(0,tlength),ylim=c(0,2),main="chimp Y chromosome",xaxs="i",yaxs="i",bty="n")
+
+#Levels: heterochromatin PAL rAMP XDG XTR
+sequenceClassesColors<-c("#d1d9ec","gray","#b5d6c0","#fdfeba")
+coordinates$V6<-sequenceClassesColors[as.numeric(as.factor(coordinates[,c(5)]))]
+apply(coordinates[,c(2,3,6)],1,function(x) {plotRectangle(x[1:2],x[3])})
+dev.off()
+@
+
+\end{document}

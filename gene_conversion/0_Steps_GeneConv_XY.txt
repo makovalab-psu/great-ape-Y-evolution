@@ -1,0 +1,330 @@
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/GeneConversion/analysis/cactus_align_PARfix/
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#Obtain the XY alignment:
+
+mkdir XY_human
+cd XY_human
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Y_Alignments/analysis/cactus_10way.chrXY.20200507/alignment.hg_centric.chrXY.guided.20200507.maf.gz .
+
+#Uncompress the files
+gunzip < alignment.hg_centric.chrXY.guided.20200507.maf.gz > alignment.hg_centric.chrXY.guided.20200507.maf
+
+cd ..
+
+Obtain the scripts from GitHub
+
+#Parse gene specific
+python convert_MAF_to_FASTA.py
+
+Will generate XDG_gene_alignments.fa
+
+###################UPDATE path and coordinates of genes within the code.
+Gene_coordinates={
+"SRY":[('2786855', '2787699')],
+"AMELY":[('6865918', '6874027')],
+"DBY":[('12904831', '12920478')],
+"EIF1AY":[('20575725', '20593154')],
+"NLGN4Y":[('14523746', '14843726')],
+"PRKY":[('7273972', '7381547')],
+"KDM5D":[('19705417', '19744939')],
+"TBL1Y":[('6910686', '7091683')],
+"TMSB4Y":[('13703567', '13706024')],
+"USP9Y":[('12701231', '12860839')],
+"UTY":[('13248379', '13480673')],
+"ZFY":[('2935477', '2982506')]
+}
+
+#List of species names in the MAF file
+species_list=["panPan_Y", "panTro_Y", "gorGor_Y", "ponAbe_Y", "hg_Y"]
+
+#all X and Y chromosome alignment file.
+#/nfs/brubeck.bx.psu.edu/scratch6/rahul/GeneConversion/analysis/cactus_align/
+input_handle = open("XY_human/alignment.hg_centric.chrXY.guided.20200507.maf", "rU")
+output_handle = open("XDG_gene_alignments.fa", "w")
+
+#Output dictionary to which the block sizes are added each time
+Gene={}
+overall_size={"panPan_Y":0, "panTro_Y":0, "gorGor_Y":0, "ponAbe_Y":0, "hg_Y":0}
+overallnonRepeat_size={"panPan_Y":0, "panTro_Y":0, "gorGor_Y":0, "ponAbe_Y":0, "
+hg_Y":0}
+
+####################
+
+
+
+
+mkdir gene_msablock_fasta
+##Break fasta into block and parse species which have both X and Y sequences
+
+python parse_FASTA_byGENE_individual_blocks.py
+
+#############################UPDATE input file names if changed in above step.
+
+#Output dictionary to which the block sizes are added each time
+Gene={}
+overall_size={"panPan_Y":0, "panTro_Y":0, "gorGor_Y":0, "ponAbe_Y":0, "hg_Y":0}
+overallnonRepeat_size={"panPan_Y":0, "panTro_Y":0, "gorGor_Y":0, "ponAbe_Y":0, "
+hg_Y":0}
+
+#############################
+
+
+
+###Creates list of individual FASTA files ready to run geneconv on
+
+#/w9 is key for random generator
+#/lp looks for local pair wise comparision
+geneconv alumw.asf  /w9  /lp -nolog
+
+
+#https://www.math.wustl.edu/~sawyer/geneconv/gconvdoc.html
+#After the comments in alumw.frags is a ``global list'' of the most significant fragments in the alignment, which begins with GI for ``global inner'' (fragment) in the first two columns. The P-values in this list are multiple-comparison corrected for all sequence pairs, as well as for the length of the alignment. The ``global list'' in this case is 
+
+#This says that the only significant global fragment is between the two sequences S1 and S2 (the two spider monkey sequences) at offsets 266-296 in the alignment. The column heading BC KA stands for ``Bonferroni-corrected Karlin-Altschul'' Pvalue. Note that it is more conservative that the permutation-test P-value in this case. Both P-values are multiple-comparison corrected. The rest of the GI line says that the fragment contains 21 sites that are polymorphic in the alignment and that the two sequences differ at 34 sites overall. The final three columns say that the fragment contains no internal mismatches and that there is no mismatch penalty, which is the GENECONV default. 
+
+
+############################
+vim run_GeneConv.sh
+#!/usr/bin/bash
+
+for file in gene_msablock_fasta/*.fasta; do 
+    if [ -f "$file" ]; then 
+		echo "$file" 
+		#geneconv $file  /w9  /lp -nolog
+    fi 
+done
+
+
+nohup sh run_GeneConv.sh > geneconv_run.out &
+
+
+##########
+
+#Parse .frags file
+python
+
+
+import glob
+
+
+geneconv_out=glob.glob("/nfs/brubeck.bx.psu.edu/scratch6/rahul/GeneConversion/analysis/cactus_align_PARfix/gene_msablock_fasta/*.frags")
+
+outGI=open("Gene_coverage_globalList.txt","w")
+outPI=open("Gene_coverage_pairwiseList.txt","w")
+
+GI_gene={}
+PI_gene={}
+for file in geneconv_out:
+	#print file
+	with open(file,"rU") as fh:
+		for line in fh:
+			if line[0] != '#' :
+				col=line.split()
+				compare=col[1]
+				left=compare.split(";")[0].split("|")[0].split(".")
+				if col[0]=='GI':
+					sim_Pvalue=float(col[2])
+					if col[3]=='>':
+						ka_Pvalue=float(col[4])
+					else:
+						ka_Pvalue=float(col[3])
+					if sim_Pvalue < 0.05:
+						gene=compare.split(";")[4].split("|")[1]
+						right=compare.split(";")[4].split("|")[0].split(".")
+						if left[0][1:3]==right[0][1:3] and left[1]!=right[1]:
+							if left[0][1:3]=='pa':
+								if left[0][1:6]==right[0][1:6] and left[1]!=right[1]:
+									outGI.write(line)
+									if left[0][1:6] in GI_gene:
+										if gene in GI_gene[left[0][1:6]]:
+											GI_gene[left[0][1:6]][gene]+=1
+										else:
+											GI_gene[left[0][1:6]][gene]=1
+									else:
+										GI_gene[left[0][1:6]]={gene:1}
+							else:
+								outGI.write(line)
+								if left[0][1:3] in GI_gene:
+									if gene in GI_gene[left[0][1:3]]:
+										GI_gene[left[0][1:3]][gene]+=1
+									else:
+										GI_gene[left[0][1:3]][gene]=1
+								else:
+									GI_gene[left[0][1:3]]={gene:1}
+				if col[0]=='PI':
+					sim_Pvalue=float(col[2])
+					if col[3]=='>':
+						ka_Pvalue=float(col[4])
+					else:
+						ka_Pvalue=float(col[3])
+					if sim_Pvalue < 0.05:
+						gene=compare.split(";")[4].split("|")[1]
+						right=compare.split(";")[4].split("|")[0].split(".")
+						if left[0][1:3]==right[0][1:3] and left[1]!=right[1]:
+							if left[0][1:3]=='pa':
+								if left[0][1:6]==right[0][1:6] and left[1]!=right[1]:
+									outPI.write(line)
+									if left[0][1:6] in PI_gene:
+										if gene in PI_gene[left[0][1:6]]:
+											PI_gene[left[0][1:6]][gene]+=1
+										else:
+											PI_gene[left[0][1:6]][gene]=1
+									else:
+										PI_gene[left[0][1:6]]={gene:1}
+							else:
+								outPI.write(line)
+								if left[0][1:3] in PI_gene:
+									if gene in PI_gene[left[0][1:3]]:
+										PI_gene[left[0][1:3]][gene]+=1
+									else:
+										PI_gene[left[0][1:3]][gene]=1
+								else:
+									PI_gene[left[0][1:3]]={gene:1}
+
+################################
+########LOAD the output to EXCEL and filter events with length <50
+
+Create a table with summary of gene conversion events. GI are of higher confidence and PI are all possible events which are significant.
+
+##############Check for overlap with Exons
+
+
+#download the coding sequences for Human hg38 (Dec. 2013) from UCSC Table browser
+
+group= Genes and Gene Prediction
+track= NCBI RefSeq
+table= RefSeq All (ncbiRefSeq)
+region=position= chrY:1-57,227,415
+Output format= BED format
+
+Download Coding Exons
+Save file as HumanY_coding_exon_hg38hglift.bed
+
+
+#Extract the location of gene conversion in BED format
+
+python
+
+glfile='Gene_coverage_globalList.txt'
+bedoutGI=open("Gene_conversion_HumanSpecific_wholeBlock_globalList.bed","w")
+
+GI_gene={}
+with open(glfile,"rU") as fh:
+	for line in fh:
+		if line[0] != '#' :
+			col=line.split()
+			temp=col[1]
+			name=temp.split(";")[0].split("|")[1].split(".")[0]
+			gene=temp.split(";")[1].split("|")
+			cord=gene[0].split(":")[1].split("-")
+			bedoutGI.write("chrY"+"\t"+cord[0]+"\t"+cord[1]+"\t"+name+"\n")
+
+##BEDTOOLs intersect
+bedtools intersect -b HumanY_coding_exon_hg38hglift.bed -a Gene_conversion_HumanSpecific_wholeBlock_globalList.bed | sort | uniq
+
+chrY    12722107        12722187        USP9Y
+chrY    12810178        12810287        USP9Y
+chrY    12914884        12914982        DBY
+chrY    2979921 2979993 ZFY
+chrY    7070719 7070731 TBL1Y
+
+After filtering for track length of >50bp there is no overlap with coding Exons
+
+######################Obatin the top list with largest gene conversion track
+# Global inner fragments (80 polymorphisms, 1428 aligned bases):
+# (Inner fragments are runs of matching sites.)
+# (Sim and BC KA P-values are corrected for multiple comparisons.)
+# (Fragments are listed only if Sim P-value <= 0.05.)
+# See earlier in the file for the full restrictions on fragments.
+#
+# BC KA means Bonferroni-corrected KA (BLAST-like) Pvalues.
+# KA Pvalues are NOT corrected for multiple pairwise comparisons.
+# In the following table, BC Pvalues are KA Pvalues multiplied by 15.
+# Num Poly  is the number of polymorphic sites in the fragment.
+# Num Dif   is the number of mismatches within the fragment.
+# Tot Difs  is the total number of mismatches between two sequences.
+# MisM Pen  is the penalty per mismatch for these two sequences.
+
+#
+Seq_Names	Sim_Pvalue	BC_KA_Pvalue	Aligned_Begin	Offsets_End	Length	Num_Poly	Num_Dif	Tot_Difs	MisM_Pen.
+#                          
+
+
+GI	hg_Y.chrY|PRKY;chrY:7341156-7341892;49885523|736|-1|57227415;;"hg.chrX|PRKY;chrY:7341156-7341892;3641192|737|1|156040895;"	0	0.00001	339	748	410	15	0	55	None
+GI	hg_Y.chrY|PRKY;chrY:7287633-7288958;49938457|1325|-1|57227415;;"hg.chrX|PRKY;chrY:7287633-7288958;3701486|1327|1|156040895;"	0.0001	0.00132	936	1332	397	19	0	46	None
+GI	gorGor_Y.QB.A_64|PRKY;chrY:7287633-7288958;51933|1322|-1|79374;;"gorGor.chrX|PRKY;chrY:7287633-7288958;3257587|1327|1|156331669;"	0	0.00082	286	615	330	27	0	36	None
+GI	panPan_Y.Contig1415|PRKY;chrY:7366365-7366795;23986|433|-1|54201;;"panPan.chrX|PRKY;chrY:7366365-7366795;3556463|427|1|155392059;"	0.0019	0.15273	31	347	317	17	0	10	None
+
+#Test a different gene
+GI	panPan_Y.Contig610|NLGN4Y;chrY:14681897-14682244;0|347|-1|4312;;"panPan.chrX|NLGN4Y;chrY:14681897-14682244;5944619|347|1|155392059;"	0	0.02049	1	199	199	14	0	18	None
+
+
+
+#FASTA	START	END
+PRKY;chrY:7341156-7341892 339	748	
+PRKY;chrY:7287633-7288958 936	1332  #only has three species
+PRKY;chrY:7287633-7288958 286	615	
+
+NLGN4Y;chrY:14681897-14682244	1	199
+MEGA7 generate alignment
+Select from 339 to 748
+
+PRKY;chrY:7341156-7341892 339	748	
+>Gor_Y
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATGTCAATGGGCATGCATGGGTGGTTCCTTCACAAGTTTGGGTTTTTTGCCTCTTATTCACACAAGCTCAACTGCTAATTCACGTTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTTCGACACTCACGTACTGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGG-GGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACGGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAG-GCCCACCAGTCCACAGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Gor_X
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTCCTTCACAAGTTTGGGTTTTTTGCCTCTTATTCACACAAGCTCAACTGCTAATTCACCTTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTTCGACACTCACGTACTGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACGGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACAGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Chimp_Y
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTGCTTCACAAGTTTGGGTTTTTTGCCTCTTATTCACACAAGCTCAATTGCTAATTCACATTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTGTGACACTCACGTACCGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACAGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACAGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Chimp_X
+atcaactgacataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTCCTTCACAAGTTTGCGTTTTTTGCCTCTTATTCACACAAGCTCAATTGCTAATTCACATTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTGTGACACTCACGTACCGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACAGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACAGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Human_Y
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTCCTTCACAAGTTTGGGTTTTTTGCCTCTTATTCACACAAGCTCAATTGCTAATTCACATTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTGCGACACTCACGTACTGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACAGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACGGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Human_X
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTCCTTCACAAGTTTGGGTTTTTTGCCTCTTATTCACACAAGCTCAATTGCTAATTCACATTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTGCGACACTCACGTACTGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACAGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACGGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Bonobo_Y
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTGCTTCACAAGTTTGGGTTTTTTGCCTCTTATTCACACAAGCTCAATTGCTAATTCACATTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTGTGACACTCACGTACCGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGAGTGCTGGCCTGTAAGATGAAGATTCTCTACAGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACAGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+>Bonobo_X
+atcaactgagataactcactaccttcagagcagccCAGAATGTTAATTGTATATTTAAAGAAGATATGGATATTTCAATATAAAAATCTCAATGGGCATGCATGGGTGGTTCCCTCACAAGTTTGCGTTTTTTGCCTCTTATTCACACAAGCTCAATTGCTAATTCACATTGCCAACCTCAGCAGGGCAGCAGATGTGTGTGCAGCCACACTGTGTGTTTGTGACACTCACGTACCGTTTTCAAGGTTACAGAAATGCCGAGTGGACGAATGGGTGGGGGAAGGGGGTGCTGGCCTGTAAGATGAAGATTCTCTACAGAGACTCTACTTACCCCGAAAGCATCTCGAATATCAGGATGCCGAGGGCCCACCAGTCCACAGCC-CTTCCGTGGCCCTTGCTCTGAATGACT
+
+NLGN4Y;chrY:14681897-14682244	1	199
+>Gor_Y
+TGTGTCTGGGAtgcttaaattcctcaccctcaaaaagacatgccctggacactccatctcagagatcctcataacccacgttagatgttatcactgcttcatttccctcaaaactatgatcacaatcagaaattctgtccttcacgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+>Gor_X
+TGTGTCTGGGAtgcttaaattcctcaccctcataaagacatgccctggccactccatctcgaagatcctcataacccacatcagatgttatcattgcttcatttccctcaaagctatgatcaccatcagcaattctgtccttcatgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+>Chimp_Y
+TGTGTCTGGGAtgcttaaattcctcaccctcaaaaagacatgccctggacactccatctcagagaacctcataacccacgttagatgttatcactgcttcatttccctcaaaactatgatcacaatcagaaattctgtccttcatgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+>Chimp_X
+TGTGTCTGGGAtgcttaaattcctcaccctcataaagacatgccctggccactccatctcaaagatcctcataacccacattagatgttatcgttgcttcatttccctcaaagctatgctcaccatcagcaattctgtccttcatgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+>Human_Y
+TGTGTCTGGGATGCTTAAATTCCTCACCCTCAAAAAGACATGCCCTGGACACTCCATCTCAGAGATCCTCATAACCCACGTTAGATGTTATCACTGCTTCATTTCCCTCAAAACTATGATCACAATCAGAAATTCTGTCCTTCATGCATTTGATCACTGCTTTATCTTCTGTCCCCATAACTAAAGTAACAGCAGGACA
+>Human_X
+TGTGTCTGGGAtgcttaaattcctcaccctcataaagacatgccctggccactccatctcaaagatcctcataacccacattagatgttatcgttgcttcatttccctcaaagctatgatcaccatcagcaattctgtccttcatgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+>Bonobo_Y
+TGTGTCTGGGATGCTTAAATTCCTCACCCTCATAAAGACATGCCCTGGCCACTCCATCTCAAAGATCCTCATAACCCACATTAGATGTTATCGTTGCTTCATTTCCCTCAAAGCTATGCTCACCATCAGCAATTCTGTCCTTCATGCATTTGATCACTGCTTTATCTTCTGTCCCCATAACTAAAGTAACAGCAGGACA
+>Bonobo_X
+TGTGTCTGGGAtgcttaaattcctcaccctcataaagacatgccctggccactccatctcaaagatcctcataacccacattagatgttatcgttgcttcatttccctcaaagctatgctcaccatcagcaattctgtccttcatgcatttgatcactgctttatcttctgtccccataactaaagtaacagcaggaca
+
+
+#Obtain locations of gene conversion
+
+
+python
+
+glfile='Gene_coverage_globalList_gt50bpFINAL.txt'
+bedoutGI=open("Gene_conversion_Location_exact_globalList.bed","w")
+
+GI_gene={}
+with open(glfile,"rU") as fh:
+	for line in fh:
+		if line[0] != '#' :
+			col=line.split()
+			temp=col[1]
+			name=temp.split(";")[0].split("|")[1].split(".")[0]
+			gene=temp.split(";")[1].split("|")
+			cord=gene[0].split(":")[1].split("-")
+			species=temp.split(";")[0].split("|")[0][0:6]
+			bedoutGI.write(name+"\t"+gene[0]+"\t"+species+"\t"+col[2]+"\t"+col[4]+"\t"+col[5]+"\n")
+ 

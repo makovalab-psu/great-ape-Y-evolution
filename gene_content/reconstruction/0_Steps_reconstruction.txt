@@ -1,0 +1,271 @@
+#Reconstruction of phylogeny
+
+
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gene_content/analysis/reconGene_AutosomalBased/
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+mkdir GA_Mac/
+cd GA_Mac/
+
+
+#Obtain the scripts from authors through email
+cp /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gene_content/analysis/script/btm165/scripts/reconstruct.R  .
+cp /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gene_content/analysis/script/btm165/scripts/parsetree.pl .
+
+#The code was obtained from the authors
+#/nfs/brubeck.bx.psu.edu/scratch6/rahul/Gene_content/analysis/script/
+
+#parsetree.pl requires two input files
+
+#Tree being used was obtained from autosome based Locke et al. 2011 Figure 1
+#Note: All internal nodes should be named. If names not defined perl script will not finish.
+vim tree_HtoM.newick
+(((((Bonobo:1,Chimpanzee:1)BC:4.25,Human:5.25)BCH:1.75,Gorilla:7)BCHG:7,Orangutan:14)GA:15,Macaque:29)Root;
+
+
+#List of species name which should match the names in the tree
+vim HtoM_speciesList.txt
+Bonobo
+Chimpanzee
+Human
+Gorilla
+Orangutan
+Macaque
+
+
+#Generate gene content file, order of column should follow the tree order
+
+vim greatAPE_Macaque_GeneContent.tab
+
+Bonobo	Chimpanzee	Human	Gorilla	Orangutan	Macaque
+AMELY	1	1	1	1	1	1
+CYorf15A	1	1	1	1	0	1
+TXLNGY	0	0	1	1	0	1
+DDX3Y	1	1	1	1	1	1
+EIF1AY	1	1	1	1	1	1
+KDM5D	1	1	1	1	1	1
+NLGN4Y	1	1	1	1	1	1
+PRKY	1	1	1	1	0	1
+RPS4Y1	1	1	1	1	1	1
+RPS4Y2	1	1	1	1	1	1
+SRY	1	1	1	1	1	1
+TBL1Y	0	0	1	1	1	1
+TMSB4Y	1	0	1	1	1	1
+USP9Y	0	0	1	1	0	1
+UTY	1	1	1	1	1	1
+ZFY	1	1	1	1	1	1
+BPY2	1	1	1	1	1	0
+CDY	1	1	1	1	1	1
+DAZ	1	1	1	1	1	1
+HSFY	0	0	1	1	1	1
+PRY	0	0	1	1	1	0
+RBMY	1	1	1	1	1	1
+TSPY	1	1	1	1	1	1
+VCY	0	1	1	0	0	0
+XKRY	0	0	1	1	1	1
+MXRA5Y	0	0	0	0	0	1
+
+
+######################################
+#XDG only
+mkdir XDG
+
+cd XDG
+vim greatAPE_Macaque_GeneContent_XDG.tab
+
+Bonobo	Chimpanzee	Human	Gorilla	Orangutan	Macaque
+AMELY	1	1	1	1	1	1
+CYorf15A	1	1	1	1	0	1
+TXLNGY	0	0	1	1	0	1
+DDX3Y	1	1	1	1	1	1
+EIF1AY	1	1	1	1	1	1
+KDM5D	1	1	1	1	1	1
+NLGN4Y	1	1	1	1	1	1
+PRKY	1	1	1	1	0	1
+RPS4Y1	1	1	1	1	1	1
+RPS4Y2	1	1	1	1	1	1
+SRY	1	1	1	1	1	1
+TBL1Y	0	0	1	1	1	1
+TMSB4Y	1	0	1	1	1	1
+USP9Y	0	0	1	1	0	1
+UTY	1	1	1	1	1	1
+ZFY	1	1	1	1	1	1
+MXRA5Y	0	0	0	0	0	1
+
+
+cp ../HtoM_treeFiles.top .
+cp ../reconstruct.R reconstruct_XDG.R
+vim reconstruct_XDG.R
+#Update the input and output file names and paths
+
+ortfile = "greatAPE_Macaque_GeneContent_XDG.tab"
+topfile = "HtoM_treeFiles.top"
+outfile = "HtoM_auto_reCon_output"
+
+
+#Running the model
+Rscript reconstruct_XDG.R
+
+##### PLOT
+
+source activate /galaxy/home/rxv923/anaconda2/envs/renv/
+
+R
+library("pheatmap")
+library("RColorBrewer")
+
+load("HtoM_auto_reCon_output.param")
+load("HtoM_auto_reCon_output.history")
+
+edge_name<-read.table("../HtoM_treeFiles.TAXid", stringsAsFactors=F,sep=" ",header=F)
+top<-read.table("HtoM_treeFiles.top", stringsAsFactors=F,sep=" ",header=T)
+original<-read.table("greatAPE_Macaque_GeneContent_XDG.tab", stringsAsFactors=F,sep="\t",header=T)
+gene_content_uniq<-as.data.frame(history,stringsAsFactors=F)
+colnames(gene_content_uniq)<-edge_name[,2]
+
+gene_content<-gene_content_uniq[tab2uniq,]
+rownames(gene_content)<-rownames(original)
+
+hm<-pheatmap(t(gene_content), cluster_rows=FALSE, show_rownames=TRUE, cluster_cols=FALSE,main="Gene content",treeheight_row=0,treeheight_col=0)
+
+pdf('Fig_greatAPE_Mac_XDGrecon_heatmap.pdf', width=5, height=4)
+hm
+dev.off()
+
+
+rn=""
+for (i in seq(length(edge_name$V1))-1){
+	branch=paste(edge_name$V2[i],edge_name$V2[top[i,3]],sep="-")
+	rn<-rbind(rn,branch)
+	}
+
+rates=as.data.frame(cbind(alpha,beta))
+rownames(rates)=rn[-1]
+
+#############
+vim output_tree_alpha_beta_XDG.newick
+(((((Bonobo:1[&&NHX:A=0.0001:B=0.0001],Chimpanzee:1[&&NHX:A=0.0001:B=0.1542])BC:4.25[&&NHX:A=0.0001:B=0.1335:L=-2],Human:5.25[&&NHX:A=0.0001:B=0.0001])BCH:1.75[&&NHX:A=0.0001:B=0.0001],Gorilla:7[&&NHX:A=0.0001:B=0.0001])BCHG:7[&&NHX:A=0.0001:B=0.0001],Orangutan:14[&&NHX:A=0.0001:B=0.2077])GA:15[&&NHX:A=0.0001:B=0.0606:L=-1],Macaque:29[&&NHX:A=0.0001:B=0.0001])Root[&&NHX:];
+
+source activate /galaxy/home/rxv923/adminConda/local
+R
+
+library(ggtree)
+library(treeio)
+
+nwk <- "output_tree_alpha_beta_XDG.newick"
+
+ga <- read.nhx(nwk)
+
+tree_plot<-ggtree(ga) + geom_tiplab() +
+geom_label(aes(label=L),size=2.5) +
+geom_text(aes(x=branch, label=A), vjust=-.5, color='red') +
+geom_text(aes(x=branch, label=B), vjust=1.5, color='blue') + 
+xlim(0, 35)
+
+
+pdf('Fig_greatAPE_Mac_recon_XDG.pdf', width=5, height=4)
+tree_plot
+dev.off()
+
+
+
+
+##########################################################################################
+##########################################################################################
+#Ampliconic only
+
+cd ..
+
+mkdir Amplicon
+cd Amplicon
+vim greatAPE_Macaque_GeneContent_Amp.tab
+
+Bonobo	Chimpanzee	Human	Gorilla	Orangutan	Macaque
+BPY2	1	1	1	1	1	0
+CDY	1	1	1	1	1	1
+DAZ	1	1	1	1	1	1
+HSFY	0	0	1	1	1	1
+PRY	0	0	1	1	1	0
+RBMY	1	1	1	1	1	1
+TSPY	1	1	1	1	1	1
+VCY	0	1	1	0	0	0
+XKRY	0	0	1	1	1	1
+
+cp ../HtoM_treeFiles.top .
+cp ../reconstruct.R reconstruct_Amp.R
+vim reconstruct_Amp.R
+#Update the input and output file names and paths
+
+ortfile = "greatAPE_Macaque_GeneContent_Amp.tab"
+topfile = "HtoM_treeFiles.top"
+outfile = "HtoM_auto_reCon_output_Amp"
+
+#Running the model
+Rscript reconstruct_Amp.R
+
+
+
+#################
+cd ../Amplicon
+
+source activate /galaxy/home/rxv923/anaconda2/envs/renv/
+
+R
+library("pheatmap")
+library("RColorBrewer")
+
+load("HtoM_auto_reCon_output_Amp.param")
+load("HtoM_auto_reCon_output_Amp.history")
+
+edge_name<-read.table("../HtoM_treeFiles.TAXid", stringsAsFactors=F,sep=" ",header=F)
+top<-read.table("HtoM_treeFiles.top", stringsAsFactors=F,sep=" ",header=T)
+original<-read.table("greatAPE_Macaque_GeneContent_Amp.tab", stringsAsFactors=F,sep="\t",header=T)
+gene_content_uniq<-as.data.frame(history,stringsAsFactors=F)
+colnames(gene_content_uniq)<-edge_name[,2]
+
+gene_content<-gene_content_uniq[tab2uniq,]
+rownames(gene_content)<-rownames(original)
+
+hm<-pheatmap(t(gene_content), cluster_rows=FALSE, show_rownames=TRUE, cluster_cols=FALSE,main="Gene content",treeheight_row=0,treeheight_col=0)
+
+pdf('Fig_greatAPE_Mac_AMPrecon_heatmap.pdf', width=5, height=4)
+hm
+dev.off()
+
+
+rn=""
+for (i in seq(length(edge_name$V1))-1){
+	branch=paste(edge_name$V2[i],edge_name$V2[top[i,3]],sep="-")
+	rn<-rbind(rn,branch)
+	}
+
+rates=as.data.frame(cbind(alpha,beta))
+rownames(rates)=rn[-1]
+
+
+#############
+vim output_tree_alpha_beta_AMP.newick
+(((((Bonobo:1[&&NHX:A=0.0001:B=0.1823],Chimpanzee:1[&&NHX:A=0.0001:B=0.0001])BC:4.25[&&NHX:A=0.0001:B=0.4055:L=-3],Human:5.25[&&NHX:A=0.0001:B=0.0001])BCH:1.75[&&NHX:A=0.1:B=0.0001:L=+1],Gorilla:7[&&NHX:A=0.0001:B=0.0001])BCHG:7[&&NHX:A=0.0001:B=0.0001],Orangutan:14[&&NHX:A=0.0001:B=0.0001])GA:15[&&NHX:A=0.0001:B=0.0001],Macaque:29[&&NHX:A=0.0001:B=0.0001])Root[&&NHX:];
+
+source activate /galaxy/home/rxv923/adminConda/local
+R
+
+library(ggtree)
+library(treeio)
+
+nwk <- "output_tree_alpha_beta_AMP.newick"
+
+ga <- read.nhx(nwk)
+
+tree_plot<-ggtree(ga) + geom_tiplab() +
+geom_label(aes(label=L),size=2.5) +
+geom_text(aes(x=branch, label=A), vjust=-.5, color='red') +
+geom_text(aes(x=branch, label=B), vjust=1.5, color='blue') + 
+xlim(0, 35)
+
+
+pdf('Fig_greatAPE_Mac_reconAMP.pdf', width=5, height=4)
+tree_plot
+dev.off()
+
+ggtree(ga) + geom_tiplab() +xlim(0, 35)

@@ -1,0 +1,563 @@
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Palindrome/analysis/species_specific_PARfix
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+#Obtain the Y alignment ancestor specific:
+
+mkdir msa
+cd msa
+#Human specific
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Y_Alignments/analysis/cactus_5way.20200506/alignment.Anc0_centric.20200506.maf.gz .
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Y_Alignments/analysis/cactus_5way.20200506/alignment.panPan_Y_centric.20200506.maf.gz .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Y_Alignments/analysis/cactus_5way.20200506/alignment.gorGor_Y_centric.20200506.maf.gz  .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Y_Alignments/analysis/cactus_5way.20200506/alignment.ponAbe_Y_centric.20200506.maf.gz .
+
+cd ..
+
+#Bob's pipeline generated the species specific files as a byproduct: https://github.com/makovalab-psu/great-ape-Y-evolution/tree/master/alignment/multiple
+
+gzip -dc fiveY.${S1}_Y_centric.maf.gz \
+  | maf_filter_by_species_set --species=${S1}_Y \
+  | grep ${S1}_Y \
+  | awk '{
+         if ($5 == "+") print $2,$3,$3+$4;
+         else           print $2,$6-($3+$4),$6-$3;
+         }' \
+  | sed "s/^${S1}_Y\.//" \
+  | genodsp --novalue --uncovered:hide --nooutputvalue \
+      --chromosomes=${S1}_Y.lengths \
+      = mask ${S1}_Y.N_intervals
+
+Bob put the intervals in
+/nfs/brubeck.bx.psu.edu/scratch5/rsharris/ape_chry_alignment/analysis/cactus_5way.20200506/alignment.${S}_Y_centric.20200506.maf.${S}_Y_specific.bed
+where ${S} is, e.g. "panPan".
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch5/rsharris/ape_chry_alignment/analysis/cactus_5way.20200506/alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific.bed .
+ln -s /nfs/brubeck.bx.psu.edu/scratch5/rsharris/ape_chry_alignment/analysis/cactus_5way.20200506/alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific.bed .
+ln -s /nfs/brubeck.bx.psu.edu/scratch5/rsharris/ape_chry_alignment/analysis/cactus_5way.20200506/alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific.bed .
+
+#Filter out windows smaller than 100bp
+awk '{ if (($3-$2)>=100 )print $0}' alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific.bed >alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific_gt100bp.bed
+awk '{ if (($3-$2)>=100 )print $0}' alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific.bed >alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific_gt100bp.bed
+awk '{ if (($3-$2)>=100 )print $0}' alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific.bed >alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific_gt100bp.bed
+
+
+
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/palindrome/palindrome_coverage/PythoBob/ .
+
+###############################################################################################################################################################################
+
+########Orangutan_Y
+#Coverage
+mkdir bam
+cd bam
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/BWA_align/orangutanWGS_msY_ver3.GCcorrected.bam .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/BWA_align/orangutanWGS_msY_ver3.GCcorrected.bam.bai .
+samtools idxstats orangutanWGS_msY_ver3.GCcorrected.bam | cut -f 1-2 > Orangutan_chromosomes.txt
+
+cd ..
+
+bedtools sort -faidx bam/Orangutan_chromosomes.txt -i alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific_gt100bp.bed > ponAbe_Y_specific_sequence_100bp_block_sorted.bed
+bedtools coverage -b bam/orangutanWGS_msY_ver3.GCcorrected.bam -a  ponAbe_Y_specific_sequence_100bp_block_sorted.bed -g bam/Orangutan_chromosomes.txt -sorted > Coverage_orangutan_msY_WGS_species_specific.bed
+
+#############################################################################################################################################################################
+
+########Bonobo_Y
+#Coverage
+mkdir bam
+cd bam
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/bonoboWGS_msY_ver1.GCcorrected.bam .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/bonoboWGS_msY_ver1.GCcorrected.bam.bai .
+samtools idxstats bonoboWGS_msY_ver1.GCcorrected.bam | cut -f 1-2 > Bonono_chromosomes.txt
+
+cd ..
+
+bedtools sort -faidx bam/Bonono_chromosomes.txt -i alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific_gt100bp.bed > panPan_Y_specific_sequence_100bp_block_sorted.bed
+bedtools coverage -b bam/bonoboWGS_msY_ver1.GCcorrected.bam -a  panPan_Y_specific_sequence_100bp_block_sorted.bed -g bam/Bonono_chromosomes.txt -sorted > Coverage_bonobo_msY_WGS_species_specific.bed
+
+
+##########################################################################################################################################################################
+#
+########Gorilla_Y
+#Coverage
+mkdir bam
+cd bam
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/new/gorillaWGS_msY_ver3.GCcorrected.bam gorillaWGS_inLab_msY_ver3.GCcorrected.bam
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/new/gorillaWGS_msY_ver3.GCcorrected.bam.bai gorillaWGS_inLab_msY_ver3.GCcorrected.bam.bai
+
+#Public dataset
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/gorillaWGS_msY_ver3.GCcorrected.bam .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/gorillaWGS_msY_ver3.GCcorrected.bam.bai .
+
+samtools idxstats gorillaWGS_inLab_msY_ver3.GCcorrected.bam | cut -f 1-2 > Gorilla_chromosomes.txt
+
+cd ..
+
+bedtools sort -faidx bam/Gorilla_chromosomes.txt -i alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific_gt100bp.bed > gorGor_Y_specific_sequence_100bp_block_sorted.bed
+bedtools coverage -b bam/gorillaWGS_inLab_msY_ver3.GCcorrected.bam -a  gorGor_Y_specific_sequence_100bp_block_sorted.bed -g bam/Gorilla_chromosomes.txt -sorted > Coverage_gorilla_msY_WGS_inlab_species_specific.bed
+
+#####PLOT
+R
+
+sspOR=read.table("Coverage_orangutan_msY_WGS_species_specific.bed", sep="\t", stringsAsFactors=F, header=F)
+sspBO=read.table("Coverage_bonobo_msY_WGS_species_specific.bed", sep="\t", stringsAsFactors=F, header=F)
+sspGO=read.table("Coverage_gorilla_msY_WGS_inlab_species_specific.bed", sep="\t", stringsAsFactors=F, header=F)
+XDGor=read.table("/nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/palindrome/human/gcCor_results/Coverage_orangutan_msY_WGS_XDG_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+XDGbo=read.table("/nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/palindrome/human/gcCor_results/Coverage_bonobo_msY_WGS_XDG_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+XDGgo=read.table("/nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/palindrome/human/gcCor_results/Coverage_gorilla_msY_WGS_XDG_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+
+#sspGO=read.table("Coverage_gorilla_msY_WGS_species_specific.bed", sep="\t", stringsAsFactors=F, header=F)
+#XDGgo=read.table("/nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/palindrome/human/gcCor_results_old/Coverage_gorilla_msY_WGS_XDG_80per.bed", sep="\t", stringsAsFactors=F, header=F)
+
+
+get_coverage<-function(data_align){
+return ((data_align$V4/data_align$V6)*250)
+}
+
+get_XDGcoverage<-function(data_align){
+temp=data_align[which(data_align$V4<200 & data_align$V13 > 0.8),]
+return ((temp$V10/temp$V12)*250)
+}
+
+get_CN<-function(coverage,XDG){
+control=median(XDG)
+temp=coverage/control
+return (temp)
+}
+
+Or=get_coverage(sspOR)
+Bo=get_coverage(sspBO)
+Go=get_coverage(sspGO)
+xO=get_XDGcoverage(XDGor)
+xB=get_XDGcoverage(XDGbo)
+xG=get_XDGcoverage(XDGgo)
+
+CNOr=get_CN(Or,xO)
+CNBo=get_CN(Bo,xB)
+CNGo=get_CN(Go,xG)
+CNxO=get_CN(xO,xO)
+CNxB=get_CN(xB,xB)
+CNxG=get_CN(xG,xG)
+
+#No of blocks
+length(CNBo)
+length(CNGo)
+length(CNOr)
+
+#total size of the blocks
+totBO=sum(sspBO$V6)
+totGO=sum(sspGO$V6)
+totOR=sum(sspOR$V6)
+
+#No of blocks <2 CN
+length(which(CNBo<2))
+length(which(CNGo<2))
+length(which(CNOr<2))
+
+#Size of the blocks <1.33 CN
+sum(sspBO$V6[which(CNBo<1.33)])
+sum(sspGO$V6[which(CNGo<1.33)])
+sum(sspOR$V6[which(CNOr<1.33)])
+
+#Percentage of the blocks <1.33 CN
+(sum(sspBO$V6[which(CNBo<1.33)])/totBO)*100
+(sum(sspGO$V6[which(CNGo<1.33)])/totGO)*100
+(sum(sspOR$V6[which(CNOr<1.33)])/totOR)*100
+
+
+
+#Size of the blocks >1.33 & <=1.66 CN
+sum(sspBO$V6[which(CNBo>1.33 & CNBo<=1.66)])
+sum(sspGO$V6[which(CNGo>1.33 & CNGo<=1.66)])
+sum(sspOR$V6[which(CNOr>1.33 & CNOr<=1.66)])
+
+#Percentage of the blocks >1.33 & <=1.66 CN
+(sum(sspBO$V6[which(CNBo>1.33 & CNBo<=1.66)])/totBO)*100
+(sum(sspGO$V6[which(CNGo>1.33 & CNGo<=1.66)])/totGO)*100
+(sum(sspOR$V6[which(CNOr>1.33 & CNOr<=1.66)])/totOR)*100
+
+
+
+#Size of the blocks >1.66 & <=2.5 CN
+sum(sspBO$V6[which(CNBo>1.66 & CNBo<=2.5)])
+sum(sspGO$V6[which(CNGo>1.66 & CNGo<=2.5)])
+sum(sspOR$V6[which(CNOr>1.66 & CNOr<=2.5)])
+
+#Percentage of the blocks >1.66 & <=2.5 CN
+(sum(sspBO$V6[which(CNBo>1.66 & CNBo<=2.5)])/totBO)*100
+(sum(sspGO$V6[which(CNGo>1.66 & CNGo<=2.5)])/totGO)*100
+(sum(sspOR$V6[which(CNOr>1.66 & CNOr<=2.5)])/totOR)*100
+
+
+#No of blocks >=2 CN
+length(which(CNBo>=2))
+length(which(CNGo>=2))
+length(which(CNOr>=2))
+
+#Size of the blocks >2.5 CN
+sum(sspBO$V6[which(CNBo>2.5)])
+sum(sspGO$V6[which(CNGo>2.5)])
+sum(sspOR$V6[which(CNOr>2.5)])
+
+#Percentage of the blocks  >2.5 CN
+(sum(sspBO$V6[which(CNBo>2.5)])/totBO)*100
+(sum(sspGO$V6[which(CNGo>2.5)])/totGO)*100
+(sum(sspOR$V6[which(CNOr>2.5)])/totOR)*100
+
+
+##apply(sspOR,1,sum)
+
+##pdf('Fig_Species_specific_Orangutan_Bonobo_Gorilla.pdf', width=5, height=4)
+##boxplot(CNBo,CNxB,CNGo,CNxG,CNOr,CNxO,names=c("SSBo(N=4310)","XDGBo","SSGo(N=527)","XDGGo","SSOr(N=489)","XDGOr"), ylab="Copy number", main="Species specific ##>100bp",outline=FALSE,cex.axis=0.60)
+##abline(h=2, col='red')
+##abline(h=1,col='black')
+##dev.off()
+
+################################ANNOTATION OF SS
+
+mkdir annotation_SSseq
+cd annotation_SSseq
+
+#Reference Y for each species assembled
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Orangutan_Y/analysis/BWA_align/index/ponAbe.msY.makovalab.ver3.smsk.fa .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Bonobo_Y/analysis/BWA_align/index/panPan.msY.makovalab.ver1.smsk.fa .
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/rahul/Gorilla_Y/analysis/BWA_align/index/gorGor.msY.makovalab.ver3.smsk.fa .
+
+
+#Generate samtools index to extract the species specific sequences
+samtools faidx ponAbe.msY.makovalab.ver3.smsk.fa
+samtools faidx panPan.msY.makovalab.ver1.smsk.fa
+samtools faidx gorGor.msY.makovalab.ver3.smsk.fa
+
+
+#Extract species species sequences
+cat ../alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific_gt100bp.bed | awk '{printf("%s:%s-%s\n",$1,$2,$3)}' > alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific_gt100bp.list.txt
+samtools faidx ponAbe.msY.makovalab.ver3.smsk.fa -r alignment.ponAbe_Y_centric.20200506.maf.ponAbe_Y_specific_gt100bp.list.txt > ponAbe.msY.makovalab.ver3.smsk.specieSpecific.fa
+
+cat ../alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific_gt100bp.bed | awk '{printf("%s:%s-%s\n",$1,$2,$3)}' > alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific_gt100bp.list.txt
+samtools faidx gorGor.msY.makovalab.ver3.smsk.fa -r alignment.gorGor_Y_centric.20200506.maf.gorGor_Y_specific_gt100bp.list.txt > gorGor.msY.makovalab.ver3.smsk.specieSpecific.fa
+
+cat ../alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific_gt100bp.bed | awk '{printf("%s:%s-%s\n",$1,$2,$3)}' > alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific_gt100bp.list.txt
+samtools faidx panPan.msY.makovalab.ver1.smsk.fa -r alignment.panPan_Y_centric.20200506.maf.panPan_Y_specific_gt100bp.list.txt > panPan.msY.makovalab.ver1.smsk.specieSpecific.fa
+
+#Align specieSpecific sites to female reference gorGor
+mkdir gorGor
+cd gorGor
+mkdir index
+cd index
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Gorilla_Y/analysis/FemRef/gorGor4.female.fa
+
+bwa index gorGor4.female.fa
+
+cd ..
+
+
+vim slurm_BWA.sh
+
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+#align
+srun bwa mem -t 20 index/gorGor4.female.fa ../gorGor.msY.makovalab.ver3.smsk.specieSpecific.fa > gorGor_speciesSpecific_FemaleRef.sam
+
+#convert to BAM
+srun samtools view -bhS gorGor_speciesSpecific_FemaleRef.sam > gorGor_speciesSpecific_FemaleRef.bam
+
+#sort and index
+samtools sort gorGor_speciesSpecific_FemaleRef.bam > gorGor_speciesSpecific_FemaleRef.sorted.bam
+samtools index gorGor_speciesSpecific_FemaleRef.sorted.bam
+
+
+python
+
+
+import re
+import pysam
+
+def Count_Matches_CIGAR(cigar_char,cigar_val):
+	"""Function to read the parsed CIGAR characters to calculate the number of matches in the first 90 positions """
+	i=0 #iterator for while loop
+	position=0 #positions in the alignment upto which the cigar string was read
+	M=0 #number of matches
+	last_val=[] #list to store the position and number of matches before updating in current iteration
+	while i <len(cigar_char):
+		last_val=[position,M]
+		position+=int(cigar_val[i])
+		if cigar_char[i]=="M":
+			M+=int(cigar_val[i])
+		i+=1
+	return [M,position]
+
+
+def parse_alignment_matchCount(BAM,output,percentFilterlow,percentFilterhigh):
+	with pysam.AlignmentFile(BAM, "rb") as bamfile, open(output, "w") as w:
+		j,i=0,0
+		for read in bamfile:
+			if read.flag != 4 and read.flag == 0 or read.flag == 16 :
+				cigar_char=re.split('\d+',read.cigarstring)[1:] #parse the character
+				cigar_val=re.split('\D+',read.cigarstring)[:-1] #parse the number
+				mismatch=read.get_tag('MD')
+				mismatch_char=re.split('\d+',mismatch)[1:] #parse the character
+				mismatch_val=re.split('\D+',mismatch)	   #parse the number
+				M=Count_Matches_CIGAR(cigar_char,cigar_val)
+				percentM=100*(M[0]/float(M[1]))
+				if percentM >= float(percentFilterlow) and percentM <= float(percentFilterhigh):
+					#print read.query_name, M[1], percentM, read.reference_name
+					w.write(str(read.query_name)+"\t"+str(M[1])+"\t"+str(percentM)+"\t"+str(read.reference_name)+"\n")
+	return
+
+
+BAM='gorGor_speciesSpecific_FemaleRef.sorted.bam'	
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology99.tab"
+parse_alignment_matchCount(BAM,read_match_count,99,100)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology80-99.tab"
+parse_alignment_matchCount(BAM,read_match_count,80,98.99)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology50-80.tab"
+parse_alignment_matchCount(BAM,read_match_count,50,79.99)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology0-50.tab"
+parse_alignment_matchCount(BAM,read_match_count,0,49.99)
+
+#cmd line
+#print the sum for each window
+
+awk '{s+=$2}END{print s}' gorGor_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology0-50.tab
+awk '{s+=$2}END{print s}' gorGor_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology50-80.tab
+awk '{s+=$2}END{print s}' gorGor_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology80-99.tab
+awk '{s+=$2}END{print s}' gorGor_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology99.tab
+
+
+Species	0-50	50-80	80-99	99-100
+Gorilla	988841	277942	308964	102770
+
+##################################
+#Align specieSpecific sites to female reference
+mkdir ponAbe
+cd ponAbe
+mkdir index
+cd index
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Sumatran_orangutan_Y/analysis/FemRef/ponAbe3.female.fa .
+
+bwa index ponAbe3.female.fa
+
+cd ..
+
+vim slurm_BWA.sh
+
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+#align
+srun bwa mem -t 20 index/ponAbe3.female.fa ../ponAbe.msY.makovalab.ver3.smsk.specieSpecific.fa > ponAbe_speciesSpecific_FemaleRef.sam
+
+#convert to BAM
+srun samtools view -bhS ponAbe_speciesSpecific_FemaleRef.sam > ponAbe_speciesSpecific_FemaleRef.bam
+
+#sort and index
+samtools sort ponAbe_speciesSpecific_FemaleRef.bam > ponAbe_speciesSpecific_FemaleRef.sorted.bam
+samtools index ponAbe_speciesSpecific_FemaleRef.sorted.bam
+
+python
+
+
+import re
+import pysam
+
+def Count_Matches_CIGAR(cigar_char,cigar_val):
+	"""Function to read the parsed CIGAR characters to calculate the number of matches in the first 90 positions """
+	i=0 #iterator for while loop
+	position=0 #positions in the alignment upto which the cigar string was read
+	M=0 #number of matches
+	last_val=[] #list to store the position and number of matches before updating in current iteration
+	while i <len(cigar_char):
+		last_val=[position,M]
+		position+=int(cigar_val[i])
+		if cigar_char[i]=="M":
+			M+=int(cigar_val[i])
+		i+=1
+	return [M,position]
+
+
+def parse_alignment_matchCount(BAM,output,percentFilterlow,percentFilterhigh):
+	with pysam.AlignmentFile(BAM, "rb") as bamfile, open(output, "w") as w:
+		j,i=0,0
+		for read in bamfile:
+			if read.flag != 4 and read.flag == 0 or read.flag == 16 :
+				cigar_char=re.split('\d+',read.cigarstring)[1:] #parse the character
+				cigar_val=re.split('\D+',read.cigarstring)[:-1] #parse the number
+				mismatch=read.get_tag('MD')
+				mismatch_char=re.split('\d+',mismatch)[1:] #parse the character
+				mismatch_val=re.split('\D+',mismatch)	   #parse the number
+				M=Count_Matches_CIGAR(cigar_char,cigar_val)
+				percentM=100*(M[0]/float(M[1]))
+				if percentM >= float(percentFilterlow) and percentM <= float(percentFilterhigh):
+					#print read.query_name, M[1], percentM, read.reference_name
+					w.write(str(read.query_name)+"\t"+str(M[1])+"\t"+str(percentM)+"\t"+str(read.reference_name)+"\n")
+	return
+
+BAM='ponAbe_speciesSpecific_FemaleRef.sorted.bam'	
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology99.tab"
+parse_alignment_matchCount(BAM,read_match_count,99,100)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology80-99.tab"
+parse_alignment_matchCount(BAM,read_match_count,80,98.99)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology50-80.tab"
+parse_alignment_matchCount(BAM,read_match_count,50,79.99)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology0-50.tab"
+parse_alignment_matchCount(BAM,read_match_count,0,49.99)
+
+
+#cmd line
+#print the sum for each window
+
+awk '{s+=$2}END{print s}' ponAbe_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology0-50.tab
+awk '{s+=$2}END{print s}' ponAbe_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology50-80.tab
+awk '{s+=$2}END{print s}' ponAbe_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology80-99.tab
+awk '{s+=$2}END{print s}' ponAbe_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology99.tab
+
+
+Species	0-50	50-80	80-99	99-100
+Orangutan	2467310	290574	298381	57742
+
+
+##########################################
+#Align specieSpecific sites to female reference
+mkdir panPan
+cd panPan
+mkdir index
+cd index
+ln -s /nfs/brubeck.bx.psu.edu/scratch6/makova_lab/projects/active/Y_Chromosome/Great_Ape_Y_chromosomes/Bonobo_Y/analysis/FemRef/panPan2.female.fa .
+
+bwa index panPan2.female.fa
+
+cd ..
+
+vim slurm_BWA.sh
+
+
+source activate /galaxy/home/biomonika/conda/GApy2.7
+#align
+srun bwa mem -t 20 index/panPan2.female.fa ../panPan.msY.makovalab.ver1.smsk.specieSpecific.fa > panPan_speciesSpecific_FemaleRef.sam
+
+#convert to BAM
+srun samtools view -bhS panPan_speciesSpecific_FemaleRef.sam > panPan_speciesSpecific_FemaleRef.bam
+
+#sort and index
+samtools sort panPan_speciesSpecific_FemaleRef.bam > panPan_speciesSpecific_FemaleRef.sorted.bam
+samtools index panPan_speciesSpecific_FemaleRef.sorted.bam
+
+
+python
+
+
+import re
+import pysam
+
+def Count_Matches_CIGAR(cigar_char,cigar_val):
+	"""Function to read the parsed CIGAR characters to calculate the number of matches in the first 90 positions """
+	i=0 #iterator for while loop
+	position=0 #positions in the alignment upto which the cigar string was read
+	M=0 #number of matches
+	last_val=[] #list to store the position and number of matches before updating in current iteration
+	while i <len(cigar_char):
+		last_val=[position,M]
+		position+=int(cigar_val[i])
+		if cigar_char[i]=="M":
+			M+=int(cigar_val[i])
+		i+=1
+	return [M,position]
+
+
+def parse_alignment_matchCount(BAM,output,percentFilterlow,percentFilterhigh):
+	with pysam.AlignmentFile(BAM, "rb") as bamfile, open(output, "w") as w:
+		j,i=0,0
+		for read in bamfile:
+			if read.flag != 4 and read.flag == 0 or read.flag == 16 :
+				cigar_char=re.split('\d+',read.cigarstring)[1:] #parse the character
+				cigar_val=re.split('\D+',read.cigarstring)[:-1] #parse the number
+				mismatch=read.get_tag('MD')
+				mismatch_char=re.split('\d+',mismatch)[1:] #parse the character
+				mismatch_val=re.split('\D+',mismatch)	   #parse the number
+				M=Count_Matches_CIGAR(cigar_char,cigar_val)
+				percentM=100*(M[0]/float(M[1]))
+				if percentM >= float(percentFilterlow) and percentM <= float(percentFilterhigh):
+					#print read.query_name, M[1], percentM, read.reference_name
+					w.write(str(read.query_name)+"\t"+str(M[1])+"\t"+str(percentM)+"\t"+str(read.reference_name)+"\n")
+	return
+
+BAM='panPan_speciesSpecific_FemaleRef.sorted.bam'	
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology99.tab"
+parse_alignment_matchCount(BAM,read_match_count,99,100)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology80-99.tab"
+parse_alignment_matchCount(BAM,read_match_count,80,98.99)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology50-80.tab"
+parse_alignment_matchCount(BAM,read_match_count,50,79.99)
+
+read_match_count=BAM+"_read_alignmentMatchCount_homology0-50.tab"
+parse_alignment_matchCount(BAM,read_match_count,0,49.99)
+
+
+#cmd line
+#print the sum for each window
+
+awk '{s+=$2}END{print s}' panPan_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology0-50.tab
+awk '{s+=$2}END{print s}' panPan_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology50-80.tab
+awk '{s+=$2}END{print s}' panPan_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology80-99.tab
+awk '{s+=$2}END{print s}' panPan_speciesSpecific_FemaleRef.sorted.bam_read_alignmentMatchCount_homology99.tab
+
+
+Species	0-50	50-80	80-99	99-100
+Bonobo 	6600780	633871	627981	71174
+
+
+###########################################################################################################################
+
+###########################################################################################################################
+
+Running aguustus to identify genes in this regions
+cd /nfs/brubeck.bx.psu.edu/scratch6/rahul/Palindrome/analysis/species_specific/annotation_SSseq/
+source activate /galaxy/home/biomonika/conda/GApy2.7
+
+cd ponAbe
+
+#Running augustus
+augustus --species=human ../ponAbe.msY.makovalab.ver3.smsk.specieSpecific.fa --softmasking=on --codingseq=on --outfile=ponAbe.msY.makovalab.ver3.smsk.specieSpecific.gff --errfile=ponAbe.msY.makovalab.ver3.smsk.specieSpecific.augustus.err
+
+getAnnoFasta.pl ponAbe.msY.makovalab.ver3.smsk.specieSpecific.gff
+
+#/galaxy/home/rxv923/src/ncbi-blast-2.6.0+/bin/blastp
+blastp -query ponAbe.msY.makovalab.ver3.smsk.specieSpecific.aa  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp.outfmt6
+
+cd ..
+
+cd gorGor
+
+#Running augustus
+augustus --species=human ../gorGor.msY.makovalab.ver3.smsk.specieSpecific.fa --softmasking=on --codingseq=on --outfile=gorGor.msY.makovalab.ver3.smsk.specieSpecific.gff --errfile=gorGor.msY.makovalab.ver3.smsk.specieSpecific.augustus.err
+
+getAnnoFasta.pl gorGor.msY.makovalab.ver3.smsk.specieSpecific.gff
+
+#/galaxy/home/rxv923/src/ncbi-blast-2.6.0+/bin/blastp
+blastp -query gorGor.msY.makovalab.ver3.smsk.specieSpecific.aa  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp.outfmt6
+
+cd ..
+
+cd panPan
+
+#Running augustus
+augustus --species=human ../panPan.msY.makovalab.ver1.smsk.specieSpecific.fa --softmasking=on --codingseq=on --outfile=panPan.msY.makovalab.ver1.smsk.specieSpecific.gff --errfile=panPan.msY.makovalab.ver1.smsk.specieSpecific.augustus.err
+
+getAnnoFasta.pl panPan.msY.makovalab.ver1.smsk.specieSpecific.gff
+
+#/galaxy/home/rxv923/src/ncbi-blast-2.6.0+/bin/blastp
+blastp -query panPan.msY.makovalab.ver1.smsk.specieSpecific.aa  -db uniprot_sprot.pep  -max_target_seqs 1 -outfmt '6 qseqid sseqid pident qlen length evalue staxids sscinames scomnames sskingdoms stitle' -evalue 1e-5 -num_threads 10 > blastp.outfmt6
+
+cd ..
