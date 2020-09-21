@@ -1,0 +1,212 @@
+      6    618
+
+AMELY_Mmu                       ATG GGG ACG TGG ATT TTG TTT GCC TGC CTT GTG GGA GCA GCT TTT GCC ATG CCT CTA CCA CCT CAT CCT GGG CAC CCT GGT TAT ATC AAC TTC AGC TAT GAG AAC TCA CGT TCT CAG GCT ATC AGT GTT GAC AGG ACT GCT TTA GTG CTC ACC CCT TTG AAG TGG TAC CAG AGC ATG GTA AGA CCA CCA TAC CCT TCC TAT GGT TAC GAG CCC ATG GGT GGA TGG CTG CAC CAC CAA ATC ATC CCC GTG CTG TCC CAA CAG CAC CCC CTG ACT CAC ACC CTT CAG CCT CAT CAC TAC ATC CCA GTG GTG CCA GCT CAG CAG CCC GTG CTC CCC CAA CAA CCA ATG ATG CCC GTT CCT GGC CAA CAC TCC ATG ACT CCA ACC CAA CAC CAC CAG CCA AAC CTC CCT CCG CCC GCC CAG CAG CCC TAC CAG CCC CAG CCT GTT CAG CCA CAG CCT CAC CAG CCC ATG CAG CCC CAG CCA CCT GTG CAC CCC ATG CAG CCC CTG CTG CCA CAG CCA CCT CTG CCT CCG ATG TTC CCC ATG CAG CCC CTG CCC CCC ATA CTT CCT GAT CTG ACT CTG GAA GCT TGG CCA GCA ACA GAC AAG ACC AAG CAG GAG GAA GTG GAT 
+AMELY_Ggo                       ATG GGG ACC TGG ATT TTG TTT GCC TGC CTT GTG GGA GCA GCT TTT GCC ATG CCT CTA CCA CCT CAT CCT GGG CAC CCT GGT TAT ATC AAC TTC AGC TAT GAG --- --- --- --- --- --- --- --- --- --- --- --- --- --- GTG CTC ACC CCT TTG AAG TGG TAC CAG AGC ATG ATA AGA CCA CCA TAC TCT TCC TAT GGT TAC GAG CCC ATG GGT GGA TGG CTG CAC CAC CAA ATC ATC CCC GTG GTG TCC CAA CAG CAC CCC CTG ACT CAT ACC CTG CAG TCT CAT CAC CAC ATT CCA GTG GTG CCA GCT CAG CAG CCC AGG GTC CCC CAG CAA GCA CTG ATG CCT GTT CCT GGC CAG CAA TCC ATG ACT CCA ACC CAA CAC CAT CAG CCA AAC CTC CCT CTG CCT GCC CAG CAG CCC TTC CAG CCC CAG CCT GTT CAG CCA CAG CCT CAC CAG CCC ATG CAG CCC CAG CCA CCT GTG CAA CCC ATG CAG CCC CTG CTG CCA CAG CCA CCT CTG CCT CCA ATG TTC CCC ATG CGG CCC CTG CCC CCC ATA CTT CCT GAT CTG CAT CTG GAA GCT TGG CCA GCA ACA GAC AAG ACC AAG CAG GAG GAA GTG GAT 
+AMELY_Hsa                       ATG GGG ACC TGG ATT TTG TTT GCC TGC CTT GTG GGA GCA GCT TTT GCC ATG CCT CTA CCA CCT CAT CCT GGG CAC CCT GGT TAT ATC AAC TTC AGC TAT GAG --- --- --- --- --- --- --- --- --- --- --- --- --- --- GTG CTC ACC CCT TTG AAG TGG TAC CAG AGC ATG ATA AGA CCA CCA TAC TCT TCC TAT GGT TAC GAG CCC ATG GGT GGA TGG CTG CAC CAC CAA ATC ATC CCC GTG GTG TCC CAA CAG CAC CCC CTG ACT CAC ACC CTG CAG TCT CAT CAC CAC ATC CCA GTG GTG CCA GCT CAG CAG CCC AGG GTC CGC CAG CAA GCA CTG ATG CCT GTT CCT GGC CAG CAA TCC ATG ACT CCA ACC CAA CAC CAT CAG CCA AAC CTC CCT CTG CCT GCC CAG CAG CCC TTC CAG CCC CAG CCT GTT CAG CCA CAG CCT CAC CAG CCC ATG CAG CCC CAG CCA CCT GTG CAA CCC ATG CAG CCC CTG CTG CCA CAG CCA CCT CTG CCT CCA ATG TTC CCC CTG CGG CCC CTG CCC CCC ATA CTT CCT GAT CTG CAT CTG GAA GCT TGG CCA GCA ACA GAC AAG ACC AAG CAG GAG GAA GTG GAT 
+AMELY_Ppa                       NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN --- --- --- --- --- --- --- --- --- --- --- --- --- --- NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN TAC TCT TCC TAT GGT TAC GAG CCC ATG GGT GGA TGG CTG CAC CAC CAA ATC ATC CCC GTG GTG TCC CAA CAG CAC CCC CTG ACT CAT ACC CTG CAG TCT CAT CAC CAC ATC CCA GTG GTG CCA GCT CAG CAG CCC AGG GTC CCC CAG CAA GCA ATG ATG CCT GTT CCT GGC CAG CAA TCC ATG ACT CCA ACC CAA CAC CAT CAG CCA AAC CTC CCT CTG CCT GCC AAG CAG CCC TTC CAG CCC CAG CCT GTT CAG CCA CAG CCT CAC CAG CCC ATG CAG CCC CAG CCA CCT GTG CAA CCC ATG CAG CCC CTG CTG CCA CAG CCA CCT CTG CCT CCA ATG TTC CCC ATG CGG CCC CTG CCC CCC ATA CTT CCT GAT CTG CAT CTG GAA GCT TGG CCA GCA ACA GAC AAG ACC AAG CAG GAG GAA GTG GNN 
+AMELY_Ptr                       ATG GGG ACC TGG ATT TTG TTT GCC TGC CTT GTG GGA GCA GCT TTT GCC ATG CCT CTA CCA CCT CAT CCT GGG CAC CCT GGT TAT ATC AAC TTC AGC TAT GAG --- --- --- --- --- --- --- --- --- --- --- --- --- --- GTG CTC ACC CCT TTG AAG TGG TAC CAG AGC ATG ATA AGA CCA CCA TAC TCT TCC TAT GGT TAC GAG CCC ATG GGT GGA TGG CTG CAC CAC CAA ATC ATC CCC GTG GTG TCC CAA CAG CAC CCC CTG ACT CAT ACC CTG CAG TCT CAT CAC CAC ATC CCA GTG GTG CCA GCT CAG CAG CCC AGG GTC CCC CAG CAA GCA ATG ATG CCT GTT CCT GGC CAG CAA TCC ATG ACT CCA ACC CAA CAC CAT CAG CCA AAC CTC CCT CTG CCT GCC CAG CAG CCC TTC CAG CCC CAG CCT GTT CAG CCA CTG CCT CAC CAG CCC ATG CAG CCC CAG CCA CCT GTG CAA CCC ATG CAG CCC CTG CTG CCA CAG CCA CCT CTG CCT CCA ATG TTC CCC ATG CGG CCC CTG CCC CCC ATA CTT CCT GAT CTG CAT CTG GAA GCT TGG CCA GCA ACA GAC AAG ACC AAG CAG GAG GAA GTG GAT 
+AMELY_Pab                       NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN --- --- --- --- --- --- --- --- --- --- --- --- --- --- NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN TAC TCT TCC TAT GGT TAC GAG CCC ATG GGT GGA TGG CTG CAC CAC CAA ATC ATC CCC ATG GTG TCC CAA CAG CAC CCC CTG ACT CAC ACC CTG CAG CCT CAT CAC CAC ATC CGA GTG GTG CCA GCT CAG CAG CCC GGG GTC CCA CAA CAA CCA CTG ATG CCT GTT CCT GGC CAG CAA TCC ATG ACT CCA ACC CAA CAC CAT CAG CCA AAC CTC CCT CTG CCT GCC CAG CAG CCC TTC CAG CCC CAG CCT GTT CAG CCA CAG CCT CAC CAG CCC ATG CAG CCC CAG CCA CCT GTG CAC CCC ATG CAG CCC CTG CTG CCA CAG CCA CCT CTG CCT CCA ATG TTC CCC ATG CAG CCC CTG CCC CGC ATA CTT CCT GAT CTG CAT CTG GAA GCT TGG CCA GCA ACA GAC AAG ACC AAG CAG GAG GAA GTG GNN 
+
+
+
+Printing out site pattern counts
+
+
+         6        333  P
+
+AMELY_Mmu                        AAC AAC AAC AAG AAG ACA ACC ACC ACG ACT ACT ACT AGA AGC AGG AGT ATA ATC ATC ATC ATC ATG ATG ATG ATG ATT CAA CAA CAA CAC CAC CAC CAC CAC CAC CAG CAG CAG CAG CAG CAG CAT CAT CCA CCA CCA CCA CCC CCC CCC CCC CCG CCG CCT CCT CCT CCT CGT CTA CTC CTC CTC CTG CTG CTT CTT CTT GAA GAC GAC GAG GAG GAT GAT GCA GCA GCC GCC GCT GCT GCT GGA GGA GGC GGG GGT GGT GTA GTG GTG GTG GTG GTT GTT TAC TAC TAC TAC TAT TAT TCA TCC TCT TGC TGG TGG TTA TTC TTC TTG TTT
+AMELY_Ggo                        --- AAC AAC AAG AAG ACA ACC ACC ACC --- ACT CAT AGA AGC --- --- ATA --- ATC ATC ATT ATG ATG ATG CTG ATT CAA CAG CAG CAA CAA CAC CAC CAT CAT --- CAG CAG CAG CAG CGG CAT CAT CCA CCA CCA GCA CCC CCC CCC CCT CCA CTG CCT CCT TCT TCT --- CTA CTC CTC GTC CTG GTG CTG CTT CTT GAA --- GAC GAG GAG GAT GAT GCA GCA GCC GCC --- GCT GCT GGA GGA GGC GGG GGT GGT ATA AGG GTG GTG GTG --- GTT CAC TAC TAC TTC TAT TAT --- TCC --- TGC TGG TGG --- TTC TTC TTG TTT
+AMELY_Hsa                        --- AAC AAC AAG AAG ACA ACC ACC ACC --- ACT CAT AGA AGC --- --- ATA --- ATC ATC ATC ATG ATG CTG CTG ATT CAA CAG CAG CAA CAA CAC CAC CAC CAT --- CAG CAG CAG CAG CGG CAT CAT CCA CCA CCA GCA CCC CCC CGC CCT CCA CTG CCT CCT TCT TCT --- CTA CTC CTC GTC CTG GTG CTG CTT CTT GAA --- GAC GAG GAG GAT GAT GCA GCA GCC GCC --- GCT GCT GGA GGA GGC GGG GGT GGT ATA AGG GTG GTG GTG --- GTT CAC TAC TAC TTC TAT TAT --- TCC --- TGC TGG TGG --- TTC TTC TTG TTT
+AMELY_Ppa                        --- AAC NNN AAG NNN ACA ACC NNN NNN --- ACT CAT NNN NNN --- --- ATA --- ATC NNN ATC ATG NNN ATG ATG NNN CAA CAG CAG CAA CAA CAC NNN CAT CAT --- AAG CAG CAG NNN CGG CAT NNN CCA CCA NNN GCA CCC CCC CCC CCT CCA CTG CCT NNN TCT TCT --- NNN CTC NNN GTC CTG GTG CTG CTT NNN GAA --- GAC GAG NNN GAT GNN GCA NNN GCC NNN --- GCT NNN GGA NNN GGC NNN GGT NNN NNN AGG GTG GTG NNN --- GTT CAC NNN TAC TTC NNN TAT --- TCC --- NNN NNN TGG --- NNN TTC NNN NNN
+AMELY_Ptr                        --- AAC AAC AAG AAG ACA ACC ACC ACC --- ACT CAT AGA AGC --- --- ATA --- ATC ATC ATC ATG ATG ATG ATG ATT CAA CAG CAG CAA CAA CAC CAC CAT CAT --- CAG CAG CTG CAG CGG CAT CAT CCA CCA CCA GCA CCC CCC CCC CCT CCA CTG CCT CCT TCT TCT --- CTA CTC CTC GTC CTG GTG CTG CTT CTT GAA --- GAC GAG GAG GAT GAT GCA GCA GCC GCC --- GCT GCT GGA GGA GGC GGG GGT GGT ATA AGG GTG GTG GTG --- GTT CAC TAC TAC TTC TAT TAT --- TCC --- TGC TGG TGG --- TTC TTC TTG TTT
+AMELY_Pab                        --- AAC NNN AAG NNN ACA ACC NNN NNN --- ACT CAT NNN NNN --- --- ATA --- ATC NNN ATC ATG NNN ATG CTG NNN CAA CAA CAG CAA CAC CAC NNN CAC CAT --- CAG CAG CAG NNN CAG CAT NNN CCA CGA NNN CCA CCC CGC CCA CCT CCA CTG CCT NNN CCT TCT --- NNN CTC NNN GTC CTG GTG CTG CTT NNN GAA --- GAC GAG NNN GAT GNN GCA NNN GCC NNN --- GCT NNN GGA NNN GGC NNN GGT NNN NNN GGG ATG GTG NNN --- GTT CAC NNN TAC TTC NNN TAT --- TCC --- NNN NNN TGG --- NNN TTC NNN NNN
+
+
+
+    1    1    1    2    1    1    3    1    1    1    2    1    1    2    1
+    1    1    1    2    1    1    6    3    1    1    1    4    1    1    1
+    1    6    1    1    1    1    1   15    1    1    1    1    1    8    1
+    3    1   13    1    1    2    1    1    8    5    1    1    1    1    1
+    1    1    8    1    1    1    1    2    1    1    2    1    1    1    1
+    1    1    2    2    2    1    1    1    1    2    2    1    1    1    1
+    4    2    1    2    1    1    2    1    2    1    1    3    1    1    2
+    2    1    1    1    2    2
+
+CODONML (in paml version 4.8a, July 2014)  AMELY.phy
+Model: several dN/dS ratios for branches for branches, 
+Codon frequency model: F3x4
+ns =   6  ls = 206
+
+Codon usage in sequences
+--------------------------------------------------------------------------------------------------------------------------------------
+Phe TTT   2   2   2   0   2   0 | Ser TCT   1   2   2   2   2   1 | Tyr TAT   3   3   3   1   3   1 | Cys TGT   0   0   0   0   0   0
+    TTC   2   3   3   2   3   2 |     TCC   3   3   3   3   3   3 |     TAC   5   3   3   2   3   2 |     TGC   1   1   1   0   1   0
+Leu TTA   1   0   0   0   0   0 |     TCA   1   0   0   0   0   0 | *** TAA   0   0   0   0   0   0 | *** TGA   0   0   0   0   0   0
+    TTG   2   2   2   0   2   0 |     TCG   0   0   0   0   0   0 |     TAG   0   0   0   0   0   0 | Trp TGG   4   4   4   2   4   2
+--------------------------------------------------------------------------------------------------------------------------------------
+Leu CTT   3   2   2   1   2   1 | Pro CCT  15  15  15  10  15  11 | His CAT   2   5   4   4   5   3 | Arg CGT   1   0   0   0   0   0
+    CTC   3   2   2   1   2   1 |     CCC  17  15  14  15  15  13 |     CAC  11   8   9   7   8   9 |     CGC   0   0   1   0   0   1
+    CTA   1   1   1   0   1   0 |     CCA  13  13  13  10  13  11 | Gln CAA   6   6   6   6   6   6 |     CGA   0   0   0   0   0   1
+    CTG   9  11  12  10  11  11 |     CCG   2   0   0   0   0   0 |     CAG  20  20  20  18  19  19 |     CGG   0   1   1   1   1   0
+--------------------------------------------------------------------------------------------------------------------------------------
+Ile ATT   1   2   1   0   1   0 | Thr ACT   4   2   2   2   2   2 | Asn AAT   0   0   0   0   0   0 | Ser AGT   1   0   0   0   0   0
+    ATC   5   3   4   3   4   3 |     ACC   4   5   5   3   5   3 |     AAC   3   2   2   1   2   1 |     AGC   2   2   2   0   2   0
+    ATA   1   2   2   1   2   1 |     ACA   1   1   1   1   1   1 | Lys AAA   0   0   0   0   0   0 | Arg AGA   1   1   1   0   1   0
+Met ATG  11  10   9   8  11   8 |     ACG   1   0   0   0   0   0 |     AAG   3   3   3   3   3   2 |     AGG   1   1   1   1   1   0
+--------------------------------------------------------------------------------------------------------------------------------------
+Val GTT   3   2   2   2   2   2 | Ala GCT   5   3   3   2   3   2 | Asp GAT   2   2   2   1   2   1 | Gly GGT   3   3   3   2   3   2
+    GTC   0   1   1   1   1   1 |     GCC   3   3   3   1   3   1 |     GAC   2   1   1   1   1   1 |     GGC   1   1   1   1   1   1
+    GTA   1   0   0   0   0   0 |     GCA   2   3   3   2   3   1 | Glu GAA   2   2   2   2   2   2 |     GGA   2   2   2   1   2   1
+    GTG   8   8   8   6   8   5 |     GCG   0   0   0   0   0   0 |     GAG   3   3   3   2   3   2 |     GGG   2   2   2   0   2   1
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Codon position x base (3x4) table for each sequence.
+
+#1: AMELY_Mmu      
+position  1:    T:0.12136    C:0.50000    A:0.18932    G:0.18932
+position  2:    T:0.25728    C:0.34951    A:0.30097    G:0.09223
+position  3:    T:0.22330    C:0.30097    A:0.15534    G:0.32039
+Average         T:0.20065    C:0.38350    A:0.21521    G:0.20065
+
+#2: AMELY_Ggo      
+position  1:    T:0.11979    C:0.51562    A:0.17708    G:0.18750
+position  2:    T:0.26562    C:0.33854    A:0.30208    G:0.09375
+position  3:    T:0.22396    C:0.27604    A:0.16146    G:0.33854
+Average         T:0.20312    C:0.37674    A:0.21354    G:0.20660
+
+#3: AMELY_Hsa      
+position  1:    T:0.11979    C:0.52083    A:0.17188    G:0.18750
+position  2:    T:0.26562    C:0.33333    A:0.30208    G:0.09896
+position  3:    T:0.21354    C:0.28646    A:0.16146    G:0.33854
+Average         T:0.19965    C:0.38021    A:0.21181    G:0.20833
+
+#4: AMELY_Ppa      
+position  1:    T:0.08451    C:0.58451    A:0.16197    G:0.16901
+position  2:    T:0.24648    C:0.35915    A:0.33803    G:0.05634
+position  3:    T:0.19014    C:0.28873    A:0.16197    G:0.35915
+Average         T:0.17371    C:0.41080    A:0.22066    G:0.19484
+
+#5: AMELY_Ptr      
+position  1:    T:0.11979    C:0.51042    A:0.18229    G:0.18750
+position  2:    T:0.27083    C:0.33854    A:0.29688    G:0.09375
+position  3:    T:0.21875    C:0.28125    A:0.16146    G:0.33854
+Average         T:0.20312    C:0.37674    A:0.21354    G:0.20660
+
+#6: AMELY_Pab      
+position  1:    T:0.07746    C:0.61268    A:0.14789    G:0.16197
+position  2:    T:0.24648    C:0.34507    A:0.34507    G:0.06338
+position  3:    T:0.18310    C:0.29577    A:0.16901    G:0.35211
+Average         T:0.16901    C:0.41784    A:0.22066    G:0.19249
+
+Sums of codon usage counts
+------------------------------------------------------------------------------
+Phe F TTT       8 | Ser S TCT      10 | Tyr Y TAT      14 | Cys C TGT       0
+      TTC      15 |       TCC      18 |       TAC      18 |       TGC       4
+Leu L TTA       1 |       TCA       1 | *** * TAA       0 | *** * TGA       0
+      TTG       8 |       TCG       0 |       TAG       0 | Trp W TGG      20
+------------------------------------------------------------------------------
+Leu L CTT      11 | Pro P CCT      81 | His H CAT      23 | Arg R CGT       1
+      CTC      11 |       CCC      89 |       CAC      52 |       CGC       2
+      CTA       4 |       CCA      73 | Gln Q CAA      36 |       CGA       1
+      CTG      64 |       CCG       2 |       CAG     116 |       CGG       4
+------------------------------------------------------------------------------
+Ile I ATT       5 | Thr T ACT      14 | Asn N AAT       0 | Ser S AGT       1
+      ATC      22 |       ACC      25 |       AAC      11 |       AGC       8
+      ATA       9 |       ACA       6 | Lys K AAA       0 | Arg R AGA       4
+Met M ATG      57 |       ACG       1 |       AAG      17 |       AGG       5
+------------------------------------------------------------------------------
+Val V GTT      13 | Ala A GCT      18 | Asp D GAT      10 | Gly G GGT      16
+      GTC       5 |       GCC      14 |       GAC       7 |       GGC       6
+      GTA       1 |       GCA      14 | Glu E GAA      12 |       GGA      10
+      GTG      43 |       GCG       0 |       GAG      16 |       GGG       9
+------------------------------------------------------------------------------
+
+(Ambiguity data are not used in the counts.)
+
+
+Codon position x base (3x4) table, overall
+
+position  1:    T:0.10976    C:0.53471    A:0.17355    G:0.18199
+position  2:    T:0.25985    C:0.34334    A:0.31144    G:0.08537
+position  3:    T:0.21107    C:0.28799    A:0.16135    G:0.33959
+Average         T:0.19356    C:0.38868    A:0.21545    G:0.20231
+
+Codon frequencies under model, for use in evolver (TTT TTC TTA TTG ... GGG):
+  0.00612233  0.00835358  0.00468018  0.00985015
+  0.00808943  0.01103758  0.00618392  0.01301499
+  0.00733795  0.01001223  0.00000000  0.00000000
+  0.00201131  0.00274432  0.00000000  0.00323597
+  0.02982673  0.04069691  0.02280088  0.04798789
+  0.03941004  0.05377282  0.03012679  0.06340638
+  0.03574900  0.04877753  0.02732813  0.05751617
+  0.00979867  0.01336974  0.00749054  0.01576497
+  0.00968060  0.01320865  0.00740028  0.01557502
+  0.01279098  0.01745258  0.00977799  0.02057926
+  0.01160275  0.01583130  0.00886965  0.01866753
+  0.00318027  0.00433930  0.00243114  0.00511670
+  0.01025621  0.01399403  0.00784030  0.01650110
+  0.01355152  0.01849030  0.01035939  0.02180290
+  0.01229264  0.01677262  0.00939704  0.01977749
+  0.00336937  0.00459732  0.00257569  0.00542094
+
+
+
+Nei & Gojobori 1986. dN/dS (dN, dS)
+(Pairwise deletion)
+(Note: This matrix is not used in later ML. analysis.
+Use runmode = -2 for ML pairwise comparison.)
+
+AMELY_Mmu           
+AMELY_Ggo            0.5279 (0.0399 0.0757)
+AMELY_Hsa            0.7527 (0.0449 0.0596) 0.3196 (0.0046 0.0144)
+AMELY_Ppa            0.6338 (0.0514 0.0811) 0.6509 (0.0063 0.0096) 1.3188 (0.0126 0.0095)
+AMELY_Ptr            0.5884 (0.0399 0.0679) 0.6368 (0.0046 0.0072) 1.2860 (0.0092 0.0072)-1.0000 (0.0062 0.0000)
+AMELY_Pab            0.6358 (0.0448 0.0705) 0.6468 (0.0253 0.0392) 1.6599 (0.0319 0.0192) 1.0801 (0.0317 0.0294) 1.0867 (0.0318 0.0292)
+
+
+TREE #  1:  ((((4, 5), 2), 3), 6, 1);   MP score: -1
+lnL(ntime:  9  np: 12):  -1024.405924      +0.000000
+   7..8     8..9     9..10   10..4    10..5     9..2     8..3     7..6     7..1  
+ 0.035430 0.005257 0.005376 0.006837 0.005377 0.005379 0.010865 0.027480 0.101833 1.922412 1.113779 999.000000
+
+Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
+
+tree length =   0.20383
+
+((((4: 0.006837, 5: 0.005377): 0.005376, 2: 0.005379): 0.005257, 3: 0.010865): 0.035430, 6: 0.027480, 1: 0.101833);
+
+((((AMELY_Ppa: 0.006837, AMELY_Ptr: 0.005377): 0.005376, AMELY_Ggo: 0.005379): 0.005257, AMELY_Hsa: 0.010865): 0.035430, AMELY_Pab: 0.027480, AMELY_Mmu: 0.101833);
+
+Detailed output identifying parameters
+
+kappa (ts/tv) =  1.92241
+
+w (dN/dS) for branches:  1.11378 999.00000
+
+dN & dS for each branch
+
+ branch          t       N       S   dN/dS      dN      dS  N*dN  S*dS
+
+   7..8      0.035   412.3   205.7  1.1138  0.0122  0.0110   5.0   2.3
+   8..9      0.005   412.3   205.7  1.1138  0.0018  0.0016   0.7   0.3
+   9..10     0.005   412.3   205.7  1.1138  0.0019  0.0017   0.8   0.3
+  10..4      0.007   412.3   205.7 999.0000  0.0034  0.0000   1.4   0.0
+  10..5      0.005   412.3   205.7  1.1138  0.0019  0.0017   0.8   0.3
+   9..2      0.005   412.3   205.7  1.1138  0.0019  0.0017   0.8   0.3
+   8..3      0.011   412.3   205.7  1.1138  0.0037  0.0034   1.5   0.7
+   7..6      0.027   412.3   205.7  1.1138  0.0095  0.0085   3.9   1.8
+   7..1      0.102   412.3   205.7  1.1138  0.0351  0.0315  14.5   6.5
+
+tree length for dN:       0.0714
+tree length for dS:       0.0610
+
+dS tree:
+((((AMELY_Ppa: 0.000003, AMELY_Ptr: 0.001666): 0.001666, AMELY_Ggo: 0.001666): 0.001629, AMELY_Hsa: 0.003366): 0.010977, AMELY_Pab: 0.008514, AMELY_Mmu: 0.031549);
+dN tree:
+((((AMELY_Ppa: 0.003414, AMELY_Ptr: 0.001855): 0.001855, AMELY_Ggo: 0.001856): 0.001814, AMELY_Hsa: 0.003749): 0.012226, AMELY_Pab: 0.009483, AMELY_Mmu: 0.035139);
+
+w ratios as labels for TreeView:
+((((AMELY_Ppa #999.0000 , AMELY_Ptr #1.1138 ) #1.1138 , AMELY_Ggo #1.1138 ) #1.1138 , AMELY_Hsa #1.1138 ) #1.1138 , AMELY_Pab #1.1138 , AMELY_Mmu #1.1138 );
+
+
+Time used:  0:07

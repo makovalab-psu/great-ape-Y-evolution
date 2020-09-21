@@ -1,0 +1,188 @@
+Supplemental results for CODEML (seqf: BPY2.phy  treef: BPY2.nwk)
+
+
+TREE #  1
+
+Ancestral reconstruction by CODONML.
+
+((BPY2_Hsa: 0.037379, BPY2_Ppa: 0.000004): 0.000004, BPY2_Ptr: 0.000004, BPY2_Ggo: 0.037284);
+
+((1, 3), 4, 2);
+
+   5..6     6..1     6..3     5..4     5..2  
+
+tree with node labels for Rod Page's TreeView
+((1_BPY2_Hsa, 3_BPY2_Ppa) 6 , 4_BPY2_Ptr, 2_BPY2_Ggo) 5 ;
+
+Nodes 5 to 6 are ancestral
+Unreliable at sites with alignment gaps
+
+(1) Marginal reconstruction of ancestral sequences
+(eqn. 4 in Yang et al. 1995 Genetics 141:1641-1650).
+
+Prob of best state at each node, listed by site
+
+   site   Freq   Data: 
+
+   1      2   CTG (L) CTG (L) CTG (L) CTG (L) :  CTG L 1.000 (L 1.000) CTG L 1.000 (L 1.000)
+   2      1   TAC (Y) TAC (Y) YAC (*) TAC (Y) :  TAC Y 1.000 (Y 1.000) TAC Y 1.000 (Y 1.000)
+   3      1   CCG (P) CCG (P) CCG (P) CCG (P) :  CCG P 1.000 (P 1.000) CCG P 1.000 (P 1.000)
+   4      1   GGT (G) GGT (G) GGT (G) GGT (G) :  GGT G 1.000 (G 1.000) GGT G 1.000 (G 1.000)
+   5      1   GAA (E) GAA (E) GAA (E) GAA (E) :  GAA E 1.000 (E 1.000) GAA E 1.000 (E 1.000)
+   6      2   GTG (V) GTG (V) GTG (V) GTG (V) :  GTG V 1.000 (V 1.000) GTG V 1.000 (V 1.000)
+   7      3   ACT (T) ACT (T) ACT (T) ACT (T) :  ACT T 1.000 (T 1.000) ACT T 1.000 (T 1.000)
+   8      1   CTT (L) CTG (L) CTT (L) CTT (L) :  CTT L 1.000 (L 1.000) CTT L 1.000 (L 1.000)
+   9      2   CTG (L) CTG (L) CTG (L) CTG (L) :  CTG L 1.000 (L 1.000) CTG L 1.000 (L 1.000)
+  10      3   ACT (T) ACT (T) ACT (T) ACT (T) :  ACT T 1.000 (T 1.000) ACT T 1.000 (T 1.000)
+  11      2   AGG (R) AGG (R) AGG (R) AGG (R) :  AGG R 1.000 (R 1.000) AGG R 1.000 (R 1.000)
+  12      1   CCC (P) CCC (P) CCC (P) CCC (P) :  CCC P 1.000 (P 1.000) CCC P 1.000 (P 1.000)
+  13      1   AGC (S) AGC (S) AGC (S) AGC (S) :  AGC S 1.000 (S 1.000) AGC S 1.000 (S 1.000)
+  14      1   ATA (I) ATA (I) ATA (I) ATA (I) :  ATA I 1.000 (I 1.000) ATA I 1.000 (I 1.000)
+  15      1   CAA (Q) CAA (Q) CAA (Q) CAA (Q) :  CAA Q 1.000 (Q 1.000) CAA Q 1.000 (Q 1.000)
+  16      1   ATG (M) ATG (M) ATG (M) ATG (M) :  ATG M 1.000 (M 1.000) ATG M 1.000 (M 1.000)
+  17      1   AGA (R) AGA (R) AGA (R) AGA (R) :  AGA R 1.000 (R 1.000) AGA R 1.000 (R 1.000)
+  18      1   TTA (L) TTA (L) TTA (L) TTA (L) :  TTA L 1.000 (L 1.000) TTA L 1.000 (L 1.000)
+  19      1   TGC (C) TGC (C) TGC (C) TGC (C) :  TGC C 1.000 (C 1.000) TGC C 1.000 (C 1.000)
+  20      1   TGT (C) TGT (C) TGT (C) TGT (C) :  TGT C 1.000 (C 1.000) TGT C 1.000 (C 1.000)
+  21      1   ATC (I) ATC (I) ATC (I) ATC (I) :  ATC I 1.000 (I 1.000) ATC I 1.000 (I 1.000)
+  22      3   ACT (T) ACT (T) ACT (T) ACT (T) :  ACT T 1.000 (T 1.000) ACT T 1.000 (T 1.000)
+  23      1   GGC (G) GGT (G) GGT (G) GGT (G) :  GGT G 1.000 (G 1.000) GGT G 1.000 (G 1.000)
+  24      1   TCA (S) TCA (S) TCA (S) TCA (S) :  TCA S 1.000 (S 1.000) TCA S 1.000 (S 1.000)
+  25      2   GTG (V) GTG (V) GTG (V) GTG (V) :  GTG V 1.000 (V 1.000) GTG V 1.000 (V 1.000)
+  26      1   TCG (S) TCG (S) TCG (S) TCG (S) :  TCG S 1.000 (S 1.000) TCG S 1.000 (S 1.000)
+  27      2   AGG (R) AGG (R) AGG (R) AGG (R) :  AGG R 1.000 (R 1.000) AGG R 1.000 (R 1.000)
+
+Summary of changes along branches.
+Check root of tree for directions of change.
+Counts of n & s are incorrect along tip branches with ambiguity data.
+
+Branch 1:    5..6  (n= 0.0 s= 0.0)
+
+
+
+Branch 2:    6..1  (BPY2_Hsa)  (n= 0.0 s= 1.0)
+
+	  23 GGT (G) 1.000 -> GGC (G)
+
+
+Branch 3:    6..3  (BPY2_Ppa)  (n= 1.0 s= 0.0)
+
+	   2 TAC (Y) 1.000 -> YAC (*)
+
+
+Branch 4:    5..4  (BPY2_Ptr)  (n= 0.0 s= 0.0)
+
+
+
+Branch 5:    5..2  (BPY2_Ggo)  (n= 0.0 s= 1.0)
+
+	   8 CTT (L) 1.000 -> CTG (L)
+
+
+
+
+List of extant and reconstructed sequences
+
+     6     81
+
+BPY2_Hsa          CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGC TCA GTG TCG AGG 
+BPY2_Ggo          CTG TAC CCG GGT GAA GTG ACT CTG CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+BPY2_Ppa          CTG YAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+BPY2_Ptr          CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+node #5           CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+node #6           CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+
+
+Overall accuracy of the 2 ancestral sequences:
+  1.00000  1.00000
+for a site.
+
+  1.00000  1.00000
+for the sequence.
+
+
+Amino acid sequences inferred by codonml.
+Results unreliable for sites with alignment gaps.
+
+Node #5           LYPGEVTLLT RPSIQMRLCC ITGSVSR
+Node #6           LYPGEVTLLT RPSIQMRLCC ITGSVSR
+
+
+Counts of changes at sites, listed by site
+
+(Counts of n & s are incorrect at sites with ambiguity data)
+
+   1 (S N:   1.333  1.667 Sd Nd:    0.0   0.0)
+   2  TAC.YAC (S N:   0.429  2.571 Sd Nd:    0.0   1.0)
+   3 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+   4 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+   5 (S N:   0.375  2.625 Sd Nd:    0.0   0.0)
+   6 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+   7 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+   8  CTT.CTG (S N:   1.083  1.917 Sd Nd:    1.0   0.0)
+   9 (S N:   1.333  1.667 Sd Nd:    0.0   0.0)
+  10 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+  11 (S N:   0.667  2.333 Sd Nd:    0.0   0.0)
+  12 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+  13 (S N:   0.333  2.667 Sd Nd:    0.0   0.0)
+  14 (S N:   0.667  2.333 Sd Nd:    0.0   0.0)
+  15 (S N:   0.375  2.625 Sd Nd:    0.0   0.0)
+  16 (S N:   0.000  3.000 Sd Nd:    0.0   0.0)
+  17 (S N:   0.750  2.250 Sd Nd:    0.0   0.0)
+  18 (S N:   0.857  2.143 Sd Nd:    0.0   0.0)
+  19 (S N:   0.375  2.625 Sd Nd:    0.0   0.0)
+  20 (S N:   0.375  2.625 Sd Nd:    0.0   0.0)
+  21 (S N:   0.667  2.333 Sd Nd:    0.0   0.0)
+  22 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+  23  GGT.GGC (S N:   1.000  2.000 Sd Nd:    1.0   0.0)
+  24 (S N:   1.286  1.714 Sd Nd:    0.0   0.0)
+  25 (S N:   1.000  2.000 Sd Nd:    0.0   0.0)
+  26 (S N:   1.125  1.875 Sd Nd:    0.0   0.0)
+  27 (S N:   0.667  2.333 Sd Nd:    0.0   0.0)
+
+
+(2) Joint reconstruction of ancestral sequences
+(eqn. 2 in Yang et al. 1995 Genetics 141:1641-1650), using the algorithm of Pupko et al. (2000 Mol Biol Evol 17:890-896),
+modified to generate sub-optimal reconstructions.
+
+Reconstruction (prob.), listed by pattern (use the observed data to find the right site).
+
+Pattern Freq   Data:
+
+   1       3  ACT (T) ACT (T) ACT (T) ACT (T) : ACT ACT  (1.000) ACT ACC  (0.000) ACC ACT  (0.000) ACT ACG  (0.000) ACG ACT  (0.000) ACT ACA  (0.000)  (total  1.000)
+   2       1  AGA (R) AGA (R) AGA (R) AGA (R) : AGA AGA  (1.000) AGA AGG  (0.000) AGG AGA  (0.000) AGA CGA  (0.000) CGA AGA  (0.000) AGG AGG  (0.000)  (total  1.000)
+   3       1  AGC (S) AGC (S) AGC (S) AGC (S) : AGC AGC  (1.000) AGC AGT  (0.000) AGT AGC  (0.000) AGT AGT  (0.000) AGC AGG  (0.000) AGG AGC  (0.000)  (total  1.000)
+   4       2  AGG (R) AGG (R) AGG (R) AGG (R) : AGG AGG  (1.000) AGG AGA  (0.000) AGA AGG  (0.000) AGG CGG  (0.000) CGG AGG  (0.000) AGA AGA  (0.000)  (total  1.000)
+   5       1  ATA (I) ATA (I) ATA (I) ATA (I) : ATA ATA  (1.000) ATA ATT  (0.000) ATT ATA  (0.000) ATA ATC  (0.000) ATC ATA  (0.000) ATT ATT  (0.000)  (total  1.000)
+   6       1  ATC (I) ATC (I) ATC (I) ATC (I) : ATC ATC  (1.000) ATC ATT  (0.000) ATT ATC  (0.000) ATC ATA  (0.000) ATA ATC  (0.000) ATT ATT  (0.000)  (total  1.000)
+   7       1  ATG (M) ATG (M) ATG (M) ATG (M) : ATG ATG  (1.000) ATG ACG  (0.000) ACG ATG  (0.000) ATG ATA  (0.000) ATA ATG  (0.000) ATG GTG  (0.000)  (total  1.000)
+   8       1  CAA (Q) CAA (Q) CAA (Q) CAA (Q) : CAA CAA  (1.000) CAA CAG  (0.000) CAG CAA  (0.000) CAG CAG  (0.000) CAA CGA  (0.000) CGA CAA  (0.000)  (total  1.000)
+   9       1  CCC (P) CCC (P) CCC (P) CCC (P) : CCC CCC  (1.000) CCC CCT  (0.000) CCT CCC  (0.000) CCC CCG  (0.000) CCG CCC  (0.000) CCC CCA  (0.000)  (total  1.000)
+  10       1  CCG (P) CCG (P) CCG (P) CCG (P) : CCG CCG  (1.000) CCG CCA  (0.000) CCA CCG  (0.000) CCG CCT  (0.000) CCT CCG  (0.000) CCG CCC  (0.000)  (total  1.000)
+  11       2  CTG (L) CTG (L) CTG (L) CTG (L) : CTG CTG  (1.000) CTG TTG  (0.000) TTG CTG  (0.000) CTG CTA  (0.000) CTA CTG  (0.000) CTG CTT  (0.000)  (total  1.000)
+  12       1  CTT (L) CTG (L) CTT (L) CTT (L) : CTT CTT  (1.000) CTG CTT  (0.000) CTC CTT  (0.000) CTA CTT  (0.000) CTG CTG  (0.000) CTC CTC  (0.000)  (total  1.000)
+  13       1  GAA (E) GAA (E) GAA (E) GAA (E) : GAA GAA  (1.000) GAA GAG  (0.000) GAG GAA  (0.000) GAG GAG  (0.000) GAA GGA  (0.000) GGA GAA  (0.000)  (total  1.000)
+  14       1  GGC (G) GGT (G) GGT (G) GGT (G) : GGT GGT  (1.000) GGT GGC  (0.000) GGC GGC  (0.000) GGT GGG  (0.000) GGT GGA  (0.000) GGC GGT  (0.000)  (total  1.000)
+  15       1  GGT (G) GGT (G) GGT (G) GGT (G) : GGT GGT  (1.000) GGT GGC  (0.000) GGC GGT  (0.000) GGT GGG  (0.000) GGG GGT  (0.000) GGT GGA  (0.000)  (total  1.000)
+  16       2  GTG (V) GTG (V) GTG (V) GTG (V) : GTG GTG  (1.000) GTG GTA  (0.000) GTA GTG  (0.000) GTG GTT  (0.000) GTT GTG  (0.000) GTG GTC  (0.000)  (total  1.000)
+  17       1  TAC (Y) TAC (Y) YAC (*) TAC (Y) : TAC TAC  (1.000) TAC TAT  (0.000) TAT TAC  (0.000) TAC CAC  (0.000) TAT TAT  (0.000) CAC CAC  (0.000)  (total  1.000)
+  18       1  TCA (S) TCA (S) TCA (S) TCA (S) : TCA TCA  (1.000) TCA TCG  (0.000) TCG TCA  (0.000) TCA TCT  (0.000) TCT TCA  (0.000) TCA TCC  (0.000)  (total  1.000)
+  19       1  TCG (S) TCG (S) TCG (S) TCG (S) : TCG TCG  (1.000) TCG TCA  (0.000) TCA TCG  (0.000) TCG TCT  (0.000) TCT TCG  (0.000) TCG TCC  (0.000)  (total  1.000)
+  20       1  TGC (C) TGC (C) TGC (C) TGC (C) : TGC TGC  (1.000) TGC TGT  (0.000) TGT TGC  (0.000) TGT TGT  (0.000) TGC CGC  (0.000) CGC TGC  (0.000)  (total  1.000)
+  21       1  TGT (C) TGT (C) TGT (C) TGT (C) : TGT TGT  (1.000) TGT TGC  (0.000) TGC TGT  (0.000) TGC TGC  (0.000) TGT CGT  (0.000) CGT TGT  (0.000)  (total  1.000)
+  22       1  TTA (L) TTA (L) TTA (L) TTA (L) : TTA TTA  (1.000) TTA TTG  (0.000) TTG TTA  (0.000) TTA CTA  (0.000) CTA TTA  (0.000) TTG TTG  (0.000)  (total  1.000)
+
+
+
+List of extant and reconstructed sequences
+
+     6     81
+
+BPY2_Hsa          CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGC TCA GTG TCG AGG 
+BPY2_Ggo          CTG TAC CCG GGT GAA GTG ACT CTG CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+BPY2_Ppa          CTG YAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+BPY2_Ptr          CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+node #5           CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+node #6           CTG TAC CCG GGT GAA GTG ACT CTT CTG ACT AGG CCC AGC ATA CAA ATG AGA TTA TGC TGT ATC ACT GGT TCA GTG TCG AGG 
+
+

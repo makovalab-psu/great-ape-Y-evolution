@@ -1,0 +1,240 @@
+      7    120
+
+TSPY_Ggo                        GTG GAA GAA GAG AAG CAT CCT GTT CAT CTC TGC AAG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT AAA GTG ATT ACC AAG GAA TAT CTG GTG AAC ATC ACA GAA TAC AGG 
+TSPY_Mmu                        GTG AAA GAA GCG AAG CAT CCC GTT CAT CTC TGC CAG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT AAA GTG ATT ACC AAG GAA TAT CTC GTG AAC GTC ACA GGT GAC AGG 
+TSPY_Pab                        GTG GAA GAA GTG AAG CAT CCC GTT CAT CTC TGC AGG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT AAA GTG ATT ACC AAG GAA TAT CTG GTG AAC ATC ACA --- TAC AGG 
+TSPY_Ppa                        GTG GAA GAA GWG AAG CAT CCW GTT CAT CTC TGC AAG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT NAA GTG ATT ACC AAG GAA TAT CTG GTG AAC ATC ACA GAA TAC AGG 
+TSPY_Ppy                        GTG GAA GAA GTG AAG CAT CCC GTT CAT CTC TGC AGG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT AAA GTG ATT ACC AAG GAA TAT CTG GTG AAC ATC ACA --- TAC AGG 
+TSPY_Ptr                        GTG GAA GAA GAG AAG CAT CCT GTT CAT CTC TGC AAG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT GAA GTG ATT ACC AAG GAA TAT CTG GTG AAC ATC ACA GAA TAC AGG 
+TSPY1_Hsa                       GTG GGA GAA GAG AAG CAT CCT GTT CAT CTC TGC AAG ATC ATG TTG TTC TTT CGG AGT AAC CCC TAC TTC CAG AAT AAA GTG ATT ACC AAG GAA TAT CTG GTG AAC ATC ACA GAA TAC AGG 
+
+
+
+Printing out site pattern counts
+
+
+         7         99  P
+
+TSPY_Ggo                         AAA AAC AAG AAG AAT ACA ACC AGG AGT ATC ATC ATG ATT CAG CAT CCC CCT CGG CTC CTG GAA GAA GAA GAG GTG GTT TAC TAC TAT TGC TTC TTG TTT
+TSPY_Mmu                         AAA AAC AAG CAG AAT ACA ACC AGG AGT ATC GTC ATG ATT CAG CAT CCC CCC CGG CTC CTC AAA GAA GGT GCG GTG GTT GAC TAC TAT TGC TTC TTG TTT
+TSPY_Pab                         AAA AAC AAG AGG AAT ACA ACC AGG AGT ATC ATC ATG ATT CAG CAT CCC CCC CGG CTC CTG GAA GAA --- GTG GTG GTT TAC TAC TAT TGC TTC TTG TTT
+TSPY_Ppa                         NAA AAC AAG AAG AAT ACA ACC AGG AGT ATC ATC ATG ATT CAG CAT CCC CCW CGG CTC CTG GAA GAA GAA GWG GTG GTT TAC TAC TAT TGC TTC TTG TTT
+TSPY_Ppy                         AAA AAC AAG AGG AAT ACA ACC AGG AGT ATC ATC ATG ATT CAG CAT CCC CCC CGG CTC CTG GAA GAA --- GTG GTG GTT TAC TAC TAT TGC TTC TTG TTT
+TSPY_Ptr                         GAA AAC AAG AAG AAT ACA ACC AGG AGT ATC ATC ATG ATT CAG CAT CCC CCT CGG CTC CTG GAA GAA GAA GAG GTG GTT TAC TAC TAT TGC TTC TTG TTT
+TSPY1_Hsa                        AAA AAC AAG AAG AAT ACA ACC AGG AGT ATC ATC ATG ATT CAG CAT CCC CCT CGG CTC CTG GGA GAA GAA GAG GTG GTT TAC TAC TAT TGC TTC TTG TTT
+
+
+
+    1    2    2    1    1    1    1    1    1    1    1    1    1    1    2
+    1    1    1    1    1    1    2    1    1    3    1    1    1    1    1
+    2    1    1
+
+CODONML (in paml version 4.8a, July 2014)  TSPY.phy
+Model: several dN/dS ratios for branches for branches, 
+Codon frequency model: F3x4
+ns =   7  ls =  40
+
+Codon usage in sequences
+--------------------------------------------------------------------------------------------------------------------------------------
+Phe TTT   1   1   1   1   1   1 | Ser TCT   0   0   0   0   0   0 | Tyr TAT   1   1   1   1   1   1 | Cys TGT   0   0   0   0   0   0
+    TTC   2   2   2   2   2   2 |     TCC   0   0   0   0   0   0 |     TAC   2   1   2   2   2   2 |     TGC   1   1   1   1   1   1
+Leu TTA   0   0   0   0   0   0 |     TCA   0   0   0   0   0   0 | *** TAA   0   0   0   0   0   0 | *** TGA   0   0   0   0   0   0
+    TTG   1   1   1   1   1   1 |     TCG   0   0   0   0   0   0 |     TAG   0   0   0   0   0   0 | Trp TGG   0   0   0   0   0   0
+--------------------------------------------------------------------------------------------------------------------------------------
+Leu CTT   0   0   0   0   0   0 | Pro CCT   1   0   0   0   0   1 | His CAT   2   2   2   2   2   2 | Arg CGT   0   0   0   0   0   0
+    CTC   1   2   1   1   1   1 |     CCC   1   2   2   1   2   1 |     CAC   0   0   0   0   0   0 |     CGC   0   0   0   0   0   0
+    CTA   0   0   0   0   0   0 |     CCA   0   0   0   0   0   0 | Gln CAA   0   0   0   0   0   0 |     CGA   0   0   0   0   0   0
+    CTG   1   0   1   1   1   1 |     CCG   0   0   0   0   0   0 |     CAG   1   2   1   1   1   1 |     CGG   1   1   1   1   1   1
+--------------------------------------------------------------------------------------------------------------------------------------
+Ile ATT   1   1   1   1   1   1 | Thr ACT   0   0   0   0   0   0 | Asn AAT   1   1   1   1   1   1 | Ser AGT   1   1   1   1   1   1
+    ATC   2   1   2   2   2   2 |     ACC   1   1   1   1   1   1 |     AAC   2   2   2   2   2   2 |     AGC   0   0   0   0   0   0
+    ATA   0   0   0   0   0   0 |     ACA   1   1   1   1   1   1 | Lys AAA   1   2   1   0   1   0 | Arg AGA   0   0   0   0   0   0
+Met ATG   1   1   1   1   1   1 |     ACG   0   0   0   0   0   0 |     AAG   3   2   2   3   2   3 |     AGG   1   1   2   1   2   1
+--------------------------------------------------------------------------------------------------------------------------------------
+Val GTT   1   1   1   1   1   1 | Ala GCT   0   0   0   0   0   0 | Asp GAT   0   0   0   0   0   0 | Gly GGT   0   1   0   0   0   0
+    GTC   0   1   0   0   0   0 |     GCC   0   0   0   0   0   0 |     GAC   0   1   0   0   0   0 |     GGC   0   0   0   0   0   0
+    GTA   0   0   0   0   0   0 |     GCA   0   0   0   0   0   0 | Glu GAA   4   2   3   4   3   5 |     GGA   0   0   0   0   0   0
+    GTG   3   3   4   3   4   3 |     GCG   0   1   0   0   0   0 |     GAG   1   0   0   0   0   1 |     GGG   0   0   0   0   0   0
+--------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------
+Phe TTT   1 | Ser TCT   0 | Tyr TAT   1 | Cys TGT   0
+    TTC   2 |     TCC   0 |     TAC   2 |     TGC   1
+Leu TTA   0 |     TCA   0 | *** TAA   0 | *** TGA   0
+    TTG   1 |     TCG   0 |     TAG   0 | Trp TGG   0
+------------------------------------------------------
+Leu CTT   0 | Pro CCT   1 | His CAT   2 | Arg CGT   0
+    CTC   1 |     CCC   1 |     CAC   0 |     CGC   0
+    CTA   0 |     CCA   0 | Gln CAA   0 |     CGA   0
+    CTG   1 |     CCG   0 |     CAG   1 |     CGG   1
+------------------------------------------------------
+Ile ATT   1 | Thr ACT   0 | Asn AAT   1 | Ser AGT   1
+    ATC   2 |     ACC   1 |     AAC   2 |     AGC   0
+    ATA   0 |     ACA   1 | Lys AAA   1 | Arg AGA   0
+Met ATG   1 |     ACG   0 |     AAG   3 |     AGG   1
+------------------------------------------------------
+Val GTT   1 | Ala GCT   0 | Asp GAT   0 | Gly GGT   0
+    GTC   0 |     GCC   0 |     GAC   0 |     GGC   0
+    GTA   0 |     GCA   0 | Glu GAA   3 |     GGA   1
+    GTG   3 |     GCG   0 |     GAG   1 |     GGG   0
+------------------------------------------------------
+
+Codon position x base (3x4) table for each sequence.
+
+#1: TSPY_Ggo       
+position  1:    T:0.20000    C:0.20000    A:0.37500    G:0.22500
+position  2:    T:0.35000    C:0.10000    A:0.45000    G:0.10000
+position  3:    T:0.22500    C:0.30000    A:0.15000    G:0.32500
+Average         T:0.25833    C:0.20000    A:0.32500    G:0.21667
+
+#2: TSPY_Mmu       
+position  1:    T:0.17500    C:0.22500    A:0.35000    G:0.25000
+position  2:    T:0.35000    C:0.12500    A:0.40000    G:0.12500
+position  3:    T:0.22500    C:0.35000    A:0.12500    G:0.30000
+Average         T:0.25000    C:0.23333    A:0.29167    G:0.22500
+
+#3: TSPY_Pab       
+position  1:    T:0.20513    C:0.20513    A:0.38462    G:0.20513
+position  2:    T:0.38462    C:0.10256    A:0.38462    G:0.12821
+position  3:    T:0.20513    C:0.33333    A:0.12821    G:0.33333
+Average         T:0.26496    C:0.21368    A:0.29915    G:0.22222
+
+#4: TSPY_Ppa       
+position  1:    T:0.21622    C:0.18919    A:0.37838    G:0.21622
+position  2:    T:0.37838    C:0.08108    A:0.43243    G:0.10811
+position  3:    T:0.21622    C:0.32432    A:0.13514    G:0.32432
+Average         T:0.27027    C:0.19820    A:0.31532    G:0.21622
+
+#5: TSPY_Ppy       
+position  1:    T:0.20513    C:0.20513    A:0.38462    G:0.20513
+position  2:    T:0.38462    C:0.10256    A:0.38462    G:0.12821
+position  3:    T:0.20513    C:0.33333    A:0.12821    G:0.33333
+Average         T:0.26496    C:0.21368    A:0.29915    G:0.22222
+
+#6: TSPY_Ptr       
+position  1:    T:0.20000    C:0.20000    A:0.35000    G:0.25000
+position  2:    T:0.35000    C:0.10000    A:0.45000    G:0.10000
+position  3:    T:0.22500    C:0.30000    A:0.15000    G:0.32500
+Average         T:0.25833    C:0.20000    A:0.31667    G:0.22500
+
+#7: TSPY1_Hsa      
+position  1:    T:0.20000    C:0.20000    A:0.37500    G:0.22500
+position  2:    T:0.35000    C:0.10000    A:0.42500    G:0.12500
+position  3:    T:0.22500    C:0.30000    A:0.15000    G:0.32500
+Average         T:0.25833    C:0.20000    A:0.31667    G:0.22500
+
+Sums of codon usage counts
+------------------------------------------------------------------------------
+Phe F TTT       7 | Ser S TCT       0 | Tyr Y TAT       7 | Cys C TGT       0
+      TTC      14 |       TCC       0 |       TAC      13 |       TGC       7
+Leu L TTA       0 |       TCA       0 | *** * TAA       0 | *** * TGA       0
+      TTG       7 |       TCG       0 |       TAG       0 | Trp W TGG       0
+------------------------------------------------------------------------------
+Leu L CTT       0 | Pro P CCT       3 | His H CAT      14 | Arg R CGT       0
+      CTC       8 |       CCC      10 |       CAC       0 |       CGC       0
+      CTA       0 |       CCA       0 | Gln Q CAA       0 |       CGA       0
+      CTG       6 |       CCG       0 |       CAG       8 |       CGG       7
+------------------------------------------------------------------------------
+Ile I ATT       7 | Thr T ACT       0 | Asn N AAT       7 | Ser S AGT       7
+      ATC      13 |       ACC       7 |       AAC      14 |       AGC       0
+      ATA       0 |       ACA       7 | Lys K AAA       6 | Arg R AGA       0
+Met M ATG       7 |       ACG       0 |       AAG      18 |       AGG       9
+------------------------------------------------------------------------------
+Val V GTT       7 | Ala A GCT       0 | Asp D GAT       0 | Gly G GGT       1
+      GTC       1 |       GCC       0 |       GAC       1 |       GGC       0
+      GTA       0 |       GCA       0 | Glu E GAA      24 |       GGA       1
+      GTG      23 |       GCG       1 |       GAG       3 |       GGG       0
+------------------------------------------------------------------------------
+
+(Ambiguity data are not used in the counts.)
+
+
+Codon position x base (3x4) table, overall
+
+position  1:    T:0.20000    C:0.20364    A:0.37091    G:0.22545
+position  2:    T:0.36364    C:0.10182    A:0.41818    G:0.11636
+position  3:    T:0.21818    C:0.32000    A:0.13818    G:0.32364
+Average         T:0.26061    C:0.20848    A:0.30909    G:0.22182
+
+Codon frequencies under model, for use in evolver (TTT TTC TTA TTG ... GGG):
+  0.01632829  0.02370868  0.01061339  0.02424751
+  0.00471338  0.00684383  0.00306370  0.00699937
+  0.01894082  0.02750206  0.00000000  0.00000000
+  0.00520097  0.00755181  0.00000000  0.00772345
+  0.01692204  0.02457081  0.01099933  0.02512924
+  0.00488478  0.00709270  0.00317511  0.00725390
+  0.01962957  0.02850214  0.01275922  0.02914991
+  0.00539010  0.00782643  0.00350357  0.00800430
+  0.03028155  0.04396882  0.01968301  0.04496811
+  0.00874118  0.01269220  0.00568177  0.01298066
+  0.03512660  0.05100383  0.02283229  0.05216301
+  0.00964544  0.01400518  0.00626954  0.01432348
+  0.01870331  0.02715721  0.01215715  0.02777442
+  0.00539897  0.00783930  0.00350933  0.00801746
+  0.02169584  0.03150236  0.01410230  0.03221833
+  0.00595748  0.00865026  0.00387236  0.00884686
+
+
+
+Nei & Gojobori 1986. dN/dS (dN, dS)
+(Pairwise deletion)
+(Note: This matrix is not used in later ML. analysis.
+Use runmode = -2 for ML pairwise comparison.)
+
+TSPY_Ggo            
+TSPY_Mmu             0.6476 (0.0713 0.1101)
+TSPY_Pab             0.5069 (0.0218 0.0430) 0.9525 (0.0617 0.0648)
+TSPY_Ppa            -1.0000 (0.0000 0.0000) 0.9186 (0.0647 0.0705)-1.0000 (0.0117 0.0000)
+TSPY_Ppy             0.5069 (0.0218 0.0430) 0.9525 (0.0617 0.0648)-1.0000 (0.0000 0.0000)-1.0000 (0.0117 0.0000)
+TSPY_Ptr            -1.0000 (0.0105 0.0000) 0.7529 (0.0829 0.1101) 0.7660 (0.0329 0.0430)-1.0000 (0.0000 0.0000) 0.7660 (0.0329 0.0430)
+TSPY1_Hsa           -1.0000 (0.0105 0.0000) 0.7675 (0.0832 0.1084) 0.7805 (0.0331 0.0424)-1.0000 (0.0114 0.0000) 0.7805 (0.0331 0.0424)-1.0000 (0.0212 0.0000)
+
+
+TREE #  1:  (((((3, 5), 7), 1), 4), 6, 2);   MP score: -1
+lnL(ntime: 11  np: 14):   -229.549689      +0.000000
+   8..9     9..10   10..11   11..12   12..3    12..5    11..7    10..1     9..4     8..6     8..2  
+ 0.000004 0.000004 0.000004 0.078648 0.000004 0.000004 0.025376 0.000004 0.000004 0.025311 0.246332 3.214990 1.235967 1.715654
+
+Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
+
+tree length =   0.37569
+
+(((((3: 0.000004, 5: 0.000004): 0.078648, 7: 0.025376): 0.000004, 1: 0.000004): 0.000004, 4: 0.000004): 0.000004, 6: 0.025311, 2: 0.246332);
+
+(((((TSPY_Pab: 0.000004, TSPY_Ppy: 0.000004): 0.078648, TSPY1_Hsa: 0.025376): 0.000004, TSPY_Ggo: 0.000004): 0.000004, TSPY_Ppa: 0.000004): 0.000004, TSPY_Ptr: 0.025311, TSPY_Mmu: 0.246332);
+
+Detailed output identifying parameters
+
+kappa (ts/tv) =  3.21499
+
+w (dN/dS) for branches:  1.23597 1.71565
+
+dN & dS for each branch
+
+ branch          t       N       S   dN/dS      dN      dS  N*dN  S*dS
+
+   8..9      0.000    88.7    31.3  1.2360  0.0000  0.0000   0.0   0.0
+   9..10     0.000    88.7    31.3  1.2360  0.0000  0.0000   0.0   0.0
+  10..11     0.000    88.7    31.3  1.2360  0.0000  0.0000   0.0   0.0
+  11..12     0.079    88.7    31.3  1.2360  0.0276  0.0223   2.4   0.7
+  12..3      0.000    88.7    31.3  1.7157  0.0000  0.0000   0.0   0.0
+  12..5      0.000    88.7    31.3  1.2360  0.0000  0.0000   0.0   0.0
+  11..7      0.025    88.7    31.3  1.2360  0.0089  0.0072   0.8   0.2
+  10..1      0.000    88.7    31.3  1.2360  0.0000  0.0000   0.0   0.0
+   9..4      0.000    88.7    31.3  1.2360  0.0000  0.0000   0.0   0.0
+   8..6      0.025    88.7    31.3  1.2360  0.0089  0.0072   0.8   0.2
+   8..2      0.246    88.7    31.3  1.2360  0.0864  0.0699   7.7   2.2
+
+tree length for dN:       0.1318
+tree length for dS:       0.1066
+
+dS tree:
+(((((TSPY_Pab: 0.000001, TSPY_Ppy: 0.000001): 0.022323, TSPY1_Hsa: 0.007203): 0.000001, TSPY_Ggo: 0.000001): 0.000001, TSPY_Ppa: 0.000001): 0.000001, TSPY_Ptr: 0.007184, TSPY_Mmu: 0.069919);
+dN tree:
+(((((TSPY_Pab: 0.000001, TSPY_Ppy: 0.000001): 0.027591, TSPY1_Hsa: 0.008902): 0.000001, TSPY_Ggo: 0.000001): 0.000001, TSPY_Ppa: 0.000001): 0.000001, TSPY_Ptr: 0.008880, TSPY_Mmu: 0.086418);
+
+w ratios as labels for TreeView:
+(((((TSPY_Pab #1.7157 , TSPY_Ppy #1.2360 ) #1.2360 , TSPY1_Hsa #1.2360 ) #1.2360 , TSPY_Ggo #1.2360 ) #1.2360 , TSPY_Ppa #1.2360 ) #1.2360 , TSPY_Ptr #1.2360 , TSPY_Mmu #1.2360 );
+
+
+Time used:  0:03

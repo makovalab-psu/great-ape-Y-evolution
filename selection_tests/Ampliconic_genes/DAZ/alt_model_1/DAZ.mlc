@@ -1,0 +1,201 @@
+      6     75
+
+DAZ1_Hsa                        CCT CCT CCT CCA CCA CAG TTT CAG AAC GTC TGG CGG AAT CCA AAC ACT GAA ACC TAC CTG CAG CCC CAA ATC ACG 
+DAZ_Ggo                         CCG CCT CCT CCG CCA CAG TGT CAG AAC ATC TGG AGG AAT CCA AAC ACT GAA ACC TAC CTG CAG CCC CTA ATC ACG 
+DAZ_Ppa                         CCT CCT CCT CCA CCA CAG TTT CAG AAC GTC CGG CGG AAT CCA AAC ACT GAA ACC TAC CTG CAG CCC CAC ATC ACG 
+DAZ_Ptr                         CCT CCT CCT CCA CCA CAG TTT CAG AAC GTC CGG CGG AAT CCA AAC ACT GAA ACC TAC CTG CAG CCC CAC ATC ACG 
+DAZA_Mmu                        CCT CCT CCT CCA CCA CAG TTT CAG AAT GTC TGG AGT AAT CCA AAC GCT GAA AAT TAC CTG CAG CCC CCA ATA ACG 
+DAZB_Mmu                        CCT CCT CCT CCA CCG CAG TTT CAG AAT GTC TGG AGT AAT CCA AAT GCT GAA ACA TAT CTT CAG CCC CGA GTC GCG 
+
+
+
+Printing out site pattern counts
+
+
+         6         66  P
+
+DAZ1_Hsa                        AAC AAC AAT ACC ACG ACT ATC CAA CAG CCA CCA CCA CCC CCT CCT CGG CTG GAA GTC TAC TGG TTT 
+DAZ_Ggo                         ... ... ... ... ... ... ... .T. ... ... ... ..G ... ..G ... A.. ... ... A.. ... ... .G. 
+DAZ_Ppa                         ... ... ... ... ... ... ... ..C ... ... ... ... ... ... ... ... ... ... ... ... C.. ... 
+DAZ_Ptr                         ... ... ... ... ... ... ... ..C ... ... ... ... ... ... ... ... ... ... ... ... C.. ... 
+DAZA_Mmu                        ... ..T ... .AT ... G.. ..A .C. ... ... ... ... ... ... ... A.T ... ... ... ... ... ... 
+DAZB_Mmu                        ..T ..T ... ..A G.. G.. G.. .G. ... ... ..G ... ... ... ... A.T ..T ... ... ..T ... ... 
+
+    1    1    1    1    1    1    1    1    3    1    1    1    1    1    2
+    1    1    1    1    1    1    1
+
+CODONML (in paml version 4.8a, July 2014)  DAZ.phy
+Model: several dN/dS ratios for branches for branches, 
+Codon frequency model: F3x4
+ns =   6  ls =  25
+
+Codon usage in sequences
+--------------------------------------------------------------------------------------------------------------------------------------
+Phe TTT   1   0   1   1   1   1 | Ser TCT   0   0   0   0   0   0 | Tyr TAT   0   0   0   0   0   1 | Cys TGT   0   1   0   0   0   0
+    TTC   0   0   0   0   0   0 |     TCC   0   0   0   0   0   0 |     TAC   1   1   1   1   1   0 |     TGC   0   0   0   0   0   0
+Leu TTA   0   0   0   0   0   0 |     TCA   0   0   0   0   0   0 | *** TAA   0   0   0   0   0   0 | *** TGA   0   0   0   0   0   0
+    TTG   0   0   0   0   0   0 |     TCG   0   0   0   0   0   0 |     TAG   0   0   0   0   0   0 | Trp TGG   1   1   0   0   1   1
+--------------------------------------------------------------------------------------------------------------------------------------
+Leu CTT   0   0   0   0   0   1 | Pro CCT   3   2   3   3   3   3 | His CAT   0   0   0   0   0   0 | Arg CGT   0   0   0   0   0   0
+    CTC   0   0   0   0   0   0 |     CCC   1   1   1   1   1   1 |     CAC   0   0   1   1   0   0 |     CGC   0   0   0   0   0   0
+    CTA   0   1   0   0   0   0 |     CCA   3   2   3   3   4   2 | Gln CAA   1   0   0   0   0   0 |     CGA   0   0   0   0   0   1
+    CTG   1   1   1   1   1   0 |     CCG   0   2   0   0   0   1 |     CAG   3   3   3   3   3   3 |     CGG   1   0   2   2   0   0
+--------------------------------------------------------------------------------------------------------------------------------------
+Ile ATT   0   0   0   0   0   0 | Thr ACT   1   1   1   1   0   0 | Asn AAT   1   1   1   1   3   3 | Ser AGT   0   0   0   0   1   1
+    ATC   1   2   1   1   0   0 |     ACC   1   1   1   1   0   0 |     AAC   2   2   2   2   1   0 |     AGC   0   0   0   0   0   0
+    ATA   0   0   0   0   1   0 |     ACA   0   0   0   0   0   1 | Lys AAA   0   0   0   0   0   0 | Arg AGA   0   0   0   0   0   0
+Met ATG   0   0   0   0   0   0 |     ACG   1   1   1   1   1   0 |     AAG   0   0   0   0   0   0 |     AGG   0   1   0   0   0   0
+--------------------------------------------------------------------------------------------------------------------------------------
+Val GTT   0   0   0   0   0   0 | Ala GCT   0   0   0   0   1   1 | Asp GAT   0   0   0   0   0   0 | Gly GGT   0   0   0   0   0   0
+    GTC   1   0   1   1   1   2 |     GCC   0   0   0   0   0   0 |     GAC   0   0   0   0   0   0 |     GGC   0   0   0   0   0   0
+    GTA   0   0   0   0   0   0 |     GCA   0   0   0   0   0   0 | Glu GAA   1   1   1   1   1   1 |     GGA   0   0   0   0   0   0
+    GTG   0   0   0   0   0   0 |     GCG   0   0   0   0   0   1 |     GAG   0   0   0   0   0   0 |     GGG   0   0   0   0   0   0
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Codon position x base (3x4) table for each sequence.
+
+#1: DAZ1_Hsa       
+position  1:    T:0.12000    C:0.52000    A:0.28000    G:0.08000
+position  2:    T:0.16000    C:0.40000    A:0.36000    G:0.08000
+position  3:    T:0.24000    C:0.28000    A:0.20000    G:0.28000
+Average         T:0.17333    C:0.40000    A:0.28000    G:0.14667
+
+#2: DAZ_Ggo        
+position  1:    T:0.12000    C:0.48000    A:0.36000    G:0.04000
+position  2:    T:0.16000    C:0.40000    A:0.32000    G:0.12000
+position  3:    T:0.20000    C:0.28000    A:0.16000    G:0.36000
+Average         T:0.16000    C:0.38667    A:0.28000    G:0.17333
+
+#3: DAZ_Ppa        
+position  1:    T:0.08000    C:0.56000    A:0.28000    G:0.08000
+position  2:    T:0.16000    C:0.40000    A:0.36000    G:0.08000
+position  3:    T:0.24000    C:0.32000    A:0.16000    G:0.28000
+Average         T:0.16000    C:0.42667    A:0.26667    G:0.14667
+
+#4: DAZ_Ptr        
+position  1:    T:0.08000    C:0.56000    A:0.28000    G:0.08000
+position  2:    T:0.16000    C:0.40000    A:0.36000    G:0.08000
+position  3:    T:0.24000    C:0.32000    A:0.16000    G:0.28000
+Average         T:0.16000    C:0.42667    A:0.26667    G:0.14667
+
+#5: DAZA_Mmu       
+position  1:    T:0.12000    C:0.48000    A:0.28000    G:0.12000
+position  2:    T:0.16000    C:0.40000    A:0.36000    G:0.08000
+position  3:    T:0.36000    C:0.16000    A:0.24000    G:0.24000
+Average         T:0.21333    C:0.34667    A:0.29333    G:0.14667
+
+#6: DAZB_Mmu       
+position  1:    T:0.12000    C:0.48000    A:0.20000    G:0.20000
+position  2:    T:0.16000    C:0.40000    A:0.32000    G:0.12000
+position  3:    T:0.44000    C:0.12000    A:0.20000    G:0.24000
+Average         T:0.24000    C:0.33333    A:0.24000    G:0.18667
+
+Sums of codon usage counts
+------------------------------------------------------------------------------
+Phe F TTT       5 | Ser S TCT       0 | Tyr Y TAT       1 | Cys C TGT       1
+      TTC       0 |       TCC       0 |       TAC       5 |       TGC       0
+Leu L TTA       0 |       TCA       0 | *** * TAA       0 | *** * TGA       0
+      TTG       0 |       TCG       0 |       TAG       0 | Trp W TGG       4
+------------------------------------------------------------------------------
+Leu L CTT       1 | Pro P CCT      17 | His H CAT       0 | Arg R CGT       0
+      CTC       0 |       CCC       6 |       CAC       2 |       CGC       0
+      CTA       1 |       CCA      17 | Gln Q CAA       1 |       CGA       1
+      CTG       5 |       CCG       3 |       CAG      18 |       CGG       5
+------------------------------------------------------------------------------
+Ile I ATT       0 | Thr T ACT       4 | Asn N AAT      10 | Ser S AGT       2
+      ATC       5 |       ACC       4 |       AAC       9 |       AGC       0
+      ATA       1 |       ACA       1 | Lys K AAA       0 | Arg R AGA       0
+Met M ATG       0 |       ACG       5 |       AAG       0 |       AGG       1
+------------------------------------------------------------------------------
+Val V GTT       0 | Ala A GCT       2 | Asp D GAT       0 | Gly G GGT       0
+      GTC       6 |       GCC       0 |       GAC       0 |       GGC       0
+      GTA       0 |       GCA       0 | Glu E GAA       6 |       GGA       0
+      GTG       0 |       GCG       1 |       GAG       0 |       GGG       0
+------------------------------------------------------------------------------
+
+
+Codon position x base (3x4) table, overall
+
+position  1:    T:0.10667    C:0.51333    A:0.28000    G:0.10000
+position  2:    T:0.16000    C:0.40000    A:0.34667    G:0.09333
+position  3:    T:0.28667    C:0.24667    A:0.18667    G:0.28000
+Average         T:0.18444    C:0.38667    A:0.27111    G:0.15778
+
+Codon frequencies under model, for use in evolver (TTT TTC TTA TTG ... GGG):
+  0.00498778  0.00429181  0.00324786  0.00487179
+  0.01246946  0.01072954  0.00811965  0.01217947
+  0.01080687  0.00929893  0.00000000  0.00000000
+  0.00290954  0.00250356  0.00000000  0.00284188
+  0.02400371  0.02065436  0.01563032  0.02344549
+  0.06000928  0.05163589  0.03907581  0.05861371
+  0.05200804  0.04475111  0.03386570  0.05079855
+  0.01400217  0.01204837  0.00911769  0.01367653
+  0.01309293  0.01126601  0.00852563  0.01278845
+  0.03273233  0.02816503  0.02131408  0.03197112
+  0.02836802  0.02440969  0.01847220  0.02770830
+  0.00763754  0.00657184  0.00497328  0.00745993
+  0.00467605  0.00402358  0.00304487  0.00456730
+  0.01169012  0.01005894  0.00761217  0.01141826
+  0.01013144  0.00871775  0.00659721  0.00989582
+  0.00272769  0.00234709  0.00177617  0.00266426
+
+
+
+Nei & Gojobori 1986. dN/dS (dN, dS)
+(Note: This matrix is not used in later ML. analysis.
+Use runmode = -2 for ML pairwise comparison.)
+
+DAZ1_Hsa            
+DAZ_Ggo              0.2991 (0.0550 0.1838)
+DAZ_Ppa             -1.0000 (0.0366 0.0000) 0.4010 (0.0849 0.2118)
+DAZ_Ptr             -1.0000 (0.0366 0.0000) 0.4010 (0.0849 0.2118)-1.0000 (0.0000 0.0000)
+DAZA_Mmu             0.2758 (0.0735 0.2664) 0.3222 (0.1131 0.3509) 0.3518 (0.1041 0.2959) 0.3518 (0.1041 0.2959)
+DAZB_Mmu             0.1771 (0.0940 0.5307) 0.2080 (0.1352 0.6500) 0.2243 (0.1260 0.5619) 0.2243 (0.1260 0.5619) 0.2095 (0.0832 0.3971)
+
+
+TREE #  1:  (((3, 4), 1), 2, (5, 6));   MP score: 22
+lnL(ntime:  9  np: 12):   -205.884942      +0.000000
+   7..8     8..9     9..3     9..4     8..1     7..2     7..10   10..5    10..6  
+ 0.060205 0.081935 0.000004 0.000004 0.000004 0.213780 0.176626 0.140831 0.372103 2.577138 0.665442 452.102291
+
+Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
+
+tree length =   1.04549
+
+(((3: 0.000004, 4: 0.000004): 0.081935, 1: 0.000004): 0.060205, 2: 0.213780, (5: 0.140831, 6: 0.372103): 0.176626);
+
+(((DAZ_Ppa: 0.000004, DAZ_Ptr: 0.000004): 0.081935, DAZ1_Hsa: 0.000004): 0.060205, DAZ_Ggo: 0.213780, (DAZA_Mmu: 0.140831, DAZB_Mmu: 0.372103): 0.176626);
+
+Detailed output identifying parameters
+
+kappa (ts/tv) =  2.57714
+
+w (dN/dS) for branches:  0.66544 452.10229
+
+dN & dS for each branch
+
+ branch          t       N       S   dN/dS      dN      dS  N*dN  S*dS
+
+   7..8      0.060    47.1    27.9  0.6654  0.0169  0.0254   0.8   0.7
+   8..9      0.082    47.1    27.9  0.6654  0.0230  0.0346   1.1   1.0
+   9..3      0.000    47.1    27.9 452.1023  0.0000  0.0000   0.0   0.0
+   9..4      0.000    47.1    27.9  0.6654  0.0000  0.0000   0.0   0.0
+   8..1      0.000    47.1    27.9  0.6654  0.0000  0.0000   0.0   0.0
+   7..2      0.214    47.1    27.9  0.6654  0.0600  0.0902   2.8   2.5
+   7..10     0.177    47.1    27.9  0.6654  0.0496  0.0745   2.3   2.1
+  10..5      0.141    47.1    27.9  0.6654  0.0396  0.0594   1.9   1.7
+  10..6      0.372    47.1    27.9  0.6654  0.1045  0.1571   4.9   4.4
+
+tree length for dN:       0.2936
+tree length for dS:       0.4413
+
+dS tree:
+(((DAZ_Ppa: 0.000000, DAZ_Ptr: 0.000002): 0.034582, DAZ1_Hsa: 0.000002): 0.025411, DAZ_Ggo: 0.090230, (DAZA_Mmu: 0.059440, DAZB_Mmu: 0.157053): 0.074548);
+dN tree:
+(((DAZ_Ppa: 0.000002, DAZ_Ptr: 0.000001): 0.023012, DAZ1_Hsa: 0.000001): 0.016909, DAZ_Ggo: 0.060043, (DAZA_Mmu: 0.039554, DAZB_Mmu: 0.104510): 0.049608);
+
+w ratios as labels for TreeView:
+(((DAZ_Ppa #452.1023 , DAZ_Ptr #0.6654 ) #0.6654 , DAZ1_Hsa #0.6654 ) #0.6654 , DAZ_Ggo #0.6654 , (DAZA_Mmu #0.6654 , DAZB_Mmu #0.6654 ) #0.6654 );
+
+
+Time used:  0:07

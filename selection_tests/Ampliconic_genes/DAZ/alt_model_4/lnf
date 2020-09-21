@@ -1,0 +1,27 @@
+    -1     25     22
+
+
+ 1
+
+     1      1    -6.6423434814   0.001303967836       0.0326  AAC (N) AAC (N) AAC (N) AAC (N) AAC (N) AAT (N) 
+     2      1    -7.3067777986   0.000670975591       0.0168  AAC (N) AAC (N) AAC (N) AAC (N) AAT (N) AAT (N) 
+     3      1    -4.4170486476   0.012069802008       0.3017  AAT (N) AAT (N) AAT (N) AAT (N) AAT (N) AAT (N) 
+     4      1   -14.3863157320   0.000000565070       0.0000  ACC (T) ACC (T) ACC (T) ACC (T) AAT (N) ACA (T) 
+     5      1    -7.8660796279   0.000383535019       0.0096  ACG (T) ACG (T) ACG (T) ACG (T) ACG (T) GCG (A) 
+     6      1    -8.4672820468   0.000210235538       0.0053  ACT (T) ACT (T) ACT (T) ACT (T) GCT (A) GCT (A) 
+     7      1   -14.8066759705   0.000000371144       0.0000  ATC (I) ATC (I) ATC (I) ATC (I) ATA (I) GTC (V) 
+     8      1   -20.2782060102   0.000000001561       0.0000  CAA (Q) CTA (L) CAC (H) CAC (H) CCA (P) CGA (R) 
+     9      3    -4.0689975890   0.017094515652       0.4274  CAG (Q) CAG (Q) CAG (Q) CAG (Q) CAG (Q) CAG (Q) 
+    10      1    -4.7498041005   0.008653390232       0.2163  CCA (P) CCA (P) CCA (P) CCA (P) CCA (P) CCA (P) 
+    11      1    -6.0712508166   0.002308284164       0.0577  CCA (P) CCA (P) CCA (P) CCA (P) CCA (P) CCG (P) 
+    12      1    -6.8686786433   0.001039850170       0.0260  CCA (P) CCG (P) CCA (P) CCA (P) CCA (P) CCA (P) 
+    13      1    -4.5288721262   0.010792842175       0.2698  CCC (P) CCC (P) CCC (P) CCC (P) CCC (P) CCC (P) 
+    14      1    -7.3517558877   0.000641465030       0.0160  CCT (P) CCG (P) CCT (P) CCT (P) CCT (P) CCT (P) 
+    15      2    -4.3583485134   0.012799508421       0.3200  CCT (P) CCT (P) CCT (P) CCT (P) CCT (P) CCT (P) 
+    16      1   -16.6627137690   0.000000058006       0.0000  CGG (R) AGG (R) CGG (R) CGG (R) AGT (S) AGT (S) 
+    17      1    -7.9994462299   0.000335648449       0.0084  CTG (L) CTG (L) CTG (L) CTG (L) CTG (L) CTT (L) 
+    18      1    -5.4740965555   0.004194015900       0.1049  GAA (E) GAA (E) GAA (E) GAA (E) GAA (E) GAA (E) 
+    19      1    -9.7935195700   0.000055812117       0.0014  GTC (V) ATC (I) GTC (V) GTC (V) GTC (V) GTC (V) 
+    20      1    -8.3757543700   0.000230386006       0.0058  TAC (Y) TAC (Y) TAC (Y) TAC (Y) TAC (Y) TAT (Y) 
+    21      1   -10.9403599235   0.000017728094       0.0004  TGG (W) TGG (W) CGG (R) CGG (R) TGG (W) TGG (W) 
+    22      1   -11.9072862600   0.000006741108       0.0002  TTT (F) TGT (C) TTT (F) TTT (F) TTT (F) TTT (F) 

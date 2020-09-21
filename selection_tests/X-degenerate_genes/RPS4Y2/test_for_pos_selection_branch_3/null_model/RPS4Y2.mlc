@@ -1,0 +1,233 @@
+
+Before deleting alignment gaps
+      7    789
+
+RPS4Y2_Mmu                      ATG GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTC GAC AAA CTA ACG GNT GTA TTT GCA CCT CGT CCG TCG ACA GGT CCC CAC AAG CTG AGG GAA TGT CTT CCC CTG ATC GTC TTC CTC AGG AAT AGA CTT AAG TAT GCG TTG ACT GGA GAT GAG GTA AAG AAG ATA TGT ATG CAA CGC TTC ATC AAA ATT GAT GGC AAG GTT CGA GTG GAT GTC ACA TAC CCT GCT GGA TTC ATG GAT GTC ATC AGC ATC GAG AAG ACA GGT GAA CAT TTC CGC CTG GTC TAT GAC ACC AAG GGC CGT TTT GCT GTT CAT CGT ATC ACA GCG GAA GAG GCA AAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT GTC ATC AAA GTG AAT GAT ACT GTC CGG ATT GAT TTA GGG AGT GGC AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGC AAT GTG TGT ATG GTG ATT GGT GGA GCT AAC CTC GGT CGT GTT GGT GTG ATC ACA AAC AGG GAA AGA CAT CCT GGT TCT TTC GAT GTG GTG CAT GTG AAG GAT GCC AGT GGC AAC AGC TTT GCC ACA AGG ATT TCC AAC ATT TTT GTC ATT GGC AAT GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC ATC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGA CTG GCT GCC AAA CAG AGC AGT GGC 
+RPS4Y2_Ppy                      ATG GCC CGG GGT CCT AAG AAG CAC CTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTC GAC AAA CTA ACT GGT GTA TTT GCA CCT CGT CCA TCG ACA GGT CCT CAC AAG CTG AGG GAA TGT CTT CCC CTG NNA GTC TTC CTC AGG AAT AGA CTC AAG TAT GCA TTG ACT GGA GAT GAG GTA AAG AAG ATA TGT ATG AAA CGC TTC ATC AAA ATT GAT GGC AAG GTT CGA GTG GAC ATC ACA TAC CCT GCT GGA TTC ATA GAT GTC ATC AGC ATT GAG AAA ACA GGT GAG CAT TTC CGC CTG GTC TAN --- ACC AAG GGC CGT TTT GCT GTT CAT CGT ATC ACA GTG GAA GAG GCA AAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGC AAG ATA ACC AGC TTT ATC AAA TTT GAT ACA GGC AAT GTA TGT ATG GTG ATT GGT GGA GCT AAC CTC GGT CGT GTT GGT GTG ATC ACA AAC AGG GAA AGA CAT CCT GGT TCT TGC GAT GTG GTA CAT GTG AAG GAT GCC AAT GGC AAC AGC TTT GCC ACA AGG ATT TCC AAC ATT TTT GTC ATT GGC AAT GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC ATC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG GCT GCC AAA CAG AGC AGT GGC 
+RPS4Y2_Ggo                      ATG GCC CGG GGC CCC AAG AAG CAC TTG AAG CAT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA TTA ACT GGT GTA TTT GCA CCT CGT CCA TCA ACA GGT CCT CAC AAG CTG AGG GAA TGT CTT CCC CTG ATA GTC TTC CTC AGG AAT AGA CTC AAG TAT GCA TTG ACT GGA GAT GAG GTA AAG AAG ATA TGT ATG CAA CGG TTC ATC AAA ATT GAT GGC AAG GTT CGA GTG GAC ATC ACA TAC CCT GCT GGA TTC ATG GAT GTC ATC AGC ATT GAG AAA ACA GGT GAG CAT TTC CGC CTG GTC TAT GAT ACC AAG GGC CGT TTT GCT GTT CAT CGT ATC ACA GTG GAA GAG GCA AAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTA GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT GTC ATC AAG GTG AAT GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGC AAT GTA TGT ATG GTG ATT GGT GGA GCT AAC CTC GGT CGT GTT GGT GTG ATC ACA AAC AGG GAA AGA CAT CCT GGT TCT TGC GAT GTG GTA CAT GTG AAG GAT GCC AAC GGC AAC AGC TTT GCC ACA AGG ATT TCC AAC ATT TTT GTC ATT GGC AAT GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC ATC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG GCT GCC AGA CAG AGC AGT GGC 
+RPS4Y2_Hsa                      ATG GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA CTA ACT GGT GTA TTT GCA CCT CGT CCA TCG ACA GGT CCT CAC AAG CTG AGG GAA TGT CTT CCC CTG ATA GTC TTC CTC AGG AAT AGA CTC AAG TAT GCA TTG ACT GGA GAT GAG GTA AAG AAG ATA TGT ATG CAA CAC TTC CTC AAA ATT GAT GGC AAG GTT CGA GTG GAC ATC ACA TAC CCT GCT GGA TTC ATA GAT GTC ATC AGC ATT GAG AAA ACA GGT GAG CAT TTC CGC CTG GTC TAT AAT ACC AAG GGC TGT TTT GCT GTT CAT CGT ATC ACA GTG GAA GAG GCA AAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGC AAT GTA TGT ATG GTG ATT GCT GGA GCT AAC CTC GGT CGT GTT GGT GTG ATC ACA AAC AGG GAA AGA CAT CCT GGT TCT TGC GAT GTG GTA CAT GTG AAG GAT GCC AAC GGC AAC AGC TTT GCC ACA AGG ATT TCC AAC ATT TTT GTC ATT GGC AAT GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC ATC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG GCT GCC AAA CAG AGC AGT GGC 
+RPS4Y2_Ppa                      NNG GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA CTA ACT GGT GTA TTT GCA CCT CGT CCA TCG ACA GGT CCT CAC AAG CTG AGG GAA TGT CTT CCC CTG ATA GTC TTC CTC AGG AAT AGA CTC AAG TAT GCA TTG ACT GGA GAT GAG GTA AAG AAG ATA TGT ATG CAA CGC TTC ATC AAA ATT GAT GGC AAG GTT CGA GTG GAC ATT ACA TAC CCT GCT GGA TTC ATG GAT GTC ATC AGC ATT GAG AAA ACA GGT GAG CAT TTC CGC CTG GTC TAT GAT ACC AAG GGC CGT TTT GCT GTT CAT CGT ATC ACA GTG GAA GAG GCA AAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGC AAT GTA TGT ATG GTG ATT GGT GGA GCT AAC CTC GGT CGT GTT GGT GTG GTC ACA AAC AGG GAA AGA CAT CCT GGT TCT TGC GAT GTG GTA CAT GTG AAG GAT GCC AAC GGC AAC AGC TTT GCC ACA AGG ATT TCC AAC ATT TTT GTC ATT GGC AAT GGT AAT AAA CCT TGG ATT TCC CTG CCC AGA GGA AAG GGC ATC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG GCT GCC AAA CAG AGC AGT GGC 
+RPS4Y2_Ptr                      ATG GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA CTA ACT GGT GTA TTT GCA CCT CGT CCA TCG ACA GGT CCT CAC AAG CTG AGG GAA TGT CTT CCC CTG ATA GTC TTC CTC AGG AAT AGA CTC AAG TAT GCA TTG ACT GGA GAT GAG GTA AAG AAG ATA TGT ATG CAA CGC TTC ATC AAA ATT GAT GGC AAG GTT CGA GTG GAC ATT ACA TAC CCT GCT GGA TTC ATG GAT GTC ATC AGC ATT GAG AAA ACA GGT GAG CAT TTC CGC CTG GTC TAT GAT ACC AAG GGC CGT TTT GCT GTT CAT CGT ATC ACA GTG GAA GAG GCA AAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGC AAT GTA TGT ATG GTG ATT GGT GGA GCT AAC CTC GGT CGT GTT GGT GTG GTC ACA AAC AGG GAA AGA CAT CCT GGT TCT TGC GAT GTG GTA CAT GTG AAG GAT GCC AAC GGC AAC AGC TTT GCC ACA AGG ATT TCC AAC ATT TTT GTC ATT GGC AAT GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC ATC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG GCT GCC AAA CAG AGC AGT GGC 
+RPS4Y2_Pab                      NNG GCC CGG GGT CCT AAG AAG CAC CTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTC GAC AAA CTA ACT GGT GTA TTT GNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN N-- -NN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NAG TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGA ATG AAG GGA ATC CCT CAC CTG GTG ACT CAT GAT GCT CGA ACC ATC CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGC AAG ATA ATT AAC TTT ATC AAA TTT GAT ACA GGN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN NNN GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC ATY CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG GCY RCC AAA CAG AGC AGT GGC 
+
+
+
+After deleting gaps. 336 sites
+      7    336
+
+RPS4Y2_Mmu                      GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTC GAC AAA CTA ACG GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT GTC ATC AAA GTG AAT GAT ACT GTC CGG ATT GAT TTA GGG AGT GGC AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGA CTG AAA CAG AGC AGT GGC 
+RPS4Y2_Ppy                      GCC CGG GGT CCT AAG AAG CAC CTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTC GAC AAA CTA ACT GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGC AAG ATA ACC AGC TTT ATC AAA TTT GAT ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG AAA CAG AGC AGT GGC 
+RPS4Y2_Ggo                      GCC CGG GGC CCC AAG AAG CAC TTG AAG CAT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA TTA ACT GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTA GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT GTC ATC AAG GTG AAT GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG AGA CAG AGC AGT GGC 
+RPS4Y2_Hsa                      GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA CTA ACT GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG AAA CAG AGC AGT GGC 
+RPS4Y2_Ppa                      GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA CTA ACT GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGA GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG AAA CAG AGC AGT GGC 
+RPS4Y2_Ptr                      GCC CGG GGC CCC AAG AAG CAC TTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTG GAT AAA CTA ACT GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGG ACA AAG GGA ATT CCA CAC CTG GTG ACT CAT GAT GCT CGA ACC ATT CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGG AAG ATA ACC AGC TTT ATC AAA TTT GAC ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG AAA CAG AGC AGT GGC 
+RPS4Y2_Pab                      GCC CGG GGT CCT AAG AAG CAC CTG AAG CGT GTT GCA GCG CCG AAG CAT TGG ATG CTC GAC AAA CTA ACT GTA TTT TAC AAG TTG TGC AAA GTG AGG AAG ATT ACT GTG GGA ATG AAG GGA ATC CCT CAC CTG GTG ACT CAT GAT GCT CGA ACC ATC CGC TAC CCA GAT CCT CTC ATC AAG GTG AAC GAT ACT GTG CAG ATT GAT TTA GGG ACT GGC AAG ATA ATT AAC TTT ATC AAA TTT GAT ACA GGT AAT AAA CCT TGG ATT TCC CTG CCC AGG GGA AAG GGC CGA CTT ACT ATT GCT GAA GAG AGA GAC AAG AGG CTG AAA CAG AGC AGT GGC 
+
+
+
+Printing out site pattern counts
+
+
+         7        222  P
+
+RPS4Y2_Mmu                      AAA AAA AAA AAG AAT AAT ACA ACA ACC ACC ACG ACT AGA AGA AGC AGC AGG AGG AGT AGT ATA ATC ATG ATT ATT CAC CAG CAT CCA CCA CCC CCC CCG CCT CGA CGC CGG CGG CGT CTA CTC CTG CTG CTT GAA GAC GAC GAC GAG GAT GCA GCC GCG GCT GGA GGC GGC GGC GGG GGG GGT GTA GTC GTC GTG GTT TAC TCC TGC TGG TTA TTG TTG TTT 
+RPS4Y2_Ppy                      ... ... ..G ... ..C ... ... ... ... ... ..T ... ... ..G ... ... ... ... .C. ... ... ... ... ... ... ... ... ... ... ... ... ..T ... ... ... ... .A. ... ... ... ... ... ... ... ... ... ... ..T ... ... ... ... ... ... ... ... ... ..T ... ... ... ... C.. ..G ... ... ... ... ... ... ... C.. ... ... 
+RPS4Y2_Ggo                      ... .G. ..G ... ... ... ... ... ... ... ..T ... ... ..G ... ... ... ... .C. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... .A. ... .A. T.. ..G ..A ... ... ... ... ..T ... ... ... ... ... ... ... ... ... ..G ... ... ... ... ... ... ..G ... ... ... ... ... ... ... ... ... ... 
+RPS4Y2_Hsa                      ... ... ..G ... ..C ... ... ... ... ... ..T ... ... ..G ... ... ... ... .C. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... .A. ... ... ... ..G ... ... ... ... ... ..T ... ... ... ... ... ... ... ... ... ..G ... ... ... ... ... C.. ..G ... ... ... ... ... ... ... ... ... ... 
+RPS4Y2_Ppa                      ... ... ..G ... ..C ... ... ... ... ... ..T ... ... ..G ... ... ..A ... .C. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... .A. ... ... ... ..G ... ... ... ... ... ..T ... ... ... ... ... ... ... ... ... ..G ... ... ... ... ... C.. ..G ... ... ... ... ... ... ... ... ... ... 
+RPS4Y2_Ptr                      ... ... ..G ... ..C ... ... ... ... ... ..T ... ... ..G ... ... ... ... .C. ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... .A. ... ... ... ..G ... ... ... ... ... ..T ... ... ... ... ... ... ... ... ... ..G ... ... ... ... ... C.. ..G ... ... ... ... ... ... ... ... ... ... 
+RPS4Y2_Pab                      ... ... ..G ... ..C ... ... .TG ... .TT ..T ... ... ..G .A. ... ... ... .C. ... ... ... ... ..C ... ... ... ... ... ..T ... ..T ... ... ... ... .A. ... ... ... ... ... ... ... ... ... ... ..T ... ... ... ... ... ... ... ... ... ..T ..A ... ... ... C.. ..G ... ... ... ... ... ... ... C.. ... ... 
+
+    4    1    1   10    1    1    1    1    1    1    1    4    1    1    1
+    1    1    1    1    1    1    2    1    2    4    2    1    2    1    1
+    1    1    1    2    2    1    1    1    1    1    1    1    2    1    1
+    1    1    1    1    4    1    1    1    2    2    2    1    1    1    1
+    1    1    1    1    4    1    2    1    1    2    1    1    1    3
+
+CODONML (in paml version 4.8a, July 2014)  RPS4Y2.phy
+Model: several dN/dS ratios for branches for branches,  omega = 1.000 fixed
+
+Codon frequency model: F3x4
+Site-class models:  PositiveSelection
+ns =   7  ls = 112
+
+Codon usage in sequences
+--------------------------------------------------------------------------------------------------------------------------------------
+Phe TTT   3   3   3   3   3   3 | Ser TCT   0   0   0   0   0   0 | Tyr TAT   0   0   0   0   0   0 | Cys TGT   0   0   0   0   0   0
+    TTC   0   0   0   0   0   0 |     TCC   1   1   1   1   1   1 |     TAC   2   2   2   2   2   2 |     TGC   1   1   1   1   1   1
+Leu TTA   1   1   2   1   1   1 |     TCA   0   0   0   0   0   0 | *** TAA   0   0   0   0   0   0 | *** TGA   0   0   0   0   0   0
+    TTG   2   1   2   2   2   2 |     TCG   0   0   0   0   0   0 |     TAG   0   0   0   0   0   0 | Trp TGG   2   2   2   2   2   2
+--------------------------------------------------------------------------------------------------------------------------------------
+Leu CTT   1   1   1   1   1   1 | Pro CCT   2   3   2   2   2   2 | His CAT   2   2   3   2   2   2 | Arg CGT   1   1   0   1   1   1
+    CTC   1   2   0   1   1   1 |     CCC   2   1   2   2   2   2 |     CAC   2   2   2   2   2   2 |     CGC   1   1   1   1   1   1
+    CTA   1   1   1   1   1   1 |     CCA   2   2   2   2   2   2 | Gln CAA   0   0   0   0   0   0 |     CGA   2   2   2   2   2   2
+    CTG   3   4   3   4   4   4 |     CCG   1   1   1   1   1   1 |     CAG   1   2   2   2   2   2 |     CGG   2   1   1   1   1   1
+--------------------------------------------------------------------------------------------------------------------------------------
+Ile ATT   6   6   6   6   6   6 | Thr ACT   4   6   6   6   6   6 | Asn AAT   2   1   2   1   1   1 | Ser AGT   2   1   1   1   1   1
+    ATC   2   2   2   2   2   2 |     ACC   2   2   2   2   2   2 |     AAC   0   1   0   1   1   1 |     AGC   2   2   2   2   2   2
+    ATA   1   1   1   1   1   1 |     ACA   2   2   2   2   2   2 | Lys AAA   6   5   4   5   5   5 | Arg AGA   2   1   2   1   2   1
+Met ATG   1   1   1   1   1   1 |     ACG   1   0   0   0   0   0 |     AAG  10  11  11  11  11  11 |     AGG   2   3   3   3   2   3
+--------------------------------------------------------------------------------------------------------------------------------------
+Val GTT   1   1   1   1   1   1 | Ala GCT   2   2   2   2   2   2 | Asp GAT   4   5   5   5   5   5 | Gly GGT   1   2   1   1   1   1
+    GTC   2   0   1   0   0   0 |     GCC   1   1   1   1   1   1 |     GAC   3   2   2   2   2   2 |     GGC   4   3   3   3   3   3
+    GTA   1   1   1   1   1   1 |     GCA   1   1   1   1   1   1 | Glu GAA   1   1   1   1   1   1 |     GGA   2   2   2   2   2   2
+    GTG   4   5   5   5   5   5 |     GCG   1   1   1   1   1   1 |     GAG   1   1   1   1   1   1 |     GGG   2   2   3   3   3   3
+--------------------------------------------------------------------------------------------------------------------------------------
+
+------------------------------------------------------
+Phe TTT   3 | Ser TCT   0 | Tyr TAT   0 | Cys TGT   0
+    TTC   0 |     TCC   1 |     TAC   2 |     TGC   1
+Leu TTA   1 |     TCA   0 | *** TAA   0 | *** TGA   0
+    TTG   1 |     TCG   0 |     TAG   0 | Trp TGG   2
+------------------------------------------------------
+Leu CTT   1 | Pro CCT   4 | His CAT   2 | Arg CGT   1
+    CTC   2 |     CCC   1 |     CAC   2 |     CGC   1
+    CTA   1 |     CCA   1 | Gln CAA   0 |     CGA   2
+    CTG   4 |     CCG   1 |     CAG   2 |     CGG   1
+------------------------------------------------------
+Ile ATT   5 | Thr ACT   6 | Asn AAT   1 | Ser AGT   1
+    ATC   4 |     ACC   1 |     AAC   2 |     AGC   1
+    ATA   1 |     ACA   1 | Lys AAA   5 | Arg AGA   1
+Met ATG   2 |     ACG   0 |     AAG  11 |     AGG   3
+------------------------------------------------------
+Val GTT   1 | Ala GCT   2 | Asp GAT   5 | Gly GGT   2
+    GTC   0 |     GCC   1 |     GAC   2 |     GGC   3
+    GTA   1 |     GCA   1 | Glu GAA   1 |     GGA   3
+    GTG   5 |     GCG   1 |     GAG   1 |     GGG   1
+------------------------------------------------------
+
+Codon position x base (3x4) table for each sequence.
+
+#1: RPS4Y2_Mmu     
+position  1:    T:0.10714    C:0.21429    A:0.40179    G:0.27679
+position  2:    T:0.26786    C:0.19643    A:0.30357    G:0.23214
+position  3:    T:0.27679    C:0.23214    A:0.19643    G:0.29464
+Average         T:0.21726    C:0.21429    A:0.30060    G:0.26786
+
+#2: RPS4Y2_Ppy     
+position  1:    T:0.09821    C:0.23214    A:0.40179    G:0.26786
+position  2:    T:0.26786    C:0.20536    A:0.31250    G:0.21429
+position  3:    T:0.30357    C:0.20536    A:0.17857    G:0.31250
+Average         T:0.22321    C:0.21429    A:0.29762    G:0.26488
+
+#3: RPS4Y2_Ggo     
+position  1:    T:0.11607    C:0.20536    A:0.40179    G:0.27679
+position  2:    T:0.26786    C:0.20536    A:0.31250    G:0.21429
+position  3:    T:0.29464    C:0.19643    A:0.18750    G:0.32143
+Average         T:0.22619    C:0.20238    A:0.30060    G:0.27083
+
+#4: RPS4Y2_Hsa     
+position  1:    T:0.10714    C:0.22321    A:0.40179    G:0.26786
+position  2:    T:0.26786    C:0.20536    A:0.31250    G:0.21429
+position  3:    T:0.28571    C:0.20536    A:0.17857    G:0.33036
+Average         T:0.22024    C:0.21131    A:0.29762    G:0.27083
+
+#5: RPS4Y2_Ppa     
+position  1:    T:0.10714    C:0.22321    A:0.40179    G:0.26786
+position  2:    T:0.26786    C:0.20536    A:0.31250    G:0.21429
+position  3:    T:0.28571    C:0.20536    A:0.18750    G:0.32143
+Average         T:0.22024    C:0.21131    A:0.30060    G:0.26786
+
+#6: RPS4Y2_Ptr     
+position  1:    T:0.10714    C:0.22321    A:0.40179    G:0.26786
+position  2:    T:0.26786    C:0.20536    A:0.31250    G:0.21429
+position  3:    T:0.28571    C:0.20536    A:0.17857    G:0.33036
+Average         T:0.22024    C:0.21131    A:0.29762    G:0.27083
+
+#7: RPS4Y2_Pab     
+position  1:    T:0.09821    C:0.23214    A:0.40179    G:0.26786
+position  2:    T:0.28571    C:0.18750    A:0.32143    G:0.20536
+position  3:    T:0.30357    C:0.21429    A:0.16964    G:0.31250
+Average         T:0.22917    C:0.21131    A:0.29762    G:0.26190
+
+Sums of codon usage counts
+------------------------------------------------------------------------------
+Phe F TTT      21 | Ser S TCT       0 | Tyr Y TAT       0 | Cys C TGT       0
+      TTC       0 |       TCC       7 |       TAC      14 |       TGC       7
+Leu L TTA       8 |       TCA       0 | *** * TAA       0 | *** * TGA       0
+      TTG      12 |       TCG       0 |       TAG       0 | Trp W TGG      14
+------------------------------------------------------------------------------
+Leu L CTT       7 | Pro P CCT      17 | His H CAT      15 | Arg R CGT       6
+      CTC       8 |       CCC      12 |       CAC      14 |       CGC       7
+      CTA       7 |       CCA      13 | Gln Q CAA       0 |       CGA      14
+      CTG      26 |       CCG       7 |       CAG      13 |       CGG       8
+------------------------------------------------------------------------------
+Ile I ATT      41 | Thr T ACT      40 | Asn N AAT       9 | Ser S AGT       8
+      ATC      16 |       ACC      13 |       AAC       6 |       AGC      13
+      ATA       7 |       ACA      13 | Lys K AAA      35 | Arg R AGA      10
+Met M ATG       8 |       ACG       1 |       AAG      76 |       AGG      19
+------------------------------------------------------------------------------
+Val V GTT       7 | Ala A GCT      14 | Asp D GAT      34 | Gly G GGT       9
+      GTC       3 |       GCC       7 |       GAC      15 |       GGC      22
+      GTA       7 |       GCA       7 | Glu E GAA       7 |       GGA      15
+      GTG      34 |       GCG       7 |       GAG       7 |       GGG      17
+------------------------------------------------------------------------------
+
+
+Codon position x base (3x4) table, overall
+
+position  1:    T:0.10587    C:0.22194    A:0.40179    G:0.27041
+position  2:    T:0.27041    C:0.20153    A:0.31250    G:0.21556
+position  3:    T:0.29082    C:0.20918    A:0.18240    G:0.31760
+Average         T:0.22236    C:0.21088    A:0.29889    G:0.26786
+
+Codon frequencies under model, for use in evolver (TTT TTC TTA TTG ... GGG):
+  0.00850133  0.00611499  0.00533197  0.00928434
+  0.00633590  0.00455740  0.00397383  0.00691946
+  0.00982465  0.00706685  0.00000000  0.00000000
+  0.00677700  0.00487469  0.00000000  0.00740120
+  0.01782206  0.01281938  0.01117787  0.01946357
+  0.01328248  0.00955406  0.00833068  0.01450586
+  0.02059625  0.01481485  0.01291782  0.02249327
+  0.01420721  0.01021922  0.00891066  0.01551577
+  0.03226407  0.02320749  0.02023580  0.03523577
+  0.02404587  0.01729615  0.01508140  0.02626062
+  0.03728631  0.02681998  0.02338571  0.04072058
+  0.02571995  0.01850031  0.01613137  0.02808889
+  0.02171423  0.01561901  0.01361902  0.02371423
+  0.01618325  0.01164058  0.01015002  0.01767381
+  0.02509428  0.01805027  0.01573896  0.02740560
+  0.01730993  0.01245100  0.01085667  0.01890427
+
+
+
+Nei & Gojobori 1986. dN/dS (dN, dS)
+(Note: This matrix is not used in later ML. analysis.
+Use runmode = -2 for ML pairwise comparison.)
+
+RPS4Y2_Mmu          
+RPS4Y2_Ppy           0.0995 (0.0119 0.1194)
+RPS4Y2_Ggo           0.1317 (0.0159 0.1203) 0.0881 (0.0119 0.1347)
+RPS4Y2_Hsa           0.1127 (0.0119 0.1053)-1.0000 (0.0000 0.0912) 0.3120 (0.0119 0.0380)
+RPS4Y2_Ppa           0.0994 (0.0119 0.1195)-1.0000 (0.0000 0.1051) 0.2322 (0.0119 0.0511)-1.0000 (0.0000 0.0124)
+RPS4Y2_Ptr           0.1127 (0.0119 0.1053)-1.0000 (0.0000 0.0912) 0.3120 (0.0119 0.0380)-1.0000 (0.0000 0.0000)-1.0000 (0.0000 0.0124)
+RPS4Y2_Pab           0.1265 (0.0259 0.2049) 0.1947 (0.0139 0.0712) 0.1162 (0.0259 0.2227) 0.0800 (0.0138 0.1731) 0.0734 (0.0138 0.1887) 0.0800 (0.0138 0.1731)
+
+
+TREE #  1:  ((((5, 6), 4), 3), 1, (2, 7));   MP score: 29
+lnL(ntime: 11  np: 15):   -612.265254      +0.000000
+   8..9     9..10   10..11   11..5    11..6    10..4     9..3     8..1     8..12   12..2    12..7  
+ 0.028384 0.000004 0.000004 0.009061 0.000004 0.000004 0.056130 0.077387 0.037297 0.000004 0.084551 3.955357 0.677139 0.147906 0.000001
+
+Note: Branch length is defined as number of nucleotide substitutions per codon (not per neucleotide site).
+
+tree length =   0.29283
+
+((((5: 0.009061, 6: 0.000004): 0.000004, 4: 0.000004): 0.000004, 3: 0.056130): 0.028384, 1: 0.077387, (2: 0.000004, 7: 0.084551): 0.037297);
+
+((((RPS4Y2_Ppa: 0.009061, RPS4Y2_Ptr: 0.000004): 0.000004, RPS4Y2_Hsa: 0.000004): 0.000004, RPS4Y2_Ggo: 0.056130): 0.028384, RPS4Y2_Mmu: 0.077387, (RPS4Y2_Ppy: 0.000004, RPS4Y2_Pab: 0.084551): 0.037297);
+
+Detailed output identifying parameters
+
+kappa (ts/tv) =  3.95536
+
+
+dN/dS (w) for site classes (K=4)
+
+site class             0        1       2a       2b
+proportion       0.67714  0.14791  0.14359  0.03136
+background w     0.00000  1.00000  0.00000  1.00000
+foreground w     0.00000  1.00000  1.00000  1.00000
+
+
+Time used:  0:20
